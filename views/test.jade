@@ -1,0 +1,17 @@
+extends layout
+
+block content
+        h1 Jade - node template engine #{json.result}
+        ul
+            each val, index in json
+                li= index + ': ' + val
+        #container.col-5
+            if youAreUsingJade
+                p You are amazing
+            else
+                p Get on it!
+            p.
+                Jade is a terse and simple
+                templating language with a
+                strong focus on performance
+                and powerful features.
