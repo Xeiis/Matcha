@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var session = require('express-session');
 
 function select(){
   var insertDocuments = function(db, callback) {
@@ -77,8 +78,10 @@ function select(){
   });
 }
 
+var sess;
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  sess = req.session;
   res.render('index', { title: 'Express' });
 });
 

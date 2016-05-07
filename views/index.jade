@@ -1,10 +1,22 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  span This is op <br/>
+  div(class="container")
+    div(class="col-lg-4")
+    div(class="col-lg-4")
+        div(class="form-group" style="display:none" id="inscription")
+          input(type="text" class="form-control" id="nom" placeholder="nom")
+          br
+          input(type="text" class="form-control" id="prenom" placeholder="prenom")
+          br
+          input(type="text" class="form-control" id="login" placeholder="login")
+          br
+          input(type="password" class="form-control" id="password" placeholder="password")
+          br
+          input(type="text" class="form-control" id="email" placeholder="email")
+          br
+          button(type="submit" class="btn btn-default" id="submit_inscription" style="width:100%;") Inscription
+    div(class="col-lg-4")
+block scripts
+  script(src="/javascripts/home.js")
 
-  var ob = JSON.parse(json)
- // for(var prop in ob)
-  p #{prop}: #{ob[prop]}
