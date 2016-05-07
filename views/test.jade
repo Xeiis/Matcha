@@ -1,16 +1,22 @@
 extends layout
 
 block content
-        h1 Jade - node template engine #{json.result}
-        ul
+        h1 Jade - node template engine
+        p
+            input(type="button",value="Embêter le serveur",id="poke")
+        form(action="/",method="post",id="formulaire_chat")
+            input(type="text",name="message",id="message",placeholder="Votre message...",size="50",autofocus)
+            input(type="submit",id="envoi_message",value="Envoyer")
+        section(id="zone_chat")
+        //ul
             each val, index in json
                 li= index + ': ' + val
-        #container.col-5
-            if youAreUsingJade
+       // #container.col-5
+          //  if youAreUsingJade
                 p You are amazing
-            else
+            //else
                 p Get on it!
-            p.
+            //p.
                 Jade is a terse and simple
                 templating language with a
                 strong focus on performance

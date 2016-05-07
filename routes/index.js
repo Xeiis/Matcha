@@ -79,7 +79,7 @@ function select(){
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express', json: ob });
+  res.render('index', { title: 'Express' });
 });
 
 router.get('/lol', function(req, res, next) {
@@ -95,7 +95,7 @@ router.get('/user/:id', function (req, res, id) {
   res.render('user', { id: req.params.id, q : req.query.q});
 });
 
-router.get('/test/:id', function (req, res, id) {
+router.get('/test/jade_demo', function (req, res, id) {
   var ob = { action:"date +%s", result:"1367263074"};
   res.render('test', { pageTitle: 'Jade Demo',  youAreUsingJade: true, json : ob });
 });

@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('matcha:server');
 var http = require('http');
+var ent = require('ent');
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +21,20 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+var io = require('socket.io')(server);
+
+io.sockets.on('connection', function (socket) {
+  socket.on('message', function (message) {
+    message = ent.encode(message);
+    socket.broadcast.emit('message', {message: message, pseudo: socket.pseudo});
+  });
+  socket.on('petit_nouveau', function (pseudo) {
+    pseudo = ent.encode(pseudo);
+    socket.pseudo = pseudo;
+    socket.broadcast.emit('nouveau_client', pseudo);
+  });
+});
 
 /**
  * Listen on provided port, on all network interfaces.
