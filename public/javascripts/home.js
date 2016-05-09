@@ -1,12 +1,12 @@
 $("#sign_in").click(function(){
-    $('#inscription').css('display','block');
+    $('#container1').css('display','block');
     $('#connection').css('display','none');
     $(this).css('display','none');
     $('#sign_up').css('display',"");
 });
 
 $("#sign_up").click(function(){
-    $('#inscription').css('display','none');
+    $('#container1').css('display','none');
     $('#connection').css('display','block');
     $(this).css('display','none');
     $('#sign_in').css('display',"");
