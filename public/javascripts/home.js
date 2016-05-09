@@ -21,7 +21,26 @@ $("#submit_inscription").click(function(){
     socket.emit('inscription', {login: login, password: password, email:email, nom:nom, prenom:prenom});
 });
 
-$("#submit_connexion").click(function(){
-
+$("#submit_connection").click(function(){
+    var login = $("#login_in").val();
+    var password = $("#password_in").val();
+    socket.emit('login', {login: login, password: password});
 });
 
+socket.on('inscription', function(data) {
+    var html = "";
+    html += "Inscription effectué";
+    html += "";
+    $("#inscription_ok").html(html);
+    $("#inscription_ok").css('display','block');
+});
+
+socket.on('log_in_ok', function(data){
+    alert(data);
+    // afficher le login
+});
+
+socket.on('log_in_fail', function(data){
+    alert(data);
+    // afficher l'erreur
+});
