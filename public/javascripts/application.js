@@ -32,3 +32,24 @@ function successCallback(position){
         map: map
     });
 }
+
+function distance_with2point(position_a, position_b){
+    var distance_m = distance(position_a.longitude,position_b.longitude,position_a.latitude,position_b.latitude);
+    if (distance_m > 1000)
+        distance_m /= roundDecimal(distance_m/10000);
+    return distance_m;
+}
+
+Math.radians = function(degrees) {
+    return degrees * Math.PI / 180;
+};
+
+function distance(longa,latb,longc,latd){
+    return 6371000 * Math.acos(Math.cos(longa)*Math.cos(latb)*Math.cos(longc-latd)+Math.sin(longa)*Math.sin(latb));
+}
+
+function roundDecimal(nombre, precision){
+    var precision = precision || 2;
+    var tmp = Math.pow(10, precision);
+    return Math.round( nombre*tmp )/tmp;
+}
