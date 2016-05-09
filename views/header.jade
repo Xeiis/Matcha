@@ -31,16 +31,16 @@ div(id="header")
                             li(role="separator" class="divider")
                             li
                                 a(href="#") One more separated link
-
                 button(type="button" class="btn btn-default navbar-btn" id="sign_in") Sign in
                 button(type="button" class="btn btn-default navbar-btn" id="sign_up") Sign up
                 div(class="form-group navbar-form navbar-left" style="display:none" id="connection")
-                    input(type="text" class="form-control" id="login_in" placeholder="login")
-                    input(type="password" class="form-control" id="password_in" placeholder="password")
+                    input(type="text" class="form-control" id="login_in" placeholder="login" style="margin-right:15px")
+                    input(type="password" class="form-control" id="password_in" placeholder="password" style="margin-right:15px")
                     button(type="submit" class="btn btn-default" id="submit_connection") Connection
+                div(class="alert alert-danger form-group navbar-left" role="alert" id="connection_erreur" style="display:none;margin-right:15px;margin-bottom:0px")
                 ul(class="nav navbar-nav navbar-right")
                     li
-                        a(href="#") Link
+                        a(id="login_value")
                     li(class="dropdown")
                         a(href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") Dropdown
                             span(class="caret")

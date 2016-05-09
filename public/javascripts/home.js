@@ -36,11 +36,14 @@ socket.on('inscription', function(data) {
 });
 
 socket.on('log_in_ok', function(data){
-    alert(data);
-    // afficher le login
+    $('#sign_in').css('display','none');
+    $('#sign_up').css('display','none');
+    $('#connection').css('display','none');
+    $('#connection_erreur').css('display','none');
+    $('#login_value').html("Bonjour "+data);
 });
 
 socket.on('log_in_fail', function(data){
-    alert(data);
-    // afficher l'erreur
+    $('#connection_erreur').html(data);
+    $('#connection_erreur').css('display','block');
 });
