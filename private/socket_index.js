@@ -22,10 +22,12 @@ exports.login = function(data, callback) {
         console.log("Connected correctly to server");
         Mongo.find(db, function (docs) {
             db.close();
-            console.log(data.password);
-            console.log(docs[0].password);
-            if(passwordHash.verify(data.password, docs[0].password))
-                callback(data);
+            if(docs[0]) {
+                if (passwordHash.verify(data.password, docs[0].password))
+                    callback(data);
+                else
+                    callback(false);
+            }
             else
                 callback(false);
         }, {'login': data.login}, 'user');
