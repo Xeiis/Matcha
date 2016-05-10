@@ -34,9 +34,7 @@ function successCallback(position){
 }
 
 function distance_with2point(position_a, position_b){
-    var distance_m = distance(position_a.longitude,position_b.longitude,position_a.latitude,position_b.latitude);
-    if (distance_m > 1000)
-        distance_m /= roundDecimal(distance_m/10000);
+    var distance_m = roundDecimal(distance(position_a.longitude,position_b.longitude,position_a.latitude,position_b.latitude));
     return distance_m;
 }
 

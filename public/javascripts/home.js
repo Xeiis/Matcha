@@ -1,15 +1,17 @@
 $("#sign_in").click(function(){
-    $('#container1').css('display','block');
-    $('#connection').css('display','none');
-    $(this).css('display','none');
-    $('#sign_up').css('display',"");
+    $('#container1').show( "slow" );
+    $('#connection').hide( "slow" );
+    $(this).fadeOut('slow');
+    $('#sign_up').show( "slow" );
+    $('#container2').hide( "slow" );
 });
 
 $("#sign_up").click(function(){
-    $('#container1').css('display','none');
-    $('#connection').css('display','block');
-    $(this).css('display','none');
-    $('#sign_in').css('display',"");
+    $('#container1').hide( "slow" );
+    $('#connection').show( "slow" );
+    $(this).fadeOut( "slow" );
+    $('#sign_in').show( "slow" );
+    $('#container2').show( "slow" );
 });
 
 $("#submit_inscription").click(function(){
@@ -32,18 +34,18 @@ socket.on('inscription', function(data) {
     html += "Inscription effectué";
     html += "";
     $("#inscription_ok").html(html);
-    $("#inscription_ok").css('display','block');
+    $("#inscription_ok").show( "slow" );
 });
 
 socket.on('log_in_ok', function(data){
-    $('#sign_in').css('display','none');
-    $('#sign_up').css('display','none');
-    $('#connection').css('display','none');
-    $('#connection_erreur').css('display','none');
+    $('#sign_in').hide( "slow" );
+    $('#sign_up').hide( "slow" );
+    $('#connection').hide( "slow" );
+    $('#connection_erreur').hide( "slow" );
     $('#login_value').html("Bonjour "+data);
 });
 
 socket.on('log_in_fail', function(data){
     $('#connection_erreur').html(data);
-    $('#connection_erreur').css('display','block');
+    $('#connection_erreur').show( "slow" );
 });
