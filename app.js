@@ -9,7 +9,17 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
-var session = require('./session-share');
+var session = require("express-session")({
+  secret: "my-secret",
+  resave: true,
+  saveUninitialized: true,
+  cookie: {
+    path: '/'
+    ,expires: false // Alive Until Browser Exits
+    ,httpOnly: true
+    //  ,domain:'.example.com'
+  }
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,22 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/authenticate', session);
-app.get('/authenticate', function(req, res) {
-  console.log('i get here');
-  console.log('i have to work with this here');
-  var session = req.session;
-  session.userdata = session.userdata || {};
-  session.userdata.connected = true;
-  session.save(function(err) {
-    if (err) {
-      connectionError(res, session);
-    } else {
-      res.status(200);
-      res.send();
-    }
-  });
-});
+app.use(session);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
