@@ -2,6 +2,7 @@ var index = require('../private/socket_index.js');
 
 module.exports = function(io) {
     io.on('connection', function (socket) {
+        console.log(socket.handshake.session);
         console.log('new user connected');
         socket.on('inscription', function (data) {
             index.inscription(data, inscription_ok);
@@ -33,7 +34,6 @@ module.exports = function(io) {
         function log_in(data){
             if (data) {
                 socket.handshake.session.login = data.login;
-                console.log(socket.handshake.session.login);
                 socket.emit('log_in_ok', socket.handshake.session.login);
             }
             else

@@ -23,7 +23,6 @@ var Session = require('express-session');
 var SessionStore = require('session-file-store')(Session);
 var session = Session({store: new SessionStore({path: __dirname+'/tmp/sessions'}), secret: 'pass', resave: true, saveUninitialized: true});
 
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
