@@ -1,25 +1,13 @@
 var index = require('../private/socket_index.js');
-session = require("express-session")({
-    secret: "my-secret",
-    resave: true,
-    saveUninitialized: true,
-    cookie: {
-        path: '/'
-        ,expires: false
-        ,httpOnly: true
-    }
-}),
-    sharedsession = require("express-socket.io-session");
 
 module.exports = function(io) {
-    io.use(sharedsession(session));
-    io.sockets.on('connection', function (socket) {
+    io.on('connection', function (socket) {
         console.log('new user connected');
         socket.on('inscription', function (data) {
             index.inscription(data, inscription_ok);
         });
         socket.on('whoami', function (data) {
-            socket.emit('youare', socket.handshake.session.login);
+            socket.emit('youare', "Session id: " + socket.handshake.session.uid + " login : " + socket.handshake.session.login);
         });
         socket.on('login', function (data){
             index.login(data, log_in);
