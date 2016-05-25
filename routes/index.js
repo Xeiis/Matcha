@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var index = require('../private/index.js');
+var profile = require('../private/profile.js');
+
+var index_function = require('../private/socket_index.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,6 +12,21 @@ router.get('/', function(req, res, next) {
 
 router.get('/lol', function(req, res, next) {
   res.render('lol', { title: 'Express' });
+});
+
+router.get('/profile', function(req, res, next) {
+  profile.renderProfile(req, res, next);
+});
+
+router.post('/login', function(req, res){
+  console.log('login' + req.body);
+  index_function.login(req.body, req, res);
+});
+
+router.post('/logout', function(req, res){
+  console.log('logout');
+  req.session.destroy();
+  res.send('Done');
 });
 
 router.param('id', function (req, res, next, id) {

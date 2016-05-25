@@ -26,11 +26,46 @@ $("#submit_inscription").click(function(){
 $("#submit_connection").click(function(){
     var login = $("#login_in").val();
     var password = $("#password_in").val();
-    socket.emit('login', {login: login, password: password});
+    $.ajax({
+            method: "POST",
+            url: "login",
+            data: {login: login, password : password}
+        })
+        .done(function (msg) {
+            if (msg == 'Mauvais login / Mot de passe')
+            {
+                $('#connection_erreur').html(msg);
+                $('#connection_erreur').show("slow").delay(4000).hide('slow');
+            }
+            else {
+                $('#sign_in').hide( "slow" );
+                $('#sign_up').hide( "slow" );
+                $('#connection').hide( "slow" );
+                $('#login_value').html("Bonjour "+msg);
+                $('#submit_deconnection').fadeIn( "slow" );
+                $('#profile').show('fast');
+                socket.emit('login', msg);
+            }
+        });
+    //socket.emit('login', {login: login, password: password});
+});
+$("#submit_deconnection").click(function(){
+    socket.emit('logout');
+    $('#profile').hide('fast');
+    $.ajax({
+            method: "POST",
+            url: "logout"
+        })
+        .done(function (msg) {
+            $('#sign_in').show( "slow" );
+            $('#sign_up').show( "slow" );
+            $('#submit_deconnection').fadeOut( "slow" );
+            $('#login_value').html('');
+        });
 });
 
 $('#whoam_i').click(function(){
-    socket.emit('whoami', 'me');
+    socket.emit('whoami');
 });
 
 socket.on('youare', function(data){
@@ -44,16 +79,4 @@ socket.on('inscription', function(data) {
     html += "";
     $("#inscription_ok").html(html);
     $("#inscription_ok").show( "slow" ).delay(4000).hide('slow');
-});
-
-socket.on('log_in_ok', function(data){
-    $('#sign_in').hide( "slow" );
-    $('#sign_up').hide( "slow" );
-    $('#connection').hide( "slow" );
-    $('#login_value').html("Bonjour "+data);
-});
-
-socket.on('log_in_fail', function(data){
-    $('#connection_erreur').html(data);
-    $('#connection_erreur').show( "slow" ).delay(4000).hide('slow');
 });

@@ -2,19 +2,14 @@ div(id="header")
     nav(class="navbar navbar-default")
         div(class="container-fluid")
             div(class="navbar-header")
-                button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false")
-                    span(class="sr-only") Toggle navigation
-                    span(class="icon-bar")
-                    span(class="icon-bar")
-                    span(class="icon-bar")
-                a(class="navbar-brand" href="#") Brand
+                a(class="navbar-brand" href="#") Matcha
             div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
                 ul(class="nav navbar-nav")
-                    li(class="active")
-                        a(href="#") Link
+                    li(id="home")
+                        a(href="/") Home
                             span(class="sr-only") (current)
-                    li
-                        a(href="#") Link
+                    li(style="display:none" id="profile")
+                        a(href="profile") Profile
                     li(class="dropdown")
                         a(href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") Dropdown
                             span(class="caret")
@@ -31,8 +26,8 @@ div(id="header")
                             li(role="separator" class="divider")
                             li
                                 a(href="#") One more separated link
-                button(type="button" class="btn btn-default navbar-btn" id="sign_in") Sign in
-                button(type="button" class="btn btn-default navbar-btn" id="sign_up") Sign up
+                button(type="button" class="btn btn-default navbar-btn" style='display:none' id="sign_in") Sign in
+                button(type="button" class="btn btn-default navbar-btn" style='display:none' id="sign_up") Sign up
                 div(class="form-group navbar-form navbar-left" style="display:none" id="connection")
                     input(type="text" class="form-control" id="login_in" placeholder="login" style="margin-right:15px")
                     input(type="password" class="form-control" id="password_in" placeholder="password" style="margin-right:15px")
@@ -41,6 +36,8 @@ div(id="header")
                 ul(class="nav navbar-nav navbar-right")
                     li
                         a(id="login_value")
+                    li
+                        button(class="btn btn-default navbar-btn" style="display:none;" id="submit_deconnection") Logout
                     li(class="dropdown")
                         a(href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") Dropdown
                             span(class="caret")

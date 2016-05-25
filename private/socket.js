@@ -2,22 +2,25 @@ var index = require('../private/socket_index.js');
 
 module.exports = function(io) {
     io.on('connection', function (socket) {
-        console.log(socket.handshake.session);
+        if(socket.handshake.session.login) {
+            socket.emit('youare_logged', socket.handshake.session.login);
+        }
+        else
+            socket.emit('youare_not_logged');
         console.log('new user connected');
         socket.on('inscription', function (data) {
             index.inscription(data, inscription_ok);
         });
-        socket.on('whoami', function (data) {
+        socket.on('whoami', function () {
+            console.log(socket.handshake.session.login);
             socket.emit('youare', "Session id: " + socket.handshake.session.uid + " login : " + socket.handshake.session.login);
         });
-        socket.on('login', function (data){
-            index.login(data, log_in);
-        });
-        socket.on('logout', function(userdata) {
+        socket.on('logout', function() {
             console.log("logout : "+socket.handshake.session.login);
-            if (socket.handshake.session.login == userdata) {
-                delete socket.handshake.session.login;
-            }
+            socket.handshake.session.login = '';
+        });
+        socket.on('login', function(data) {
+            socket.handshake.session.login = data;
         });
         socket.on('message', function (message) {
             message = ent.encode(message);
@@ -30,15 +33,6 @@ module.exports = function(io) {
         });
         function inscription_ok(data){
             socket.emit('inscription', 'Inscription réussi.');
-        }
-        function log_in(data){
-            if (data) {
-                socket.handshake.session.login = data.login;
-                socket.emit('log_in_ok', socket.handshake.session.login);
-            }
-            else
-                socket.emit('log_in_fail', 'Mauvais login / Mot de passe');
-
         }
     });
 };

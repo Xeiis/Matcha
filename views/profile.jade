@@ -1,0 +1,52 @@
+extends layout
+
+block content
+    div(class="container" style="margin-top:20px")
+        form(role="form")
+            div(class="col-lg-6")
+                div(class="form-group")
+                    label(for="nom") Votre nom:
+                    input(type="text" class="form-control" placeholder="Nom" required)
+                div(class="form-group")
+                    label(for="prenom") Votre prenom:
+                    input(type="text" class="form-control" placeholder="Prenom")
+                div(class="form-group")
+                    label(for="pseudo") Votre pseudo:
+                    input(type="text" class="form-control" placeholder="Pseudo")
+                div(class="form-group")
+                    label(for="email") Votre email:
+                    input(type="email" class="form-control" placeholder="Email")
+                div(class="form-group")
+                    label(for="adresse") Votre adresse:
+                    input(type="text" class="form-control" placeholder="Adresse")
+                div(class="form-group")
+                    label(for="ville") Votre ville:
+                    input(type="text" class="form-control" placeholder="Ville")
+                div(class="form-group")
+                    label(for="codepostal") Votre code postal:
+                    input(type="number" class="form-control" placeholder="Code postal")
+            div(class="col-lg-6")
+                div(class="form-group")
+                    label(for="date") Votre date de naissance:
+                    input(type="date" class="form-control")
+                div(class="form-group")
+                    label(for="sexe") Votre sexe:
+                    select(class="form-control")
+                        option(value="0") Homme
+                        option(value="1") Femme
+                        option(value="2") Autre
+                div(class="form-group")
+                    label(for="attirance") Votre attirance:
+                    select(class="form-control")
+                        option(value="0") Homme
+                        option(value="1") Femme
+                        option(value="2") Les deux
+                div(class="form-group")
+                    label(for="desciprtion") Une description:
+                    textarea(placeholder="Description" class="form-control")
+                div(class="form-group")
+                    label(for="img") Une image de vous:
+                    input(type="file" class="form-control")
+                button(type="submit" class="btn btn-default" id="submit_inscription" style="width:100%;") Enregistrer
+
+            //tag

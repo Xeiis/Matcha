@@ -10,9 +10,23 @@ socket.on('disconnect', function(){
    console.log('Disconnect');
 });
 
+socket.on('youare_logged', function(data){
+    /*$('#sign_in').css('display', 'none');
+    $('#sign_up').css('display', 'none');*/
+    $('#connection').css('display', "none" );
+    $('#submit_deconnection').css('display', "block" );
+    $('#login_value').html("Bonjour "+data);
+    $('#profile').show('fast');
+});
+
+socket.on('youare_not_logged', function(){
+    $('#sign_in').fadeIn('fast');
+    $('#sign_up').fadeIn('fast'); 
+});
+
 function initialize() {
     map = new google.maps.Map(document.getElementById("map_canvas"), {
-        zoom: 19,
+        zoom: 15,
         center: new google.maps.LatLng(48.858565, 2.347198),
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });

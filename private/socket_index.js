@@ -15,7 +15,7 @@ exports.inscription = function(data, callback) {
     });
 };
 
-exports.login = function(data, callback) {
+exports.login = function(data, req, res) {
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
@@ -23,13 +23,15 @@ exports.login = function(data, callback) {
         Mongo.find(db, function (docs) {
             db.close();
             if(docs[0]) {
-                if (passwordHash.verify(data.password, docs[0].password))
-                    callback(data);
-                else
-                    callback(false);
+                if (passwordHash.verify(data.password, docs[0].password)) {
+                    req.session.login = data.login;
+                    console.log(req.session.login);
+                    res.send(data.login);
+                }else
+                    res.send('Mauvais login / Mot de passe');
             }
             else
-                callback(false);
+                res.send('Mauvais login / Mot de passe');
         }, {'login': data.login}, 'user');
     });
 };
