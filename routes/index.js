@@ -23,6 +23,10 @@ router.post('/login', function(req, res){
   index_function.login(req.body, req, res);
 });
 
+router.post('/update_profile', function(req, res){
+  profile.update_profile(req.body, req, res);
+});
+
 router.post('/logout', function(req, res){
   console.log('logout');
   req.session.destroy();

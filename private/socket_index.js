@@ -1,5 +1,4 @@
 var Mongo = require ('./mongodb.js');
-var assert = require('assert');
 var passwordHash = require('password-hash');
 
 exports.inscription = function(data, callback) {

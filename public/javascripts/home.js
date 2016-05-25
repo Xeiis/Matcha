@@ -49,20 +49,6 @@ $("#submit_connection").click(function(){
         });
     //socket.emit('login', {login: login, password: password});
 });
-$("#submit_deconnection").click(function(){
-    socket.emit('logout');
-    $('#profile').hide('fast');
-    $.ajax({
-            method: "POST",
-            url: "logout"
-        })
-        .done(function (msg) {
-            $('#sign_in').show( "slow" );
-            $('#sign_up').show( "slow" );
-            $('#submit_deconnection').fadeOut( "slow" );
-            $('#login_value').html('');
-        });
-});
 
 $('#whoam_i').click(function(){
     socket.emit('whoami');
