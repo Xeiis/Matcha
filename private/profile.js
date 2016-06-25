@@ -11,6 +11,10 @@ exports.renderProfile = function(req,res,next)
             if(docs[0]) {
                 res.render('profile', {nom: docs[0].nom || '', prenom: docs[0].prenom || '', email: docs[0].email || '', ville: docs[0].ville || '', cp: docs[0].cp || '', date: docs[0].date || '', attirance: docs[0].attirance || '', sexe: docs[0].sexe || '', description: docs[0].decsription || '', login: docs[0].login || ''});
             }
+            else
+            {
+                res.render('profile_error');
+            }
         }, {'login': req.session.login}, 'user');
     });
 };
