@@ -15,10 +15,11 @@ else
 
 function successCallback(position){
     // permet de se place là ou on se trouve
-    map.panTo(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
+    var myLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    map.panTo(myLatlng);
     // creer un point sur la map
     var marker = new google.maps.Marker({
-        position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+        position: myLatlng,
         map: map
     });
     var infowindow = new google.maps.InfoWindow({
@@ -29,6 +30,15 @@ function successCallback(position){
     google.maps.event.addListener(marker, 'click', function(){
         infowindow.open(map,marker);
     });
+
+    // faire cela pour chaque personne, connecté en ce moment ?
+    overlay = new CustomMarker(
+        myLatlng,
+        map,
+        {
+            marker_id: '123'
+        }
+    );
     // enregistrer ce point en bdd et l'envoyez a tous les utilisateurs.
 
     /*var new_marker = new google.maps.Marker({

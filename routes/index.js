@@ -19,7 +19,6 @@ router.get('/profile', function(req, res, next) {
 });
 
 router.post('/login', function(req, res){
-  console.log('login' + req.body);
   index_function.login(req.body, req, res);
 });
 
@@ -28,7 +27,6 @@ router.post('/update_profile', function(req, res){
 });
 
 router.post('/logout', function(req, res){
-  console.log('logout');
   req.session.destroy();
   res.send('Done');
 });

@@ -26,7 +26,7 @@ exports.login = function(data, req, res) {
                     req.session.login = data.login;
                     console.log(req.session.login);
                     res.send(data.login);
-                }else
+                } else
                     res.send('Mauvais login / Mot de passe');
             }
             else
