@@ -17,35 +17,20 @@ function successCallback(position){
     // permet de se place là ou on se trouve
     var myLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
     map.panTo(myLatlng);
-    // creer un point sur la map
-    var marker = new google.maps.Marker({
-        position: myLatlng,
-        map: map
-    });
-    var infowindow = new google.maps.InfoWindow({
-        content: "Hello World !",
-        size: new google.maps.Size(100, 100)
-    });
 
-    google.maps.event.addListener(marker, 'click', function(){
-        infowindow.open(map,marker);
-    });
-
-    // faire cela pour chaque personne, connecté en ce moment ?
+    // faire cela pour chaque personne, connecté en ce moment ? demander au serveur de retourner ces infos.
     overlay = new CustomMarker(
         myLatlng,
         map,
         {
             marker_id: '123'
-        }
+        },
+        '../images/tmp1.png', // a remplacer par les images de chaqu'un biensur ;)
+        'Ceci est un test d\'infowindow tralalalalalal lolo c\'est trop bien cette merde' // message dans l'infowindows
     );
     // enregistrer ce point en bdd et l'envoyez a tous les utilisateurs.
 
-    /*var new_marker = new google.maps.Marker({
-        position: new google.maps.LatLng(48.858565, 2.347198),
-        map: map
-    });
-    alert(distance_with2point(position.coords.longitude, position.coords.latitude, 2.347198, 48.858565));
+    /*alert(distance_with2point(position.coords.longitude, position.coords.latitude, 2.347198, 48.858565));
     on recuperer la bonne distance tout est ok.
     */
     //alert(ConvertDistance(distance_with2point(position.coords.longitude, position.coords.latitude, 2.347198, 48.858565)));

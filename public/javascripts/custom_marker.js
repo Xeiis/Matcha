@@ -1,6 +1,8 @@
-function CustomMarker(latlng, map, args) {
+function CustomMarker(latlng, map, args, img, text) {
     this.latlng = latlng;
     this.args = args;
+    this.img = img;
+    this.text = text;
     this.setMap(map);
 }
 
@@ -22,29 +24,27 @@ CustomMarker.prototype.draw = function() {
         div.style.cursor = 'pointer';
         div.style.width = '100px';
         div.style.height = '100px';
-        div.style.padding = '10px';
         div.style.background = 'white';
-        div.innerHTML = "<img src='' alt='photo de profil'>";
+        div.style.border = '5px solid #aaaba8';
+        div.innerHTML = "<img src='"+ this.img +"' width='90' height='90' alt='photo de profil'>";
 
         if (typeof(self.args.marker_id) !== 'undefined') {
             div.dataset.marker_id = self.args.marker_id;
         }
 
         google.maps.event.addDomListener(div, "mouseover", function(event) {
-            //console.log('mouseover');
             infowindow.style.display = '';
             infowindow.className = 'infowindow';
             infowindow.style.position = 'absolute';
             infowindow.style.width = 'auto';
+            infowindow.style.maxWidth = '300px';
             infowindow.style.height = 'auto';
             infowindow.style.padding = '10px';
             infowindow.style.background = 'white';
-            // Ce texte change selon le profil recuperer l'id ou quelque chose pour savoir lequel.
-            infowindow.innerHTML = 'Ceci est un test d\'infowindow';
+            infowindow.innerHTML = self.text;
         });
 
         google.maps.event.addDomListener(div, "mouseout", function(event) {
-            //console.log('mouseout');
             infowindow.style.display = 'none';
         });
 
