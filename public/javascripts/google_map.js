@@ -19,6 +19,28 @@ function successCallback(position){
     map.panTo(myLatlng);
 
     // faire cela pour chaque personne, connecté en ce moment ? demander au serveur de retourner ces infos.
+    $.ajax({
+            method: "POST",
+            url: "get_profile_data"
+        })
+        .done(function (msg) {
+            alert(msg);
+            //if (msg == '')
+            //{
+                // while msg ( en json )
+                /*overlay = new CustomMarker(
+                    myLatlng,
+                    map,
+                    {
+                        marker_id: '123'
+                    },
+                    '../images/tmp1.png', // a remplacer par les images de chaqu'un biensur ;)
+                    'Ceci est un test d\'infowindow tralalalalalal lolo c\'est trop bien cette merde' // message dans l'infowindows
+                );*/
+                
+                /*$('#connection_erreur').html(msg);
+                $('#connection_erreur').show("slow").delay(4000).hide('slow');*/
+        });
     overlay = new CustomMarker(
         myLatlng,
         map,

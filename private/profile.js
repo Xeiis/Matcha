@@ -32,3 +32,17 @@ exports.update_profile = function(data, req, res)
         }, {login :req.session.login},  {$set: data}, 'user');
     });
 };
+
+exports.photo_add = function(data, req, res)
+{
+    console.log(data);
+    // Use connect method to connect to the Server
+    Mongo.Client.connect(Mongo.url, function(err, db) {
+        Mongo.assert.equal(null, err);
+        console.log("Connected correctly to server");
+        Mongo.update(db, function () {
+            db.close();
+            res.send('done');
+        }, {login :req.session.login},  {$set: data}, 'user');
+    });
+};

@@ -26,9 +26,17 @@ router.post('/update_profile', function(req, res){
   profile.update_profile(req.body, req, res);
 });
 
+router.post('/get_profile_data', function(req, res){
+  index_function.get_profile_data(req, res);
+});
+
 router.post('/logout', function(req, res){
   req.session.destroy();
   res.send('Done');
+});
+router.post('/photo_add', function(req, res){
+  console.log(req.body);
+  //profile.photo_add(req.body, req, res);
 });
 
 router.param('id', function (req, res, next, id) {

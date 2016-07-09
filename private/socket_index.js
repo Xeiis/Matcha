@@ -34,3 +34,14 @@ exports.login = function(data, req, res) {
         }, {'login': data.login}, 'user');
     });
 };
+
+exports.get_profile_data = function(req, res) {
+    Mongo.Client.connect(Mongo.url, function(err, db) {
+        Mongo.assert.equal(null, err);
+        console.log("Connected correctly to server");
+        Mongo.find(db, function (docs) {
+            db.close();
+            res.send(docs);
+        }, {}, 'user');
+    });
+};

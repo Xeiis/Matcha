@@ -25,3 +25,17 @@ $("#update_profile").click(function() {
             }
         });
 });
+
+$(function(){
+    $( '#photo_add' ).submit(function(event) {
+        console.log(new FormData( this ));
+        $.ajax({
+            url: 'photo_add',
+            type: 'POST',
+            data: new FormData( this ),
+            processData: false,
+            contentType: false
+        });
+        event.preventDefault();
+    });
+});
