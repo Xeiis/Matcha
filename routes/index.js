@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var index = require('../private/index.js');
 var profile = require('../private/profile.js');
-
 var index_function = require('../private/socket_index.js');
 
 /* GET home page. */
@@ -23,6 +22,7 @@ router.post('/login', function(req, res){
 });
 
 router.post('/update_profile', function(req, res){
+  console.log(req.body);
   profile.update_profile(req.body, req, res);
 });
 
@@ -34,8 +34,20 @@ router.post('/logout', function(req, res){
   req.session.destroy();
   res.send('Done');
 });
+
 router.post('/photo_add', function(req, res){
-  console.log(req.body);
+    console.log(req.file.name);
+    console.log(req.file.path);
+    console.log(req.file.type);
+    // we did it
+    //res.send('Hello World');
+    /*var form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+        res.writeHead(200, {'content-type': 'text/plain'});
+        res.write('received upload:\n\n');
+        res.end(util.inspect({fields: fields, files: files}));
+    });*/
+  //res.send(req.body);
   //profile.photo_add(req.body, req, res);
 });
 

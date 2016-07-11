@@ -24,7 +24,7 @@ function successCallback(position){
             url: "get_profile_data"
         })
         .done(function (msg) {
-            alert(msg);
+            //alert(msg);
             //if (msg == '')
             //{
                 // while msg ( en json )
@@ -47,7 +47,7 @@ function successCallback(position){
         {
             marker_id: '123'
         },
-        '../images/tmp1.png', // a remplacer par les images de chaqu'un biensur ;)
+        '../images/8a70d9c62e591b1ba1be4e436f7607ee', // a remplacer par les images de chaqu'un biensur ;)
         'Ceci est un test d\'infowindow tralalalalalal lolo c\'est trop bien cette merde' // message dans l'infowindows
     );
     // enregistrer ce point en bdd et l'envoyez a tous les utilisateurs.
@@ -61,7 +61,7 @@ function successCallback(position){
 function ConvertDistance(d)
 {
     var result;
-    if(d<1000 )
+    if( d < 1000 )
     {
         result = d + ' M';
     }

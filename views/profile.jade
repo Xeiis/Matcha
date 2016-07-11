@@ -61,12 +61,11 @@ block content
                 div(class="form-group")
                     label(for="description") Une description:
                     textarea(placeholder="Description" id="description" class="form-control")
-                form(id="photo_add" method="POST" action="photo_add" enctype="multipart/form-data")
+                form(id="photo_add" method="POST" action="/photo_add" enctype="multipart/form-data")
                     div(class="form-group")
                         label(for="photo") Une photo de vous:
-                        input(type="file" id="photo" class="form-control")
-                        input(type="submit" value="upload" class="btn btn-default" style="width:100%;")
-
+                        input(type="file" id="photo" class="form-control" name="singleInputFileName" multiple)
+                        input(type="submit" value="upload" name="upload" class="btn btn-default" style="width:100%;")
                 //tag
         div(class="row")
             button(type="submit" class="btn btn-default" id="update_profile" style="width:100%;") Enregistrer

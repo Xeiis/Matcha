@@ -25,8 +25,8 @@ CustomMarker.prototype.draw = function() {
         div.style.width = '100px';
         div.style.height = '100px';
         div.style.background = 'white';
-        div.style.border = '5px solid #aaaba8';
-        div.innerHTML = "<img src='"+ this.img +"' width='90' height='90' alt='photo de profil'>";
+        div.style.border = '2px solid #5048c7';
+        div.innerHTML = "<img src='"+ this.img +"' width='96' height='96' alt='photo de profil'>";
 
         if (typeof(self.args.marker_id) !== 'undefined') {
             div.dataset.marker_id = self.args.marker_id;
