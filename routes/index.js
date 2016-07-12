@@ -36,19 +36,15 @@ router.post('/logout', function(req, res){
 });
 
 router.post('/photo_add', function(req, res){
-    console.log(req.file.name);
-    console.log(req.file.path);
-    console.log(req.file.type);
-    // we did it
-    //res.send('Hello World');
-    /*var form = new formidable.IncomingForm();
-    form.parse(req, function(err, fields, files) {
-        res.writeHead(200, {'content-type': 'text/plain'});
-        res.write('received upload:\n\n');
-        res.end(util.inspect({fields: fields, files: files}));
-    });*/
-  //res.send(req.body);
-  //profile.photo_add(req.body, req, res);
+    var data = new Object();
+
+    data.url = req.file.path.substring(req.file.path.indexOf('/') + 1);
+    data.login = req.session.login;
+    profile.photo_add(data, req, res);
+});
+
+router.post('/suppr_images', function(req, res){
+    profile.photo_suppr(req.body, req, res);
 });
 
 router.param('id', function (req, res, next, id) {

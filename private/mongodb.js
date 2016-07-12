@@ -38,9 +38,7 @@ exports.delete = function (db, callback, data, collection_in) {
     // Get the documents collection
     var collection = db.collection(collection_in);
     // Insert some documents
-    collection.delete(data, function (err, result) {
-        assert.equal(err, null);
-        assert.equal(1, result.result.n);
+    collection.deleteOne(data, function (err, result) {
         callback(result);
     });
 };

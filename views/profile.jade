@@ -69,7 +69,16 @@ block content
                 //tag
         div(class="row")
             button(type="submit" class="btn btn-default" id="update_profile" style="width:100%;") Enregistrer
-            div(class="alert alert-success" role="alert" id="profile_modif" style="display:none;margin-top:20px;") Profil mis à jours
+            if answer == "yes"
+                div(class="alert alert-success" role="alert" id="profile_modif" style="margin-top:20px;") Picture correctly uploaded
+            else
+                div(class="alert alert-success" role="alert" id="profile_modif" style="display:none;margin-top:20px;") Profil mis à jours
             div(class="alert alert-danger" role="alert" id="profile_modif_erreur" style="display:none;margin-top:20px;") Une erreur s'est produite veuillez réessayez plus tard.
+            // faire du style pour les images.
+            p.jumbotron(style="padding-top:30px;padding-bottom:30px")
+                != '<strong style="font-size:30px;font-weight: 300;">Vos images : </strong>'
+            each val, index in images
+                div(style="padding:17px;float:left;background-color:#eee;")
+                    img(src="../"+val.url width="200" height="200" class="images")
 block scripts
     script(src="/javascripts/profile.js")

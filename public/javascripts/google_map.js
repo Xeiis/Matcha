@@ -47,7 +47,7 @@ function successCallback(position){
         {
             marker_id: '123'
         },
-        '../images/8a70d9c62e591b1ba1be4e436f7607ee', // a remplacer par les images de chaqu'un biensur ;)
+        '../images/tmp1.png', // a remplacer par les images de chaqu'un biensur ;)
         'Ceci est un test d\'infowindow tralalalalalal lolo c\'est trop bien cette merde' // message dans l'infowindows
     );
     // enregistrer ce point en bdd et l'envoyez a tous les utilisateurs.

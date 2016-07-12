@@ -25,3 +25,39 @@ $("#update_profile").click(function() {
             }
         });
 });
+
+var img;
+
+$(".images").mouseover(function(){
+    console.log('mouseover : '+ this.src);
+    img = this.src;
+    this.setAttribute('src', '../images/suppression.png');
+    this.setAttribute('width', '200');
+    this.setAttribute('height', '200');
+});
+
+$(".images").mouseout(function() {
+    console.log('mouseout');
+    this.setAttribute('src', img);
+});
+
+$(".images").on('click', function(){
+    img = img.substr(28);
+    img = ".."+img;
+    $.ajax({
+            method: "POST",
+            url: "suppr_images",
+            data: {images: img}
+        })
+        .done(function (msg) {
+            if (msg == 'done') {
+                // modification effectué
+                console.log('done');
+            }
+            else {
+                // modification erreur
+                console.log('error');
+            }
+        });
+});
+// onclick images appel ajax on supprime la photo de la bdd.
