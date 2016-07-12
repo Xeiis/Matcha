@@ -7,11 +7,10 @@ exports.renderProfile = function(req,res,next)
         Mongo.assert.equal(null, err);
         console.log("Connected correctly to server");
         Mongo.find(db, function (docs) {
-
             if(docs[0]) {
                 Mongo.find(db, function (doc) {
                     db.close();
-                    res.render('profile', {nom: docs[0].nom || '', prenom: docs[0].prenom || '', email: docs[0].email || '', ville: docs[0].ville || '', cp: docs[0].cp || '', date: docs[0].date || '', attirance: docs[0].attirance || '', sexe: docs[0].sexe || '', description: docs[0].decsription || '', login: docs[0].login || '', answer : req.query.answer, images: doc});
+                    res.render('profile', {nom: docs[0].nom || '', prenom: docs[0].prenom || '', email: docs[0].email || '', ville: docs[0].ville || '', cp: docs[0].cp || '', date: docs[0].date || '', attirance: docs[0].attirance || '', sexe: docs[0].sexe || '', description: docs[0].decsription || '', login: docs[0].login || '', answer : req.query.answer, images: doc, deletes : req.query.delete});
                 }, {'login': req.session.login}, 'images');
             }
             else {
@@ -50,13 +49,14 @@ exports.photo_add = function(data, req, res)
 
 exports.photo_suppr = function(data, req, res)
 {
+    console.log(data);
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
         console.log("Connected correctly to server");
-        Mongo.delete(db, function () {
+        Mongo.delete(db, function (result) {
             db.close();
-            res.send("done");
+            res.send('done');
         }, data, 'images');
     });
 };

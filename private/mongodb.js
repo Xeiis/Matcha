@@ -39,6 +39,7 @@ exports.delete = function (db, callback, data, collection_in) {
     var collection = db.collection(collection_in);
     // Insert some documents
     collection.deleteOne(data, function (err, result) {
+        console.log(result);
         callback(result);
     });
 };
