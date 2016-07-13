@@ -36,6 +36,7 @@ exports.login = function(data, req, res) {
 };
 
 exports.get_profile_data = function(req, res) {
+    // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
         console.log("Connected correctly to server");

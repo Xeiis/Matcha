@@ -42,6 +42,7 @@ $(".images").mouseout(function() {
 });
 
 $(".images").on('click', function(){
+    div = img.substr(29);
     img = img.substr(22);
     $.ajax({
             method: "POST",
@@ -51,6 +52,7 @@ $(".images").on('click', function(){
         .done(function (msg) {
             if (msg == 'done') {
                 // modification effectué
+                $("#"+div+"").hide();
                 console.log('done');
             }
             else {
@@ -59,7 +61,3 @@ $(".images").on('click', function(){
             }
         });
 });
-// onclick images appel ajax on supprime la photo de la bdd.
-// url: 'images/79b82ffe31e5a7984ee9146778d529d8'
-// url: 'images/79b82ffe31e5a7984ee9146778d529d8'
-// url: '79b82ffe31e5a7984ee9146778d529d8'

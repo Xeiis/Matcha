@@ -24,6 +24,7 @@ function successCallback(position){
             url: "get_profile_data"
         })
         .done(function (msg) {
+            // recuperer toutes les datas et les afficher sur la map
             //alert(msg);
             //if (msg == '')
             //{

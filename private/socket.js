@@ -7,16 +7,13 @@ module.exports = function(io) {
         }
         else
             socket.emit('youare_not_logged');
-        console.log('new user connected');
         socket.on('inscription', function (data) {
             index.inscription(data, inscription_ok);
         });
         socket.on('whoami', function () {
-            console.log(socket.handshake.session.login);
             socket.emit('youare', "Session id: " + socket.handshake.session.uid + " login : " + socket.handshake.session.login);
         });
         socket.on('logout', function() {
-            console.log("logout : "+socket.handshake.session.login);
             socket.handshake.session.login = '';
         });
         socket.on('login', function(data) {

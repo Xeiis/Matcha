@@ -35,7 +35,6 @@ exports.update_profile = function(data, req, res)
 
 exports.photo_add = function(data, req, res)
 {
-    console.log(data);
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
@@ -49,7 +48,6 @@ exports.photo_add = function(data, req, res)
 
 exports.photo_suppr = function(data, req, res)
 {
-    console.log(data);
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
