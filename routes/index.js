@@ -39,12 +39,19 @@ router.post('/photo_add', function(req, res){
     var data = new Object();
 
     data.url = req.file.path.substring(req.file.path.indexOf('/') + 1);
-    data.login = req.session.login;
     profile.photo_add(data, req, res);
+});
+
+router.post('/save_position', function(req, res){
+    index_function.save_position(req.body, req, res);
 });
 
 router.post('/suppr_images', function(req, res){
     profile.photo_suppr(req.body, req, res);
+});
+
+router.post('/profile_picture', function(req, res){
+    profile.photo_profile(req.body, req, res);
 });
 
 router.param('id', function (req, res, next, id) {

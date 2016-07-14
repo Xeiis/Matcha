@@ -17,30 +17,30 @@ function successCallback(position){
     // permet de se place là ou on se trouve
     var myLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
     map.panTo(myLatlng);
-
     // faire cela pour chaque personne, connecté en ce moment ? demander au serveur de retourner ces infos.
     $.ajax({
             method: "POST",
             url: "get_profile_data"
         })
         .done(function (msg) {
-            // recuperer toutes les datas et les afficher sur la map
-            //alert(msg);
-            //if (msg == '')
-            //{
-                // while msg ( en json )
+            console.log(msg); // on a recup toute les infos. les affichers dans des overlay different
+            // on va pouvoir y aller toutes les infos sont récupérer !!
+            
+            /*var obj = jQuery.parseJSON(msg);
+            var i = 0;
+            while(obj[i])
+            {*/
                 /*overlay = new CustomMarker(
-                    myLatlng,
-                    map,
-                    {
-                        marker_id: '123'
-                    },
-                    '../images/tmp1.png', // a remplacer par les images de chaqu'un biensur ;)
-                    'Ceci est un test d\'infowindow tralalalalalal lolo c\'est trop bien cette merde' // message dans l'infowindows
-                );*/
-                
-                /*$('#connection_erreur').html(msg);
-                $('#connection_erreur').show("slow").delay(4000).hide('slow');*/
+                 myLatlng,
+                 map,
+                 {
+                 marker_id: i
+                 },
+                 '../images/tmp1.png', // a remplacer par les images de chaqu'un biensur ;)
+                 'Ceci est un test d\'infowindow tralalalalalal lolo c\'est trop bien cette merde' // message dans l'infowindows
+                 );*/
+                //i++;
+            //}
         });
     overlay = new CustomMarker(
         myLatlng,

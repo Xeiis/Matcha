@@ -36,6 +36,7 @@ exports.login = function(data, req, res) {
 };
 
 exports.get_profile_data = function(req, res) {
+    console.log(req.session.login);
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
@@ -43,6 +44,18 @@ exports.get_profile_data = function(req, res) {
         Mongo.find(db, function (docs) {
             db.close();
             res.send(docs);
-        }, {}, 'user');
+        }, {login : {$ne : req.session.login}}, 'user');
+    });
+};
+
+exports.save_position = function(data, req, res) {
+    // Use connect method to connect to the Server
+    Mongo.Client.connect(Mongo.url, function(err, db) {
+        Mongo.assert.equal(null, err);
+        console.log("Connected correctly to server");
+        Mongo.update(db, function () {
+            db.close();
+            res.send('done');
+        }, {login :req.session.login},  {$set: data}, 'user');
     });
 };

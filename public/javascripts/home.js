@@ -38,6 +38,12 @@ $("#submit_connection").click(function(){
                 $('#connection_erreur').show("slow").delay(4000).hide('slow');
             }
             else {
+                if (navigator.geolocation)
+                    var watchId = navigator.geolocation.watchPosition(save_position,
+                        null,
+                        {enableHighAccuracy:true});
+                else
+                    alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
                 $('#sign_in').hide( "slow" );
                 $('#sign_up').hide( "slow" );
                 $('#connection').hide( "slow" );
@@ -49,6 +55,14 @@ $("#submit_connection").click(function(){
         });
     //socket.emit('login', {login: login, password: password});
 });
+
+function save_position(position){
+    $.ajax({
+        method: "POST",
+        url: "save_position",
+        data : {latitude: position.coords.latitude, longitude: position.coords.longitude}
+    });
+}
 
 $('#whoam_i').click(function(){
     socket.emit('whoami');
