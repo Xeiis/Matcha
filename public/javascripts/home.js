@@ -57,11 +57,36 @@ $("#submit_connection").click(function(){
 });
 
 function save_position(position){
+    console.log("save_position");
     $.ajax({
         method: "POST",
         url: "save_position",
         data : {latitude: position.coords.latitude, longitude: position.coords.longitude}
     });
+    $.ajax({
+            method: "POST",
+            url: "get_profile_data"
+        })
+        .done(function (msg) {
+            var i = 0;
+
+            while(msg[i])
+            {
+                var distance = ConvertDistance(distance_with2point(msg[i].longitude, msg[i].latitude, position.coords.longitude, position.coords.latitude));
+                console.log(msg[i]);
+                var myLatlng = new google.maps.LatLng(msg[i].latitude, msg[i].longitude);
+                overlay = new CustomMarker(
+                    myLatlng,
+                    map,
+                    {
+                        marker_id: i
+                    },
+                    msg[i].profile, // a remplacer par les images de chaqu'un biensur ;)
+                    "<strong>"+msg[i].prenom+"</strong></br>"+distance+"</br>"+msg[i].description // message dans l'infowindows
+                );
+                i++;
+            }
+        });
 }
 
 $('#whoam_i').click(function(){

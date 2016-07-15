@@ -22,7 +22,7 @@ $("#update_profile").click(function() {
         .done(function (msg) {
             if (msg == 'done') {
                 // modification effectué
-                $('#profile_modif').show("slow").delay(4000).hide('slow');
+                $('#profile_modif_ok').show("slow").delay(4000).hide('slow');
             }
             else {
                 // modification erreur
@@ -73,7 +73,8 @@ $(".images").on('click', function(){
         .done(function (msg) {
             if (msg == 'done') {
                 // modification effectué
-                $("#"+div+"").hide();
+                if (name == 'url')
+                    $("#"+div+"").hide();
                 $("#profile_modif_ok").show("slow").delay(4000).hide('slow');
             }
             else {

@@ -19,44 +19,65 @@ function successCallback(position){
     map.panTo(myLatlng);
     // faire cela pour chaque personne, connecté en ce moment ? demander au serveur de retourner ces infos.
     $.ajax({
-            method: "POST",
-            url: "get_profile_data"
-        })
-        .done(function (msg) {
-            console.log(msg); // on a recup toute les infos. les affichers dans des overlay different
-            // on va pouvoir y aller toutes les infos sont récupérer !!
-            
-            /*var obj = jQuery.parseJSON(msg);
-            var i = 0;
-            while(obj[i])
-            {*/
-                /*overlay = new CustomMarker(
-                 myLatlng,
-                 map,
-                 {
-                 marker_id: i
-                 },
-                 '../images/tmp1.png', // a remplacer par les images de chaqu'un biensur ;)
-                 'Ceci est un test d\'infowindow tralalalalalal lolo c\'est trop bien cette merde' // message dans l'infowindows
-                 );*/
-                //i++;
-            //}
-        });
-    overlay = new CustomMarker(
-        myLatlng,
-        map,
-        {
-            marker_id: '123'
-        },
-        '../images/tmp1.png', // a remplacer par les images de chaqu'un biensur ;)
-        'Ceci est un test d\'infowindow tralalalalalal lolo c\'est trop bien cette merde' // message dans l'infowindows
-    );
-    // enregistrer ce point en bdd et l'envoyez a tous les utilisateurs.
+        method: "POST",
+        url: "save_position",
+        data : {latitude: position.coords.latitude, longitude: position.coords.longitude}
+    });
+    $.ajax({
+        method: "POST",
+        url: "get_profile_data"
+    })
+    .done(function (msg) {
+        var i = 0;
 
-    /*alert(distance_with2point(position.coords.longitude, position.coords.latitude, 2.347198, 48.858565));
-    on recuperer la bonne distance tout est ok.
-    */
-    //alert(ConvertDistance(distance_with2point(position.coords.longitude, position.coords.latitude, 2.347198, 48.858565)));
+        while(msg[i]) {
+            age = dateDiff(msg[i].date, date_today());
+            var distance = ConvertDistance(distance_with2point(msg[i].longitude, msg[i].latitude, position.coords.longitude, position.coords.latitude));
+            console.log(msg[i]);
+            var myLatlng = new google.maps.LatLng(msg[i].latitude, msg[i].longitude);
+            overlay = new CustomMarker(
+                myLatlng,
+                map,
+                {
+                    marker_id: i
+                },
+                msg[i].profile,
+                "<strong>"+msg[i].prenom+"</strong> - "+age+" ans</br>"+distance+"</br>"+msg[i].description // message dans l'infowindows
+            );
+            i++;
+        }
+    });
+}
+
+function date_today() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+    today = yyyy+'/'+mm+'/'+dd;
+    return today;
+}
+function dateDiff(date1, date2){
+    var year = date2.substr(0,4) - date1.substr(0,4);
+    var month = date2.substr(8,2) - date1.substr(8,2);
+    if (month < 0)
+        year--;
+    else if (month == 0)
+    {
+        var day = date2.substr(5,2) - date1.substr(5,2);
+        if (day < 0)
+            year--;
+        else if (day == 0)
+            alert("C'est votre anniversaire !");
+    }
+    return year;
 }
 
 function ConvertDistance(d)
@@ -64,7 +85,7 @@ function ConvertDistance(d)
     var result;
     if( d < 1000 )
     {
-        result = d + ' M';
+        result = d + ' m';
     }
     else
     {
