@@ -1,8 +1,9 @@
-function CustomMarker(latlng, map, args, img, text) {
+function CustomMarker(latlng, map, args, img, text, login) {
     this.latlng = latlng;
     this.args = args;
     this.img = img;
     this.text = text;
+    this.login = login;
     this.setMap(map);
 }
 
@@ -42,6 +43,10 @@ CustomMarker.prototype.draw = function() {
             infowindow.style.padding = '10px';
             infowindow.style.background = 'white';
             infowindow.innerHTML = self.text;
+        });
+
+        google.maps.event.addDomListener(div, "click", function(event) {
+            document.location.href = 'http://localhost:3000/'+self.login;
         });
 
         google.maps.event.addDomListener(div, "mouseout", function(event) {

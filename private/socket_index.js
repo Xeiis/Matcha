@@ -53,7 +53,7 @@ exports.get_profile_data = function(req, res) {
                         Mongo.find(db, function (docs) {
                             db.close();
                             res.send(docs);
-                        }, {login: {$ne: req.session.login}}, 'user');
+                        }, {$and: [ {login: {$ne: req.session.login}}, {attirance: {$eq: docs[0].sexe} }] }, 'user');
                     });
                 }
                 else if (attirance == "H" || attirance == "F") {
@@ -63,7 +63,7 @@ exports.get_profile_data = function(req, res) {
                         Mongo.find(db, function (docs) {
                             db.close();
                             res.send(docs);
-                        }, {$and: [{login: {$ne: req.session.login}}, {attirance: {$lte: attirance}}]}, 'user');
+                        }, {$and: [ {login: {$ne: req.session.login} }, {sexe: {$eq: attirance} } , {$or: [ {attirance: {$eq: docs[0].sexe} }, {attirance: {$eq: "HF"}} ]} ]}, 'user');
                     });
                 }
             }, {'login': req.session.login}, 'user');

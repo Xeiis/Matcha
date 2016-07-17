@@ -36,6 +36,6 @@ $("#submit_deconnection").click(function(){
             $('#sign_up').show( "slow" );
             $('#submit_deconnection').fadeOut( "slow" );
             $('#login_value').html('');
+            document.location.href = 'http://localhost:3000/';
         });
-});
-
+}); 

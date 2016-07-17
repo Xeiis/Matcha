@@ -60,7 +60,7 @@ block content
                             option(value="HF") Les deux
                 div(class="form-group")
                     label(for="description") Une description:
-                    textarea(placeholder="Description" id="description" class="form-control")
+                    textarea(placeholder="Description" id="description" class="form-control") #{description}
                 form(id="photo_add" method="POST" action="/photo_add" enctype="multipart/form-data")
                     div(class="form-group")
                         label(for="photo") Une photo de vous:

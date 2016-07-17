@@ -43,8 +43,6 @@ $("#supprimer").on('click', function() {
     name = 'url';
 });
 
-
-
 $(".images").mouseover(function(){
     img = this.src;
     this.setAttribute('src', img_mod);

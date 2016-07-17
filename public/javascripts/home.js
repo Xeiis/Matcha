@@ -23,6 +23,10 @@ $("#submit_inscription").click(function(){
     socket.emit('inscription', {login: login, password: password, email:email, nom:nom, prenom:prenom});
 });
 
+function removeOverlay() {
+    overlay.setMap(null);
+}
+
 $("#submit_connection").click(function(){
     var login = $("#login_in").val();
     var password = $("#password_in").val();
@@ -38,6 +42,7 @@ $("#submit_connection").click(function(){
                 $('#connection_erreur').show("slow").delay(4000).hide('slow');
             }
             else {
+                removeOverlay();
                 if (navigator.geolocation)
                     var watchId = navigator.geolocation.watchPosition(save_position,
                         null,
@@ -53,50 +58,38 @@ $("#submit_connection").click(function(){
                 socket.emit('login', msg);
             }
         });
-    //socket.emit('login', {login: login, password: password});
 });
 
 function save_position(position){
-    console.log("save_position");
     $.ajax({
         method: "POST",
         url: "save_position",
         data : {latitude: position.coords.latitude, longitude: position.coords.longitude}
     });
     $.ajax({
-            method: "POST",
-            url: "get_profile_data"
-        })
-        .done(function (msg) {
-            var i = 0;
+        method: "POST",
+        url: "get_profile_data"
+    })
+    .done(function (msg) {
+        var i = 0;
 
-            while(msg[i])
-            {
-                var distance = ConvertDistance(distance_with2point(msg[i].longitude, msg[i].latitude, position.coords.longitude, position.coords.latitude));
-                console.log(msg[i]);
-                var myLatlng = new google.maps.LatLng(msg[i].latitude, msg[i].longitude);
-                overlay = new CustomMarker(
-                    myLatlng,
-                    map,
-                    {
-                        marker_id: i
-                    },
-                    msg[i].profile, // a remplacer par les images de chaqu'un biensur ;)
-                    "<strong>"+msg[i].prenom+"</strong></br>"+distance+"</br>"+msg[i].description // message dans l'infowindows
-                );
-                i++;
-            }
-        });
+        while(msg[i]) {
+            age = dateDiff(msg[i].date, date_today());
+            var distance = ConvertDistance(distance_with2point(msg[i].longitude, msg[i].latitude, position.coords.longitude, position.coords.latitude));
+            var myLatlng = new google.maps.LatLng(msg[i].latitude, msg[i].longitude);
+            overlay = new CustomMarker(
+                myLatlng,
+                map,
+                {
+                    marker_id: i
+                },
+                msg[i].profile,
+                "<strong>"+msg[i].prenom+"</strong> - "+age+" ans</br>"+distance+"</br>"+msg[i].description // message dans l'infowindows
+            );
+            i++;
+        }
+    });
 }
-
-$('#whoam_i').click(function(){
-    socket.emit('whoami');
-});
-
-socket.on('youare', function(data){
-    alert(data);
-    console.log(data);
-});
 
 socket.on('inscription', function(data) {
     var html = "";

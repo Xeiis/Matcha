@@ -33,7 +33,6 @@ function successCallback(position){
         while(msg[i]) {
             age = dateDiff(msg[i].date, date_today());
             var distance = ConvertDistance(distance_with2point(msg[i].longitude, msg[i].latitude, position.coords.longitude, position.coords.latitude));
-            console.log(msg[i]);
             var myLatlng = new google.maps.LatLng(msg[i].latitude, msg[i].longitude);
             overlay = new CustomMarker(
                 myLatlng,
@@ -42,7 +41,8 @@ function successCallback(position){
                     marker_id: i
                 },
                 msg[i].profile,
-                "<strong>"+msg[i].prenom+"</strong> - "+age+" ans</br>"+distance+"</br>"+msg[i].description // message dans l'infowindows
+                "<strong>"+msg[i].prenom+"</strong> - "+age+" ans</br>"+distance+"</br>"+msg[i].description, // message dans l'infowindows
+                msg[i].login
             );
             i++;
         }
@@ -52,7 +52,7 @@ function successCallback(position){
 function date_today() {
     var today = new Date();
     var dd = today.getDate();
-    var mm = today.getMonth()+1;
+    var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
 
     if (dd < 10) {
@@ -66,16 +66,16 @@ function date_today() {
 }
 function dateDiff(date1, date2){
     var year = date2.substr(0,4) - date1.substr(0,4);
-    var month = date2.substr(8,2) - date1.substr(8,2);
+    var month = date2.substr(5,2) - date1.substr(5,2);
     if (month < 0)
         year--;
     else if (month == 0)
     {
-        var day = date2.substr(5,2) - date1.substr(5,2);
+        var day = date2.substr(8,2) - date1.substr(8,2);
         if (day < 0)
             year--;
         else if (day == 0)
-            alert("C'est votre anniversaire !");
+            console.log("C'est votre anniversaire !"); // faire quelque chose de spéciale dans ce cas.
     }
     return year;
 }

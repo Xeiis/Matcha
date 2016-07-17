@@ -1,0 +1,58 @@
+extends layout
+
+block content
+    div(class="container" style="margin-top:20px")
+        div(class="row")
+            p // TODO Mettre en forme cette page.
+            div(class="col-lg-6")
+                div(class="form-group")
+                    p Votre nom:
+                    p #{nom}
+                div(class="form-group")
+                    p Votre prenom:
+                    p #{prenom}
+                div(class="form-group")
+                    p Votre login:
+                    p #{login}
+                div(class="form-group")
+                    p Votre email:
+                    p #{email}
+                div(class="form-group")
+                    p Votre ville:
+                    p #{ville}
+                div(class="form-group")
+                    p Votre code postal:
+                    p #{cp}
+            div(class="col-lg-6")
+                div(class="form-group")
+                    p Votre date de naissance:
+                    p #{date}
+                div(class="form-group")
+                    p Votre sexe:
+                        if sexe == "H"
+                            p Homme
+                        if sexe == "F"
+                            p Femme
+                        if sexe == "A"
+                            p Autre
+                div(class="form-group")
+                    p Votre attirance:
+                       if attirance == "H"
+                            p Homme
+                       if attirance == "F"
+                            p Femme
+                       if attirance == "HF"
+                            p Les deux
+                div(class="form-group")
+                    p Une description:
+                    p #{description}
+                //tag
+        div(class="row")
+            p.jumbotron(style="margin-top:30px;padding-top:30px;padding-bottom:30px")
+                != '<strong style="font-size:30px;font-weight: 300;">Ses images : </strong>'
+            if images
+                each val in images
+                    div(style="padding:17px;float:left;background-color:#eee;")
+                        img(src="../"+val width="200" height="200" class="photo")
+block scripts
+    script(src="/javascripts/profile.js")

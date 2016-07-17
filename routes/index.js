@@ -9,10 +9,6 @@ router.get('/', function(req, res, next) {
   index.renderIndex(req, res, next);
 });
 
-router.get('/lol', function(req, res, next) {
-  res.render('lol', { title: 'Express' });
-});
-
 router.get('/profile', function(req, res, next) {
   profile.renderProfile(req, res, next);
 });
@@ -54,6 +50,16 @@ router.post('/profile_picture', function(req, res){
     profile.photo_profile(req.body, req, res);
 });
 
+router.get('/:username', function(req, res){
+    var username = req.params.username;
+    profile.show_profile(username, req, res);
+});
+
+/*
+    ONLY TEST
+------------------------------------------------------------------------------------------
+ */
+
 router.param('id', function (req, res, next, id) {
   console.log('CALLED ONLY ONCE',id);
   next();
@@ -67,5 +73,9 @@ router.get('/test/jade_demo', function (req, res, id) {
   var ob = { action:"date +%s", result:"1367263074"};
   res.render('test', { pageTitle: 'Jade Demo',  youAreUsingJade: true, json : ob });
 });
+
+/*
+-------------------------------------------------------------------------------------------
+ */
 
 module.exports = router;
