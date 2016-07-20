@@ -93,4 +93,6 @@ exports.save_position = function(data, req, res) {
             }, {login: req.session.login}, {$set: data}, 'user');
         });
     }
+    else
+        res.end();
 };

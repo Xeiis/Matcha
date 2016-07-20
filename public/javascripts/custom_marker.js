@@ -1,9 +1,10 @@
-function CustomMarker(latlng, map, args, img, text, login) {
+function CustomMarker(latlng, map, args, img, text, login, sexe) {
     this.latlng = latlng;
     this.args = args;
     this.img = img;
     this.text = text;
     this.login = login;
+    this.sexe = sexe;
     this.setMap(map);
 }
 
@@ -26,7 +27,10 @@ CustomMarker.prototype.draw = function() {
         div.style.width = '100px';
         div.style.height = '100px';
         div.style.background = 'white';
-        div.style.border = '2px solid #5048c7';
+        if (this.sexe == "H")
+            div.style.border = '2px solid #5048c7';
+        else if (this.sexe == "F")
+            div.style.border = '2px solid #ef29d6';
         div.innerHTML = "<img src='"+ this.img +"' width='96' height='96' alt='photo de profil'>";
 
         if (typeof(self.args.marker_id) !== 'undefined') {

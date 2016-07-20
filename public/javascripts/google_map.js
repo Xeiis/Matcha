@@ -13,11 +13,11 @@ if (navigator.geolocation)
 else
     alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
 
+
 function successCallback(position){
     // permet de se place là ou on se trouve
     var myLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
     map.panTo(myLatlng);
-    // faire cela pour chaque personne, connecté en ce moment ? demander au serveur de retourner ces infos.
     $.ajax({
         method: "POST",
         url: "save_position",
@@ -42,7 +42,8 @@ function successCallback(position){
                 },
                 msg[i].profile,
                 "<strong>"+msg[i].prenom+"</strong> - "+age+" ans</br>"+distance+"</br>"+msg[i].description, // message dans l'infowindows
-                msg[i].login
+                msg[i].login,
+                msg[i].sexe
             );
             i++;
         }

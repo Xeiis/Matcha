@@ -1,4 +1,4 @@
-exports.renderIndex = function(req,res,next)
+exports.renderIndex = function(req, res)
 {
     res.render('index');
 };

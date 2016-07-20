@@ -30,7 +30,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -90,7 +90,7 @@ var server = http.createServer(app);
  * Create SOCKET IO.
  */
 
-var io = require('socket.io')(server);
+var io = require('socket.io').listen(server);
 var ios = require('./private/session.js');
 io.use(ios(session));
 rss(io);
