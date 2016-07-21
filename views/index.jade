@@ -264,7 +264,6 @@ block scripts
     });
 
     function removeOverlay() {
-      console.log('ho');
       overlay.setMap(null);
     }
 
@@ -282,7 +281,6 @@ block scripts
                   $('#connection_erreur').show("slow").delay(4000).hide('slow');
                 }
                 else {
-                  console.log('hi');
                   if (typeof(overlay) != 'undefined')
                     removeOverlay();
                   if (navigator.geolocation)
@@ -291,7 +289,6 @@ block scripts
                             {enableHighAccuracy: true});
                   else
                     alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
-                  console.log('hey');
                   $('#sign_in').hide("slow");
                   $('#sign_up').hide("slow");
                   $('#connection').hide("slow");

@@ -41,6 +41,8 @@ router.post('/photo_add', function(req, res){
     console.log("/photo_add");
     var data = new Object();
 
+    if (typeof(req.file) == 'undefined')
+        res.redirect('http://localhost:3000/profile?photo=false');
     data.url = req.file.path.substring(req.file.path.indexOf('/') + 1);
     profile.photo_add(data, req, res);
 });
