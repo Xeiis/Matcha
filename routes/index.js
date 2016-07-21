@@ -63,7 +63,7 @@ router.post('/profile_picture', function(req, res){
 router.get('/:username', function(req, res){
     console.log('/:username');
     var username = req.params.username;
-    if (username != 'favicon.ico') {
+    if (username != 'favicon.ico' && username != 'undefined') {
         profile.show_profile(username, req, res);
     }
     else
