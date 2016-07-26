@@ -3,6 +3,9 @@ var router = express.Router();
 var index = require('../private/index.js');
 var profile = require('../private/profile.js');
 var index_function = require('../private/socket_index.js');
+var visites = require('../private/visites.js');
+var match = require('../private/match.js');
+var chat = require('../private/chat.js');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -62,9 +65,25 @@ router.post('/profile_picture', function(req, res){
     profile.photo_profile(req.body, req, res);
 });
 
+router.get('/visites', function(req, res){
+    console.log('/visites');
+    visites.renderVisites(req, res);
+});
+
+router.get('/match', function(req, res){
+    console.log('/match');
+    match.renderMatch(req, res);
+});
+
+router.get('/chat', function(req, res){
+    console.log('/chat');
+    chat.renderChat(req, res);
+});
+
 router.get('/:username', function(req, res){
     console.log('/:username');
     var username = req.params.username;
+    
     if (username != 'favicon.ico' && username != 'undefined') {
         profile.show_profile(username, req, res);
     }

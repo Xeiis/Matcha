@@ -10,7 +10,13 @@ div(id="header")
                             span(class="sr-only") (current)
                     li(style="display:none" id="profile")
                         a(href="profile") Profile
-                    li(class="dropdown")
+                    li(style="display:none" id="visites")
+                        a(href="visites") Visiteur
+                    li(style="display:none" id="match")
+                        a(href="match") Matchs
+                    li(style="display:none" id="chat")
+                        a(href="chat") Chat
+                    //li(class="dropdown")
                         a(href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") Dropdown
                             span(class="caret")
                         ul(class="dropdown-menu")
@@ -38,7 +44,7 @@ div(id="header")
                         a(id="login_value")
                     li
                         button(class="btn btn-default navbar-btn" style="display:none;" id="submit_deconnection") Logout
-                    li(class="dropdown")
+                    //li(class="dropdown")
                         a(href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") Dropdown
                             span(class="caret")
                         ul(class="dropdown-menu")

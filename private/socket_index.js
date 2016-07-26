@@ -62,6 +62,7 @@ exports.get_profile_data = function(req, res) {
                         Mongo.assert.equal(null, err);
                         Mongo.find(db, function (docs) {
                             db.close();
+                            console.info(docs);
                             res.send(docs);
                         }, {$and: [ {login: {$ne: req.session.login} }, {sexe: {$eq: attirance} } , {$or: [ {attirance: {$eq: docs[0].sexe} }, {attirance: {$eq: "HF"}} ]} ]}, 'user');
                     });

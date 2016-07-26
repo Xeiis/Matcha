@@ -34,6 +34,18 @@ exports.update = function (db, callback, where, value, collection_in) {
         });
 };
 
+exports.updateMulti = function (db, callback, where, value, collection_in) {
+    // Get the documents collection
+    var collection = db.collection(collection_in);
+    // Update document where a is 2, set b equal to 1
+    collection.updateMany(where, value, {multi :true}, function (err, result) {
+        assert.equal(err, null);
+        assert.equal(1, result.result.n);
+        callback(result);
+    });
+};
+
+
 exports.delete = function (db, callback, data, collection_in) {
     // Get the documents collection
     var collection = db.collection(collection_in);

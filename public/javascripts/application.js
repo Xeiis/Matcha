@@ -11,12 +11,13 @@ socket.on('disconnect', function(){
 });
 
 socket.on('youare_logged', function(data){
-    /*$('#sign_in').css('display', 'none');
-    $('#sign_up').css('display', 'none');*/
     $('#connection').css('display', "none" );
     $('#submit_deconnection').css('display', "block" );
     $('#login_value').html("Bonjour "+data);
     $('#profile').show('fast');
+    $('#visites').show('fast');
+    $('#match').show('fast');
+    $('#chat').show('fast');
 });
 
 socket.on('youare_not_logged', function(){
@@ -36,6 +37,19 @@ $("#submit_deconnection").click(function(){
             $('#sign_up').show( "slow" );
             $('#submit_deconnection').fadeOut( "slow" );
             $('#login_value').html('');
-            document.location.href = 'http://localhost:3000/';
+            var CheminComplet = document.location.href;
+            var NomDuFichier = CheminComplet.substring(CheminComplet.lastIndexOf( "/" )+1 );
+            if (NomDuFichier != '') {
+                document.location.href = 'http://localhost:3000/';
+            }
+            else{
+                $('#profile').hide('fast');
+                $('#visites').hide('fast');
+                $('#match').hide('fast');
+                $('#chat').hide('fast');
+            }
         });
-}); 
+});
+
+
+
