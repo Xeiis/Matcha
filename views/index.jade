@@ -116,7 +116,7 @@ block scripts
       return this.latlng;
     };
 
-  script(type = "text/javascript").
+  script(type="text/javascript").
     function initialize() {
       map = new google.maps.Map(document.getElementById("map_canvas"), {
         zoom: 15,
@@ -265,85 +265,92 @@ block scripts
     });
 
     function removeOverlay() {
+      console.log("remove overlay");
       overlay.setMap(null);
     }
 
     $("#submit_connection").click(function() {
       var login = $("#login_in").val();
       var password = $("#password_in").val();
-      $.ajax({
-                method: "POST",
-                url: "login",
-                data: {login: login, password: password}
-              })
-              .done(function (msg) {
-                if (msg == 'Mauvais login / Mot de passe') {
-                  $('#connection_erreur').html(msg);
-                  $('#connection_erreur').show("slow").delay(4000).hide('slow');
-                }
-                else {
-                  if (typeof(overlay) != 'undefined')
-                    removeOverlay();
-                  if (navigator.geolocation)
-                    var watchId = navigator.geolocation.watchPosition(save_position,
-                            null,
-                            {enableHighAccuracy: true});
-                  else
-                    alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
-                  $('#sign_in').hide("slow");
-                  $('#sign_up').hide("slow");
-                  $('#connection').hide("slow");
-                  $('#login_value').html("Bonjour " + msg);
-                  $('#submit_deconnection').fadeIn("slow");
-                  $('#profile').show('fast');
-                  $('#visites').show('fast');
-                  $('#match').show('fast');
-                  $('#chat').show('fast');
-                  socket.emit('login', msg);
-                }
-              });
+    $.ajax({
+            method: "POST",
+            url: "login",
+            data: {login: login, password: password}
+          })
+          .done(function (msg) {
+            if (msg == 'Mauvais login / Mot de passe') {
+              $('#connection_erreur').html(msg);
+              $('#connection_erreur').show("slow").delay(4000).hide('slow');
+            }
+            else {
+              if (typeof(overlay) != 'undefined')
+                removeOverlay();
+              if (navigator.geolocation)
+                var watchId = navigator.geolocation.watchPosition(save_position,
+                        null,
+                        {enableHighAccuracy: true});
+              else
+                alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+              function save_position(position) {
+                console.log('save position');
+                get_data(position);
+                $.ajax({
+                  method: "POST",
+                  url: "save_position",
+                  data: {latitude: position.coords.latitude, longitude: position.coords.longitude}
+                })
+                .done(function (msg){
+                  console.log('done');
+                });
+              }
+
+              function get_data(position) {
+                $.ajax({
+                  method: "POST",
+                  url: "get_profile_data"
+                })
+                .done(function (msg) {
+                  var i = 0;
+
+                  while (msg[i]) {
+                    console.log(msg[i]);
+                    if (msg[i].date)
+                      age = dateDiff(msg[i].date, date_today());
+                    else
+                      age = 0;
+                    var distance = ConvertDistance(distance_with2point(msg[i].longitude, msg[i].latitude, position.coords.longitude, position.coords.latitude));
+                    var myLatlng = new google.maps.LatLng(msg[i].latitude, msg[i].longitude);
+                    overlay = new CustomMarker(
+                            myLatlng,
+                            map,
+                            {
+                              marker_id: i
+                            },
+                            msg[i].profile,
+                            "<strong>" + msg[i].prenom + "</strong> - " + age + " ans</br>" + distance + "</br>" + msg[i].description // message dans l'infowindows
+                    );
+                    i++;
+                  }
+                });
+              }
+              $('#sign_in').hide("slow");
+              $('#sign_up').hide("slow");
+              $('#connection').hide("slow");
+              $('#login_value').html("Bonjour " + msg);
+              $('#submit_deconnection').fadeIn("slow");
+              $('#profile').show('fast');
+              $('#visites').show('fast');
+              $('#match').show('fast');
+              $('#chat').show('fast');
+              socket.emit('login', msg);
+            }
+          });
     });
 
-    function save_position(position) {
-      console.log('save position');
-      $.ajax({
-        method: "POST",
-        url: "save_position",
-        data: {latitude: position.coords.latitude, longitude: position.coords.longitude}
-      });
-      $.ajax({
-        method: "POST",
-        url: "get_profile_data"
-      })
-      .done(function (msg) {
-        var i = 0;
 
-        while (msg[i]) {
-          console.log(msg[i]);
-          if (msg[i].date)
-            age = dateDiff(msg[i].date, date_today());
-          else
-            age = 0;
-          var distance = ConvertDistance(distance_with2point(msg[i].longitude, msg[i].latitude, position.coords.longitude, position.coords.latitude));
-          var myLatlng = new google.maps.LatLng(msg[i].latitude, msg[i].longitude);
-          overlay = new CustomMarker(
-                  myLatlng,
-                  map,
-                  {
-                    marker_id: i
-                  },
-                  msg[i].profile,
-                  "<strong>" + msg[i].prenom + "</strong> - " + age + " ans</br>" + distance + "</br>" + msg[i].description // message dans l'infowindows
-          );
-          i++;
-        }
-      });
-    }
 
     socket.on('inscription', function(data) {
-      var html = "";
-      html += "Inscription effectué";
-      html += "";
+      var html = "Inscription effectué";
     $("#inscription_ok").html(html);
     $("#inscription_ok").show( "slow" ).delay(4000).hide('slow');
     });

@@ -28,6 +28,9 @@ socket.on('youare_not_logged', function(){
 $("#submit_deconnection").click(function(){
     socket.emit('logout');
     $('#profile').hide('fast');
+    $('#visites').hide('fast');
+    $('#match').hide('fast');
+    $('#chat').hide('fast');
     $.ajax({
             method: "POST",
             url: "logout"
@@ -41,12 +44,6 @@ $("#submit_deconnection").click(function(){
             var NomDuFichier = CheminComplet.substring(CheminComplet.lastIndexOf( "/" )+1 );
             if (NomDuFichier != '') {
                 document.location.href = 'http://localhost:3000/';
-            }
-            else{
-                $('#profile').hide('fast');
-                $('#visites').hide('fast');
-                $('#match').hide('fast');
-                $('#chat').hide('fast');
             }
         });
 });
