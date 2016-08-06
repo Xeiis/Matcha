@@ -36,7 +36,7 @@ router.post('/get_profile_data', function(req, res){
 
 router.post('/logout', function(req, res){
     console.log('/logout');
-    req.session.destroy();
+    index_function.logout(req);
     res.send('Done');
 });
 
@@ -63,6 +63,11 @@ router.post('/suppr_images', function(req, res){
 router.post('/profile_picture', function(req, res){
     console.log('/profile_picture');
     profile.photo_profile(req.body, req, res);
+});
+
+router.post('/like_profile', function(req, res){
+    console.log('/like_profile');
+    profile.like_profile(req.body, req, res);
 });
 
 router.get('/visites', function(req, res){

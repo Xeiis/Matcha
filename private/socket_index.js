@@ -21,6 +21,13 @@ exports.login = function(data, req, res) {
             db.close();
             if (docs[0]) {
                 if (passwordHash.verify(data.password, docs[0].password)) {
+                    // changer la donner connection dans la bdd
+                    Mongo.Client.connect(Mongo.url, function (err, db) {
+                        Mongo.assert.equal(null, err);
+                        Mongo.update(db, function () {
+                            db.close();
+                        }, {login: req.session.login}, {$set: {logged : true}}, 'user');
+                    });
                     req.session.login = data.login;
                     res.send(data.login);
                 } else
@@ -29,6 +36,16 @@ exports.login = function(data, req, res) {
             else
                 res.send('Mauvais login / Mot de passe');
         }, {'login': data.login}, 'user');
+    });
+};
+
+exports.logout = function(req){
+    Mongo.Client.connect(Mongo.url, function (err, db) {
+        Mongo.assert.equal(null, err);
+        Mongo.update(db, function () {
+            db.close();
+            req.session.destroy();
+        }, {login: req.session.login}, {$set: {logged : false}}, 'user');
     });
 };
 

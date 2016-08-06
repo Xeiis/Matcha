@@ -104,6 +104,43 @@ exports.show_profile = function(username, req, res) {
     });
 };
 
+exports.like_profile = function(username, req, res){
+    var find = 0;
+    Mongo.Client.connect(Mongo.url, function (err, db) {
+        Mongo.assert.equal(null, err);
+        Mongo.find(db, function (docs) {
+            db.close();
+            if (docs[0])
+            {
+                while (docs[0].like)
+                {
+                    if (docs[0].like.login == req.session.login)
+                    {
+                        find = 1;
+                        var like = {like: {login: req.session.login}};
+                        Mongo.Client.connect(Mongo.url, function(err, db) {
+                            Mongo.assert.equal(null, err);
+                            Mongo.update(db, function () {
+                                db.close();
+                            }, {login : username}, {$pull: like}, 'user');
+                        });
+                    }
+                }
+                if (find == 0)
+                {
+                    var like = {like: {login: req.session.login, date: date_today(), photo: docs[0].profile}};
+                    Mongo.Client.connect(Mongo.url, function(err, db) {
+                        Mongo.assert.equal(null, err);
+                        Mongo.update(db, function () {
+                            db.close();
+                        }, {login : username}, {$push: like}, 'user');
+                    });
+                }
+            }
+        }, {'login': req.session.login}, 'user');
+    });
+};
+
 function date_today() {
     var today = new Date();
     var dd = today.getDate();

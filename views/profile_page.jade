@@ -5,47 +5,35 @@ block content
         div(class="row")
             p // TODO Mettre en forme cette page.
             p // ADD like, report, bloquer
-            p // Afficher si la personne est en ligne sinon la dernière connection
+            p // Afficher si la personne est en ligne sinon la dernière connection]
+            input(type="hidden" value="#{login}" id="login")
             div(class="col-lg-6")
                 div(class="form-group")
-                    p Votre nom:
-                    p #{nom}
+                    p #{nom} #{prenom} #{ville} #{cp}
+                    if sexe == "H"
+                        p Homme #{date}
+                    if sexe == "F"
+                        p Femme #{date}
+                    if sexe == "A"
+                        p Autre #{date}
                 div(class="form-group")
-                    p Votre prenom:
-                    p #{prenom}
-                div(class="form-group")
-                    p Votre login:
-                    p #{login}
-                div(class="form-group")
-                    p Votre ville:
-                    p #{ville}
-                div(class="form-group")
-                    p Votre code postal:
-                    p #{cp}
-            div(class="col-lg-6")
-                div(class="form-group")
-                    p Votre date de naissance:
-                    p #{date}
-                div(class="form-group")
-                    p Votre sexe:
-                        if sexe == "H"
-                            p Homme
-                        if sexe == "F"
-                            p Femme
-                        if sexe == "A"
-                            p Autre
-                div(class="form-group")
-                    p Votre attirance:
-                       if attirance == "H"
-                            p Homme
-                       if attirance == "F"
-                            p Femme
-                       if attirance == "HF"
-                            p Les deux
-                div(class="form-group")
-                    p Une description:
                     p #{description}
-                //tag
+                div(class="form-group")
+                    button(type="button" class="btn btn-default" id="like") Like
+                    // or make a heart (like camagru)
+            div(class="col-lg-6")
+                div(class="form-group")
+
+                div(class="form-group")
+                    if attirance
+                        p Attirer par :
+                           if attirance == "H"
+                                p Homme
+                           if attirance == "F"
+                                p Femme
+                           if attirance == "HF"
+                                p Les deux
+                p // Faire les tag
         div(class="row")
             p.jumbotron(style="margin-top:30px;padding-top:30px;padding-bottom:30px")
                 != '<strong style="font-size:30px;font-weight: 300;">Ses images : </strong>'
@@ -54,4 +42,22 @@ block content
                     div(style="padding:17px;float:left;background-color:#eee;")
                         img(src="../"+val width="200" height="200" class="photo")
 block scripts
-    //script(src="/javascripts/profile.js")
+    script(type="text/javascript").
+        $("#like").on('click', function(){
+            var login = $("#login").val();
+            $.ajax({
+                method: "POST",
+                url: "like_profile",
+                data: {login: login}
+            })
+                    .done(function (msg) {
+                        if (msg == 'done') {
+                            // modification effectué
+                            // afficher le coeur rempli
+                        }
+                        else {
+                            // modification erreur
+                            // afficher une erreur
+                        }
+                    });
+        });

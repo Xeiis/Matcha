@@ -21,3 +21,11 @@ a{
 .navbar{
     margin-bottom: 0px!important;
 }
+
+select{
+    text-align-last:center;
+}
+
+.slider.slider-horizontal{
+    width:79% !important;
+}

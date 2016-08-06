@@ -1,38 +1,23 @@
 div(id="header")
-    nav(class="navbar navbar-default")
+    nav(class="navbar navbar-default" style="border-radius: 0px;")
         div(class="container-fluid")
             div(class="navbar-header")
-                a(class="navbar-brand" href="#") Matcha
+                a(class="navbar-brand" href="/") Matcha
             div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
                 ul(class="nav navbar-nav")
-                    li(id="home")
-                        a(href="/") Home
-                            span(class="sr-only") (current)
                     li(style="display:none" id="profile")
-                        a(href="profile") Profile
+                        a(href="profile").
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                     li(style="display:none" id="visites")
-                        a(href="visites") Visiteur
-                    li(style="display:none" id="match")
-                        a(href="match") Matchs
+                        a(href="visites").
+                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
                     li(style="display:none" id="chat")
-                        a(href="chat") Chat
-                    //li(class="dropdown")
-                        a(href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") Dropdown
-                            span(class="caret")
-                        ul(class="dropdown-menu")
-                            li
-                                a(href="#") Action
-                            li
-                                a(href="#") Another action
-                            li
-                                a(href="#") Something else here
-                            li(role="separator" class="divider")
-                            li
-                                a(href="#") Separated link
-                            li(role="separator" class="divider")
-                            li
-                                a(href="#") One more separated link
-                button(type="button" class="btn btn-default navbar-btn" style='display:none' id="sign_in") Sign in
+                        a(href="chat").
+                            <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                    li(style="display:none" id="match")
+                        a(href="match").
+                            <span class="glyphicon glyphicon-heart" aria-hiddent="true"></span>
+                button(type="button" class="btn btn-default navbar-btn" style='display:none;margin-right:15px'  id="sign_in") Sign in
                 button(type="button" class="btn btn-default navbar-btn" style='display:none' id="sign_up") Sign up
                 div(class="form-group navbar-form navbar-left" style="display:none" id="connection")
                     input(type="text" class="form-control" id="login_in" placeholder="login" style="margin-right:15px")
@@ -44,19 +29,3 @@ div(id="header")
                         a(id="login_value")
                     li
                         button(class="btn btn-default navbar-btn" style="display:none;" id="submit_deconnection") Logout
-                    //li(class="dropdown")
-                        a(href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false") Dropdown
-                            span(class="caret")
-                        ul(class="dropdown-menu")
-                            li
-                                a(href="#") Action
-                            li
-                                a(href="#") Another action
-                            li
-                                a(href="#") Something else here
-                            li(role="separator" class="divider")
-                            li
-                                a(href="#") Separated link
-
-    
-    
