@@ -19,7 +19,7 @@ a{
 }
 
 .navbar{
-    margin-bottom: 0px!important;
+    margin-bottom: 0px !important;
 }
 
 select{
@@ -27,5 +27,11 @@ select{
 }
 
 .slider.slider-horizontal{
-    width:79% !important;
+    width:auto !important;
+    min-width:73% !important;
+    max-width:88% !important;
+}
+
+.slider-selection{
+    border: 5px solid #595efd;
 }

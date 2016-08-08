@@ -13,9 +13,9 @@ router.get('/', function(req, res) {
     index.renderIndex(req, res);
 });
 
-router.get('/profile', function(req, res, next) {
+router.get('/profile', function(req, res) {
     console.log("/profile");
-    profile.renderProfile(req, res, next);
+    profile.renderProfile(req, res);
 });
 
 router.post('/login', function(req, res){

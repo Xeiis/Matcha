@@ -1,4 +1,7 @@
 exports.renderIndex = function(req, res)
 {
-    res.render('index');
+    if (req.session.login)
+        res.render('index',{login : true});
+    else
+        res.render('index', {login : false});
 };

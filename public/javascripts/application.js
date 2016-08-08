@@ -13,6 +13,7 @@ socket.on('disconnect', function(){
 socket.on('youare_logged', function(data){
     $('#connection').css('display', "none" );
     $('#submit_deconnection').css('display', "block" );
+    $('#recherche_block').css('display', 'block');
     $('#login_value').html("Bonjour "+data);
     $('#profile').show('fast');
     $('#visites').show('fast');
@@ -27,6 +28,7 @@ socket.on('youare_not_logged', function(){
 
 $("#submit_deconnection").click(function(){
     socket.emit('logout');
+    $('#recherche_block').css('display', 'none');
     $('#profile').hide('fast');
     $('#visites').hide('fast');
     $('#match').hide('fast');

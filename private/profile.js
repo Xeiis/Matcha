@@ -1,6 +1,6 @@
 var Mongo = require ('./mongodb.js');
 
-exports.renderProfile = function(req,res,next)
+exports.renderProfile = function(req,res)
 {
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
@@ -69,7 +69,7 @@ exports.show_profile = function(username, req, res) {
         var pull = {visiteur: {login: req.session.login}};
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
-        Mongo.updateMulti(db, function (result) {
+        Mongo.updateMulti(db, function () {
             db.close();
         }, {login : username}, {$pull: pull}, 'user');
     });
@@ -106,6 +106,7 @@ exports.show_profile = function(username, req, res) {
 
 exports.like_profile = function(username, req, res){
     var find = 0;
+    var like;
     Mongo.Client.connect(Mongo.url, function (err, db) {
         Mongo.assert.equal(null, err);
         Mongo.find(db, function (docs) {
@@ -117,22 +118,24 @@ exports.like_profile = function(username, req, res){
                     if (docs[0].like.login == req.session.login)
                     {
                         find = 1;
-                        var like = {like: {login: req.session.login}};
+                        like = {like: {login: req.session.login}};
                         Mongo.Client.connect(Mongo.url, function(err, db) {
                             Mongo.assert.equal(null, err);
                             Mongo.update(db, function () {
                                 db.close();
+                                res.send('done');
                             }, {login : username}, {$pull: like}, 'user');
                         });
                     }
                 }
                 if (find == 0)
                 {
-                    var like = {like: {login: req.session.login, date: date_today(), photo: docs[0].profile}};
+                    like = {like: {login: req.session.login, date: date_today(), photo: docs[0].profile}};
                     Mongo.Client.connect(Mongo.url, function(err, db) {
                         Mongo.assert.equal(null, err);
                         Mongo.update(db, function () {
                             db.close();
+                            res.send('done');
                         }, {login : username}, {$push: like}, 'user');
                     });
                 }
