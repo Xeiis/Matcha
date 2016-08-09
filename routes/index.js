@@ -85,6 +85,11 @@ router.get('/chat', function(req, res){
     chat.renderChat(req, res);
 });
 
+router.post('/generate', function(req, res){
+    console.log('/generate');
+
+});
+
 router.get('/:username', function(req, res){
     console.log('/:username');
     var username = req.params.username;

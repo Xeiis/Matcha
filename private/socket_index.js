@@ -2,8 +2,9 @@ var Mongo = require ('./mongodb.js');
 var passwordHash = require('password-hash');
 
 exports.inscription = function(data, callback) {
-    data.password = passwordHash.generate(data.password);
+    console.log(data);
     // Use connect method to connect to the Server
+    data.password = passwordHash.generate(data.password);
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
         Mongo.insertOne(db, function () {
