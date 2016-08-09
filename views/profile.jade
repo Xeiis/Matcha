@@ -64,13 +64,13 @@ block content
                 form(id="photo_add" method="POST" action="/photo_add" enctype="multipart/form-data")
                     div(class="form-group")
                         label(for="photo") Une photo de vous:
-                        input(type="file" id="photo" class="form-control" name="singleInputFileName" multiple)
+                        input(type="file" id="photo" class="form-control" name="singleInputFileName" style="margin-bottom: 20px;" multiple)
                         input(type="submit" value="upload" name="upload" class="btn btn-default" style="width:100%;")
                 //tag
         div(class="row")
             button(type="submit" class="btn btn-default" id="update_profile" style="width:100%;") Enregistrer
             p.jumbotron(style="margin-top:30px;padding-top:30px;padding-bottom:30px")
-                != '<strong style="font-size:30px;font-weight: 300;">Vos images : </strong>'
+                != '<strong style="font-size:30px;font-weight: 300;color:#333;">Vos images : </strong>'
             if answer == "yes"
                 div(class="alert alert-success" role="alert" id="picture_upload" style="margin-top:20px;") Picture correctly uploaded
             else if picture == "false"
@@ -83,7 +83,7 @@ block content
             if images
                 each val in images
                     if i == 0
-                        center
+                        center(style="margin-bottom:20px")
                             p Choississez l'action que vous voulez faire puis cliquer sur l'image en question.
                             button.btn.btn-primary.btn-lg(type='button' id="profile_img" style="margin-right:20px") Profile
                             button.btn.btn-primary.btn-lg(type='button' id="supprimer" style="margin-left:20px") Supprimer

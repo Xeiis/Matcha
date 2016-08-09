@@ -5,7 +5,7 @@ block content
         div(class="row")
             p // TODO Mettre en forme cette page.
             p // ADD like, report, bloquer
-            p // Afficher si la personne est en ligne sinon la dernière connection]
+            p // Afficher si la personne est en ligne sinon la dernière connection
             input(type="hidden" value="#{login}" id="login")
             div(class="col-lg-6")
                 div(class="form-group")
@@ -36,7 +36,7 @@ block content
                 p // Faire les tag
         div(class="row")
             p.jumbotron(style="margin-top:30px;padding-top:30px;padding-bottom:30px")
-                != '<strong style="font-size:30px;font-weight: 300;">Ses images : </strong>'
+                != '<strong style="font-size:30px;font-weight: 300;color:#333">Ses images : </strong>'
             if images
                 each val in images
                     div(style="padding:17px;float:left;background-color:#eee;")
