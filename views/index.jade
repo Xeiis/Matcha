@@ -86,6 +86,8 @@ block scripts
           div.style.border = '2px solid #5048c7';
         else if (this.sexe == "F")
           div.style.border = '2px solid #ef29d6';
+        else
+          div.style.border = '2px solid #8a09ec';
         div.innerHTML = "<img src='" + this.img + "' width='96' height='96' alt='photo de profil'>";
 
         if (typeof(self.args.marker_id) !== 'undefined') {
@@ -141,7 +143,7 @@ block scripts
   script(type="text/javascript").
     function initialize() {
       map = new google.maps.Map(document.getElementById("map_canvas"), {
-        zoom: 15,
+        zoom: 13,
         center: new google.maps.LatLng(48.858565, 2.347198),
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });

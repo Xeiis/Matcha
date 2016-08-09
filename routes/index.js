@@ -6,6 +6,7 @@ var index_function = require('../private/socket_index.js');
 var visites = require('../private/visites.js');
 var match = require('../private/match.js');
 var chat = require('../private/chat.js');
+var generate = require('../private/generate.js');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -85,9 +86,9 @@ router.get('/chat', function(req, res){
     chat.renderChat(req, res);
 });
 
-router.post('/generate', function(req, res){
+router.get('/generate', function(req, res){
     console.log('/generate');
-
+    generate.generate(req, res);
 });
 
 router.get('/:username', function(req, res){
