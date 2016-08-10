@@ -104,6 +104,13 @@ block scripts
           infowindow.style.padding = '10px';
           infowindow.style.background = 'white';
           infowindow.innerHTML = self.text;
+          infowindow.style.color = 'black';
+          var point = self.getProjection().fromLatLngToDivPixel(self.latlng);
+
+          if (point) {
+            infowindow.style.left = (point.x - (-50)) + 'px';
+            infowindow.style.top = (point.y - 100) + 'px';
+          }
         });
 
         google.maps.event.addDomListener(div, "click", function (event) {
@@ -124,8 +131,6 @@ block scripts
       if (point) {
         div.style.left = (point.x - 50) + 'px';
         div.style.top = (point.y - 100) + 'px';
-        infowindow.style.left = (point.x - (-50)) + 'px';
-        infowindow.style.top = (point.y - 100) + 'px';
       }
     };
 
