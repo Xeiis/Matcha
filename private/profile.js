@@ -66,31 +66,31 @@ exports.photo_profile = function(data, req, res) {
 
 exports.show_profile = function(username, req, res) {
     // Use connect method to connect to the Server
-    if (req.session.login) 
+    if (req.session.login) {
         var pull = {visiteur: {login: req.session.login}};
-    Mongo.Client.connect(Mongo.url, function(err, db) {
-        Mongo.assert.equal(null, err);
-        Mongo.updateMulti(db, function () {
-            db.close();
-        }, {login : username}, {$pull: pull}, 'user');
-    });
+        Mongo.Client.connect(Mongo.url, function (err, db) {
+            Mongo.assert.equal(null, err);
+            Mongo.updateMulti(db, function () {
+                db.close();
+            }, {login: username}, {$pull: pull}, 'user');
+        });
 
-    Mongo.Client.connect(Mongo.url, function (err, db) {
-        Mongo.assert.equal(null, err);
-        Mongo.find(db, function (docs) {
-            db.close();
-            if (docs[0])
-            {
-                var visiteur = {visiteur: {login: req.session.login, date: date_today(), photo: docs[0].profile}};
-                Mongo.Client.connect(Mongo.url, function(err, db) {
-                    Mongo.assert.equal(null, err);
-                    Mongo.update(db, function () {
-                        db.close();
-                    }, {login : username}, {$push: visiteur}, 'user');
-                });
-            }
-        }, {'login': req.session.login}, 'user');
-    });
+        Mongo.Client.connect(Mongo.url, function (err, db) {
+            Mongo.assert.equal(null, err);
+            Mongo.find(db, function (docs) {
+                db.close();
+                if (docs[0]) {
+                    var visiteur = {visiteur: {login: req.session.login, date: date_today(), photo: docs[0].profile}};
+                    Mongo.Client.connect(Mongo.url, function (err, db) {
+                        Mongo.assert.equal(null, err);
+                        Mongo.update(db, function () {
+                            db.close();
+                        }, {login: username}, {$push: visiteur}, 'user');
+                    });
+                }
+            }, {'login': req.session.login}, 'user');
+        });
+    }
     
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
