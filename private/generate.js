@@ -38,7 +38,7 @@ exports.generate = function(req, res) {
     tague = {tag: 'Brun(ne)'};
     tag(tague);
     tague = {tag: 'Blond(e)'};
-    tag(tague);;
+    tag(tague);
     tague = {tag: 'Paris'};
     tag(tague);
     tague = {tag: 'Ibiza'};

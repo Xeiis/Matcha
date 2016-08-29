@@ -24,12 +24,12 @@ block content
                     input(type="number" class="form-control" id="cp" placeholder="Code postal" value="#{cp}")
                 div(class="form-group")
                     label Tag:
-                    if tags
+                    if tag
                         select(class="form-control" id="tag")
-                        option(value='') -- Ajouter un tag --
-                        each val in tags
-                            option(value=val) #{val}
-                        button(type="button" class="btn btn-default" id="add" style="margin-left:20px") Ajouter
+                            option(value='') -- Ajouter un tag --
+                            each val in tag
+                                option(value=val) #{val}
+                        button(type="button" class="btn btn-default" id="add" style="width:100%; margin-top:20px") Ajouter
             div(class="col-lg-6")
                 div(class="form-group")
                     label(for="date") Votre date de naissance:
@@ -108,6 +108,16 @@ block scripts
         var action = 'suppr_images';
         var name = 'url';
         var img;
+
+        $("#create_tag").click(function(){
+            var tag = $("#ajout").val();
+            // ajax
+        });
+
+        $("#add").click(function () {
+            var tag = $("#tag").val();
+            // inclure dans un nouveaux bloc html ( en dessous de pref )
+        });
 
         $("#update_profile").click(function() {
             var nom = $("#nom").val();

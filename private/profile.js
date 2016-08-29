@@ -7,7 +7,37 @@ exports.renderProfile = function(req,res)
         Mongo.assert.equal(null, err);
         Mongo.find(db, function (docs) {
             if(docs) {
-                res.render('profile', {nom: docs[0].nom || '', prenom: docs[0].prenom || '', email: docs[0].email || '', ville: docs[0].ville || '', cp: docs[0].cp || '', date: docs[0].date || '', attirance: docs[0].attirance || '', sexe: docs[0].sexe || '', description: docs[0].description || '', login: docs[0].login || '', images : docs[0].url, answer : req.query.answer, deletes : req.query.delete, picture : req.query.photo});
+                Mongo.find(db, function (doc) {
+                    if (doc) {
+                        var tag = {};
+                        var i = 0;
+                        while (doc[i])
+                        {
+                            tag[i] = doc[i].tag;
+                            i++;
+                        }
+                        res.render('profile', {
+                            nom: docs[0].nom || '',
+                            prenom: docs[0].prenom || '',
+                            email: docs[0].email || '',
+                            ville: docs[0].ville || '',
+                            cp: docs[0].cp || '',
+                            date: docs[0].date || '',
+                            attirance: docs[0].attirance || '',
+                            sexe: docs[0].sexe || '',
+                            description: docs[0].description || '',
+                            login: docs[0].login || '',
+                            images: docs[0].url,
+                            tag: tag,
+                            answer: req.query.answer,
+                            deletes: req.query.delete,
+                            picture: req.query.photo
+                        });
+                    }
+                    else {
+                        res.render('profile_error');
+                    }
+                }, {}, 'tag');
             }
             else {
                 res.render('profile_error');
