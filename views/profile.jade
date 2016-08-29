@@ -24,6 +24,7 @@ block content
                     input(type="number" class="form-control" id="cp" placeholder="Code postal" value="#{cp}")
                 div(class="form-group")
                     label Tag:
+                    div(style="width:100%;min-height:90px;height:auto;border-radius:5px;margin-bottom:20px;background-color:white;color:black" id="all_tag")
                     if tag
                         select(class="form-control" id="tag")
                             option(value='') -- Ajouter un tag --
@@ -115,8 +116,24 @@ block scripts
         });
 
         $("#add").click(function () {
+            console.log('click');
             var tag = $("#tag").val();
-            // inclure dans un nouveaux bloc html ( en dessous de pref )
+
+            $.ajax({
+                method: "POST",
+                url: "add_profile_tag",
+                data: { tag : tag }
+            })
+                .done(function (msg) {
+                    if (msg == 'done') {
+                        var all_tag = $("#all_tag").text();
+                        all_tag += ' ' + tag;
+                        $("#all_tag").html(all_tag);
+                    }
+                    else {
+                        // erreur pendant l'ajout.
+                    }
+                });
         });
 
         $("#update_profile").click(function() {
