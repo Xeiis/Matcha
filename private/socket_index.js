@@ -60,9 +60,9 @@ exports.get_profile_data = function(req, res) {
                 db.close();
                 if (docs[0].attirance)
                     attirance = docs[0].attirance;
-                else if (docs[0].sexe = "H")
+                else if (docs[0].sexe == "H")
                     attirance = "F";
-                else if (docs[0].sexe = "F")
+                else if (docs[0].sexe == "F")
                     attirance = "H";
                 if (attirance == "HF") {
                     // Use connect method to connect to the Server
@@ -70,8 +70,9 @@ exports.get_profile_data = function(req, res) {
                         Mongo.assert.equal(null, err);
                         Mongo.find(db, function (docs) {
                             db.close();
+                            console.log(docs);
                             res.send(docs);
-                        }, {$and: [ {login: {$ne: req.session.login}}, {attirance: {$eq: docs[0].sexe} }] }, 'user');
+                        }, {login: {$ne: req.session.login}}, 'user');
                     });
                 }
                 else if (attirance == "H" || attirance == "F") {
@@ -80,9 +81,8 @@ exports.get_profile_data = function(req, res) {
                         Mongo.assert.equal(null, err);
                         Mongo.find(db, function (docs) {
                             db.close();
-                            console.info(docs);
                             res.send(docs);
-                        }, {$and: [ {login: {$ne: req.session.login} }, {sexe: {$eq: attirance} } , {$or: [ {attirance: {$eq: docs[0].sexe} }, {attirance: {$eq: "HF"}} ]} ]}, 'user');
+                        }, {$and: [ {login: {$ne: req.session.login} }, {sexe: {$eq: attirance} }, {$or: [ {attirance: {$eq: docs[0].sexe} }, {attirance: {$eq: "HF"}} ]} ]}, 'user');
                     });
                 }
             }, {'login': req.session.login}, 'user');

@@ -27,7 +27,72 @@ exports.generate = function(req, res) {
     data_photo = {profile: 'images/258.jpg' };
     inscription(data_inscription, data_profile, '258', update_profile);
     photo_profile(data_photo, '258');
-    res.send('Les comptes ont bien été crées.');
+    var tague = {tag: 'Intello'};
+    tag(tague);
+    tague = {tag: 'Geek'};
+    tag(tague);
+    tague = {tag: 'Artiste'};
+    tag(tague);
+    tague = {tag: 'Roux(sse)'};
+    tag(tague);
+    tague = {tag: 'Brun(ne)'};
+    tag(tague);
+    tague = {tag: 'Blond(e)'};
+    tag(tague);;
+    tague = {tag: 'Paris'};
+    tag(tague);
+    tague = {tag: 'Ibiza'};
+    tag(tague);
+    tague = {tag: 'Motard'};
+    tag(tague);
+    tague = {tag: 'Apple'};
+    tag(tague);
+    tague = {tag: 'Samsung'};
+    tag(tague);
+    tague = {tag: 'Chic'};
+    tag(tague);
+    tague = {tag: 'BCBG'};
+    tag(tague);
+    tague = {tag: 'Bohème'};
+    tag(tague);
+    tague = {tag: 'Cheveux_long'};
+    tag(tague);
+    tague = {tag: 'Yeux_bleus'};
+    tag(tague);
+    tague = {tag: 'Tatouages'};
+    tag(tague);
+    tague = {tag: 'Barbes'};
+    tag(tague);
+    tague = {tag: 'Imberbes'};
+    tag(tague);
+    tague = {tag: 'Globetrotteur'};
+    tag(tague);
+    tague = {tag: 'Fétard'};
+    tag(tague);
+    tague = {tag: 'Fumeur'};
+    tag(tague);
+    tague = {tag: 'Patchnicotine'};
+    tag(tague);
+    tague = {tag: 'Milf'};
+    tag(tague);
+    tague = {tag: 'Money'};
+    tag(tague);
+    tague = {tag: 'Beurette'};
+    tag(tague);
+    tague = {tag: 'Teen'};
+    tag(tague);
+    tague = {tag: 'Non_Fumeur(se)'};
+    tag(tague);
+    res.send('Les comptes et tag ont bien été crées.');
+};
+
+tag = function(tag){
+    Mongo.Client.connect(Mongo.url, function(err, db) {
+        Mongo.assert.equal(null, err);
+        Mongo.insertOne(db, function () {
+            db.close();
+        }, tag, 'tag');
+    });
 };
 
 inscription = function(data_x, data_y, login, callback) {
@@ -37,7 +102,6 @@ inscription = function(data_x, data_y, login, callback) {
         Mongo.assert.equal(null, err);
         Mongo.insertOne(db, function () {
             db.close();
-            console.log('compte crée');
             callback(data_y, login);
         }, data_x, 'user');
     });

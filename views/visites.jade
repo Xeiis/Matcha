@@ -6,11 +6,11 @@ block content
             p // pages des visiteurs
             if visiteur
                 each val in visiteur
-                    a(href="/"+val.login+"")
                         div(style="height:270px;width:210px;padding:5px;background-color:#ccc")
-                            if val.photo
-                                img(src="../"+val.photo width="200" height="200" class="images" style="padding:10px;")
-                            else
-                                img(src="../images/profile.jpg" width="200" height="200" class="images" style="padding:10px;")
-                            p(style="padding:5px;")= val.login +" à visiter votre profile le "+ val.date.substr(0,10) + " à "+ val.date.substr(11,8)
+                            a(href="/"+val.login+"")
+                                if val.photo
+                                    img(src="../"+val.photo width="200" height="200" class="images" style="padding:10px;")
+                                else
+                                    img(src="../images/profile.jpg" width="200" height="200" class="images" style="padding:10px;")
+                                p(style="padding:5px;")= val.login +" à visiter votre profile le "+ val.date.substr(0,10) + " à "+ val.date.substr(11,8)
 block scripts

@@ -22,6 +22,14 @@ block content
                 div(class="form-group")
                     label(for="cp") Votre code postal:
                     input(type="number" class="form-control" id="cp" placeholder="Code postal" value="#{cp}")
+                div(class="form-group")
+                    label Tag:
+                    if tags
+                        select(class="form-control" id="tag")
+                        option(value='') -- Ajouter un tag --
+                        each val in tags
+                            option(value=val) #{val}
+                        button(type="button" class="btn btn-default" id="add" style="margin-left:20px") Ajouter
             div(class="col-lg-6")
                 div(class="form-group")
                     label(for="date") Votre date de naissance:
@@ -66,7 +74,10 @@ block content
                         label(for="photo") Une photo de vous:
                         input(type="file" id="photo" class="form-control" name="singleInputFileName" style="margin-bottom: 20px;" multiple)
                         input(type="submit" value="upload" name="upload" class="btn btn-default" style="width:100%;")
-                //tag
+                div(class="form-group")
+                    label(for="ajout") Créer un tag :
+                    input(type="text" id="ajout" class="form-control" placeholder="Nom du tag" value="")
+                    button(type="button" class="btn btn-default" id="create_tag" style="width:100%; margin-top:20px") Créer
         div(class="row")
             button(type="submit" class="btn btn-default" id="update_profile" style="width:100%;") Enregistrer
             p.jumbotron(style="margin-top:30px;padding-top:30px;padding-bottom:30px")

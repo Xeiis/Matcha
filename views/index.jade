@@ -99,6 +99,7 @@ block scripts
           infowindow.className = 'infowindow';
           infowindow.style.position = 'absolute';
           infowindow.style.width = 'auto';
+          infowindow.style.minWidth = '200px';
           infowindow.style.maxWidth = '300px';
           infowindow.style.height = 'auto';
           infowindow.style.padding = '10px';
@@ -172,34 +173,34 @@ block scripts
         data: {latitude: position.coords.latitude, longitude: position.coords.longitude}
       });
       $.ajax({
-                method: "POST",
-                url: "get_profile_data"
-              })
-              .done(function (msg) {
-                var i = 0;
+        method: "POST",
+        url: "get_profile_data"
+      })
+        .done(function (msg) {
+          var i = 0;
 
-                while (msg[i]) {
-                  console.log(msg[i]);
-                  if (msg[i].date)
-                    age = dateDiff(msg[i].date, date_today());
-                  else
-                    age = 0;
-                  var distance = ConvertDistance(distance_with2point(msg[i].longitude, msg[i].latitude, position.coords.longitude, position.coords.latitude));
-                  var myLatlng = new google.maps.LatLng(msg[i].latitude, msg[i].longitude);
-                  overlay = new CustomMarker(
-                          myLatlng,
-                          map,
-                          {
-                            marker_id: i
-                          },
-                          msg[i].profile,
-                          "<strong>" + msg[i].prenom + " " + msg[i].nom + "</strong> - " + age + " ans</br>" + distance + "</br>" + msg[i].description, // message dans l'infowindows
-                          msg[i].login,
-                          msg[i].sexe
-                  );
-                  i++;
-                }
-              });
+          while (msg[i]) {
+            console.log(msg[i]);
+            if (msg[i].date)
+              age = dateDiff(msg[i].date, date_today());
+            else
+              age = 0;
+            var distance = ConvertDistance(distance_with2point(msg[i].longitude, msg[i].latitude, position.coords.longitude, position.coords.latitude));
+            var myLatlng = new google.maps.LatLng(msg[i].latitude, msg[i].longitude);
+            overlay = new CustomMarker(
+                    myLatlng,
+                    map,
+                    {
+                      marker_id: i
+                    },
+                    msg[i].profile,
+                    "<strong>" + msg[i].prenom + " " + msg[i].nom + "</strong> - " + age + " ans</br>" + distance + "</br>" + msg[i].description, // message dans l'infowindows
+                    msg[i].login,
+                    msg[i].sexe
+            );
+            i++;
+          }
+        });
     }
 
     function date_today() {

@@ -3,39 +3,49 @@ extends layout
 block content
     div(class="container" style="margin-top:20px")
         div(class="row")
-            p // TODO Mettre en forme cette page.
-            p // ADD like, report, bloquer
-            p // Afficher si la personne est en ligne sinon la dernière connection
+            // Afficher si la personne est en ligne sinon la dernière connection
             input(type="hidden" value="#{login}" id="login")
             div(class="col-lg-6")
                 div(class="form-group")
-                    p #{nom} #{prenom} #{ville} #{cp}
+                    if logged
+                        p!= '<img src="images/bouton_vert.png" width="18" height="18"> En ligne'
+                    else
+                        p!= '<img src="images/bouton_rouge.png" width="18" height="18"> Hors ligne'
                     if sexe == "H"
-                        p Homme #{date}
+                        if attirance
+                            if attirance == "F" && sexe == "H"
+                                p Homme, #{nom} #{prenom} #{ville} #{cp}, Heterosexuelle
+                            if attirance == sexe
+                                p Homme, #{nom} #{prenom} #{ville} #{cp}, Homosexuel
+                            if attirance == "HF"
+                                p Homme, #{nom} #{prenom} #{ville} #{cp}, Bisexuel
                     if sexe == "F"
-                        p Femme #{date}
+                        if attirance
+                            if attirance == "H" && sexe == "F"
+                                p Femme, #{nom} #{prenom} #{ville} #{cp}, Heterosexuelle
+                            if attirance == sexe
+                                p Femme, #{nom} #{prenom} #{ville} #{cp}, Homosexuel
+                            if attirance == "HF"
+                                p Femme, #{nom} #{prenom} #{ville} #{cp}, Bisexuel
                     if sexe == "A"
-                        p Autre #{date}
+                        if attirance
+                            if attirance == "F"
+                                p Autre, #{nom} #{prenom} #{ville} #{cp}, aime les femmes
+                            if attirance == "H"
+                                p Autre, #{nom} #{prenom} #{ville} #{cp}, aime les hommes
+                            if attirance == "HF"
+                                p Autre, #{nom} #{prenom} #{ville} #{cp}, Bisexuel
                 div(class="form-group")
                     p #{description}
                 div(class="form-group")
-                    button(type="button" class="btn btn-default" id="like") Like
-                    // or make a heart (like camagru)
+                    button(type="button" class="btn btn-default" id="like") Charmer
+                    button(type="button" class="btn btn-default" id="report" style="margin-left:20px") Signaler
+                    button(type="button" class="btn btn-default" id="bloquer" style="margin-left:20px") Bloquer
             div(class="col-lg-6")
                 div(class="form-group")
-
-                div(class="form-group")
-                    if attirance
-                        p Attirer par :
-                           if attirance == "H"
-                                p Homme
-                           if attirance == "F"
-                                p Femme
-                           if attirance == "HF"
-                                p Les deux
                 p // Faire les tag
         div(class="row")
-            p.jumbotron(style="margin-top:30px;padding-top:30px;padding-bottom:30px")
+            p.jumbotron(style="margin-top:30px;padding-top:20px;padding-bottom:20px")
                 != '<strong style="font-size:30px;font-weight: 300;color:#333">Ses images : </strong>'
             if images
                 each val in images
@@ -48,6 +58,42 @@ block scripts
             $.ajax({
                 method: "POST",
                 url: "like_profile",
+                data: {login: login}
+            })
+                    .done(function (msg) {
+                        if (msg == 'done') {
+                            // modification effectué
+                            // afficher le coeur rempli
+                        }
+                        else {
+                            // modification erreur
+                            // afficher une erreur
+                        }
+                    });
+        });
+        $("#report").on('click', function () {
+            var login = $("#login").val();
+            $.ajax({
+                method: "POST",
+                url: "report_profile",
+                data: {login: login}
+            })
+                    .done(function (msg) {
+                        if (msg == 'done') {
+                            // modification effectué
+                            // afficher le coeur rempli
+                        }
+                        else {
+                            // modification erreur
+                            // afficher une erreur
+                        }
+                    });
+        });
+        $("#bloquer").on('click', function () {
+            var login = $("#login").val();
+            $.ajax({
+                method: "POST",
+                url: "bloquer_profile",
                 data: {login: login}
             })
                     .done(function (msg) {
