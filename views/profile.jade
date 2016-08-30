@@ -24,17 +24,18 @@ block content
                     input(type="number" class="form-control" id="cp" placeholder="Code postal" value="#{cp}")
                 div(class="form-group")
                     label Vos tag:
-                    if tag
-                        div(style="width:100%;min-height:90px;height:auto;border-radius:5px;margin-bottom:20px;background-color:white;color:black" id="all_tag")
-                          each val in tag
-                            div(class="tag suppr_tag") #{val}
-                                div(class="cross") x
+                    div(style="width:100%;min-height:90px;height:auto;border-radius:5px;margin-bottom:20px;background-color:white;color:black" id="all_tag")
+                        if tag
+                            each val in tag
+                                div(class="tag suppr_tag") #{val}
+                                    div(class="cross") x
                     label Tag dispo :
                     if tags
                         div(style="width:100%;min-height:90px;height:auto;border-radius:5px;margin-bottom:20px;background-color:white;color:black" id="tag_dispo")
                             each val in tags
+                                - var i = 0;
                                 if tag
-                                    - var i = 0;
+                                    - i = 0;
                                     each value in tag
                                         if value == val
                                             - i = 1;
