@@ -10,11 +10,11 @@ exports.renderProfile = function(req,res)
                 console.log(docs);
                 Mongo.find(db, function (doc) {
                     if (doc) {
-                        var tag = {};
+                        var tags = {};
                         var i = 0;
                         while (doc[i])
                         {
-                            tag[i] = doc[i].tag;
+                            tags[i] = doc[i].tag;
                             i++;
                         }
                         res.render('profile', {
@@ -29,7 +29,8 @@ exports.renderProfile = function(req,res)
                             description: docs[0].description || '',
                             login: docs[0].login || '',
                             images: docs[0].url,
-                            tag: tag,
+                            tag : docs[0].tag,
+                            tags: tags,
                             answer: req.query.answer,
                             deletes: req.query.delete,
                             picture: req.query.photo
@@ -83,7 +84,7 @@ exports.add_profile_tag = function(data, req, res) {
     });
 };
 
-exports.remove_profile_tag = function(data, req, res) {
+exports.suppr_profile_tag = function(data, req, res) {
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
