@@ -99,6 +99,7 @@ exports.generate = function(req, res) {
     tague = {tag: 'Non_Fumeur(se)'};
     tag(tague);
     res.send('Les comptes et tag ont bien été crées.');
+    res.redirect('http://localhost:3000/');
 };
 
 tag = function(tag){
@@ -146,7 +147,6 @@ photo_profile = function(data, login) {
 
 photo_add = function(data, login) {
 
-    // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
         Mongo.update(db, function () {

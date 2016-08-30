@@ -81,6 +81,11 @@ router.post('/suppr_profile_tag', function(req, res){
     profile.suppr_profile_tag(req.body, req, res);
 });
 
+router.post('/add_new_tag', function(req, res){
+    console.log('/add_new_tag');
+    index_function.add_new_tag(req.body, req, res);
+});
+
 router.get('/visites', function(req, res){
     console.log('/visites');
     visites.renderVisites(req, res);
