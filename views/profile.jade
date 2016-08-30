@@ -116,7 +116,6 @@ block scripts
         });
 
         $("#add").click(function () {
-            console.log('click');
             var tag = $("#tag").val();
 
             $.ajax({
@@ -126,9 +125,12 @@ block scripts
             })
                 .done(function (msg) {
                     if (msg == 'done') {
-                        var all_tag = $("#all_tag").text();
-                        all_tag += ' ' + tag;
+                        var all_tag = $("#all_tag").html();
+                        all_tag += '<div class="tag">' + tag + '<div class="cross">x</div></div>';
                         $("#all_tag").html(all_tag);
+                        $(".tag").click(function () {
+                            console.log($(this).html());
+                        });
                     }
                     else {
                         // erreur pendant l'ajout.

@@ -7,6 +7,7 @@ exports.renderProfile = function(req,res)
         Mongo.assert.equal(null, err);
         Mongo.find(db, function (docs) {
             if(docs) {
+                console.log(docs);
                 Mongo.find(db, function (doc) {
                     if (doc) {
                         var tag = {};
