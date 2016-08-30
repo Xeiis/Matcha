@@ -180,41 +180,47 @@ exports.show_profile = function(username, req, res) {
 exports.like_profile = function(username, req, res){
     var find = 0;
     var like;
-    Mongo.Client.connect(Mongo.url, function (err, db) {
-        Mongo.assert.equal(null, err);
-        Mongo.find(db, function (docs) {
-            db.close();
-            if (docs[0])
-            {
-                while (docs[0].like)
-                {
-                    if (docs[0].like.login == req.session.login)
-                    {
-                        find = 1;
-                        like = {like: {login: req.session.login}};
-                        Mongo.Client.connect(Mongo.url, function(err, db) {
-                            Mongo.assert.equal(null, err);
-                            Mongo.update(db, function () {
-                                db.close();
-                                res.send('done');
-                            }, {login : username}, {$pull: like}, 'user');
-                        });
-                    }
+    if (req.session.login) {
+        Mongo.Client.connect(Mongo.url, function(err, db) {
+            Mongo.assert.equal(null, err);
+            Mongo.find(db, function (docs) {
+                if(docs) {
+                    Mongo.find(db, function (doc) {
+                        if (doc) {
+                            var i = 0;
+                            if (doc[0].like) {
+                                while (doc[0].like[i]) {
+                                    console.log(doc[0].like[i].login);
+                                    if (doc[0].like[i].login == req.session.login) {
+                                        find = 1;
+                                        like = {like: {login: req.session.login}};
+                                        Mongo.Client.connect(Mongo.url, function (err, db) {
+                                            Mongo.assert.equal(null, err);
+                                            Mongo.update(db, function () {
+                                                db.close();
+                                                res.send('unlike');
+                                            }, {login: username.login}, {$pull: like}, 'user');
+                                        });
+                                    }
+                                    i++;
+                                }
+                            }
+                            if (find == 0) {
+                                like = {like: {login: req.session.login, date: date_today(), photo: doc[0].profile}};
+                                Mongo.Client.connect(Mongo.url, function (err, db) {
+                                    Mongo.assert.equal(null, err);
+                                    Mongo.update(db, function () {
+                                        db.close();
+                                        res.send('like');
+                                    }, {login: username.login}, {$push: like}, 'user');
+                                });
+                            }
+                        }
+                    }, {'login' : username.login}, 'user');
                 }
-                if (find == 0)
-                {
-                    like = {like: {login: req.session.login, date: date_today(), photo: docs[0].profile}};
-                    Mongo.Client.connect(Mongo.url, function(err, db) {
-                        Mongo.assert.equal(null, err);
-                        Mongo.update(db, function () {
-                            db.close();
-                            res.send('done');
-                        }, {login : username}, {$push: like}, 'user');
-                    });
-                }
-            }
-        }, {'login': req.session.login}, 'user');
-    });
+            }, {'login': req.session.login}, 'user');
+        });
+    }
 };
 
 function date_today() {
