@@ -115,3 +115,23 @@ exports.save_position = function(data, req, res) {
     else
         res.end();
 };
+
+exports.add_new_tag = function (tag, req, res) {
+    Mongo.Client.connect(Mongo.url, function (err, db) {
+        Mongo.assert.equal(null, err);
+        Mongo.find(db, function (doc) {
+            if (doc != '')
+            {
+                console.log('{' + doc + '} non');
+                res.send('fail');
+            }
+            else {
+                console.log(doc + ' oui');
+                Mongo.insertOne(db, function () {
+                    db.close();
+                    res.send('done');
+                }, tag, 'tag');
+            }
+        }, tag, 'tag');
+    });
+};

@@ -43,7 +43,10 @@ block content
                     button(type="button" class="btn btn-default" id="bloquer" style="margin-left:20px") Bloquer
             div(class="col-lg-6")
                 div(class="form-group")
-                p // Faire les tag
+                    if tag
+                        div(style="width:100%;min-height:90px;height:auto;border-radius:5px;margin-bottom:20px;background-color:white;color:black")
+                            each val in tag
+                                div(class="tag") #{val}
         div(class="row")
             p.jumbotron(style="margin-top:30px;padding-top:20px;padding-bottom:20px")
                 != '<strong style="font-size:30px;font-weight: 300;color:#333">Ses images : </strong>'

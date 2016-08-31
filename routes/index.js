@@ -71,6 +71,21 @@ router.post('/like_profile', function(req, res){
     profile.like_profile(req.body, req, res);
 });
 
+router.post('/add_profile_tag', function(req, res){
+    console.log('/add_profile_tag');
+    profile.add_profile_tag(req.body, req, res);
+});
+
+router.post('/suppr_profile_tag', function(req, res){
+    console.log('/suppr_profile_tag');
+    profile.suppr_profile_tag(req.body, req, res);
+});
+
+router.post('/add_new_tag', function(req, res){
+    console.log('/add_new_tag');
+    index_function.add_new_tag(req.body, req, res);
+});
+
 router.get('/visites', function(req, res){
     console.log('/visites');
     visites.renderVisites(req, res);

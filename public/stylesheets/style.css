@@ -36,3 +36,47 @@ select{
 .slider-selection{
     border: 5px solid #595efd;
 }
+
+.tag{
+    background-color:#e2e6e6;
+    border-radius:5px;
+    padding:10px;
+    width:auto;
+    height:auto;
+    display:inline-block;
+    margin:5px;
+    position:relative;
+}
+.tag:hover{
+    cursor:pointer;
+    background-color:#c9cdcd;
+}
+
+.tag:hover .cross{
+    display: block;
+}
+
+.tag:hover .plus{
+    display: block;
+}
+
+.cross
+{
+    display:none;
+    width:10px;
+    height:10px;
+    position:absolute;
+    top:-3px;
+    right:0;
+    color:#888888;
+}
+
+.plus{
+    display:none;
+    width:10px;
+    height:10px;
+    position:absolute;
+    top:-4px;
+    left:2px;
+    color:#888888;
+}

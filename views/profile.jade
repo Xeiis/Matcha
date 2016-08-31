@@ -23,13 +23,25 @@ block content
                     label(for="cp") Votre code postal:
                     input(type="number" class="form-control" id="cp" placeholder="Code postal" value="#{cp}")
                 div(class="form-group")
-                    label Tag:
+                    label Vos tag:
+                    div(style="width:100%;min-height:90px;height:auto;border-radius:5px;margin-bottom:20px;background-color:white;color:black" id="all_tag")
+                        if tag
+                            each val in tag
+                                div(class="tag suppr_tag") #{val}
+                                    div(class="cross") x
+                    label Tag dispo :
                     if tags
-                        select(class="form-control" id="tag")
-                        option(value='') -- Ajouter un tag --
-                        each val in tags
-                            option(value=val) #{val}
-                        button(type="button" class="btn btn-default" id="add" style="margin-left:20px") Ajouter
+                        div(style="width:100%;min-height:90px;height:auto;border-radius:5px;margin-bottom:20px;background-color:white;color:black" id="tag_dispo")
+                            each val in tags
+                                - var i = 0;
+                                if tag
+                                    - i = 0;
+                                    each value in tag
+                                        if value == val
+                                            - i = 1;
+                                if i == 0
+                                    div(class="tag add_tag") #{val}
+                                        div(class="plus") +
             div(class="col-lg-6")
                 div(class="form-group")
                     label(for="date") Votre date de naissance:
@@ -102,12 +114,67 @@ block content
                     div(style="padding:17px;float:left;background-color:#eee;" id=""+val.substr(7))
                         img(src="../"+val width="200" height="200" class="images")
 block scripts
-    //script(src="/javascripts/profile.js")
     script(type="text/javascript").
         var img_mod = '../images/suppression.png';
         var action = 'suppr_images';
         var name = 'url';
         var img;
+
+        $("#create_tag").click(function(){
+            var tag = $("#ajout").val();
+            $.ajax({
+                method: "POST",
+                url: "add_new_tag",
+                data: {tag : tag}
+            })
+                .done(function (msg) {
+                    if (msg == 'done') {
+                        var tag_dispo = $("#tag_dispo").html();
+                        tag_dispo += '<div class="tag add_tag">' + tag + '<div class="plus">+</div></div>';
+                        $("#tag_dispo").html(tag_dispo);
+                    }
+                    else if (msg == 'fail') {
+                        $("#ajout").attr('placeholder','Ce tag éxiste déjà');
+                        $("#ajout").val('');
+                    }
+                });
+        });
+
+        $("#tag_dispo").on('click', '.add_tag', function () {
+            var tag = $(this).text();
+            tag = tag.substring(0, tag.length - 1);
+            $(this).remove();
+            $.ajax({
+                method: "POST",
+                url: "add_profile_tag",
+                data: { tag : tag }
+            })
+                .done(function (msg) {
+                    if (msg == 'done') {
+                        var all_tag = $("#all_tag").html();
+                        all_tag += '<div class="tag suppr_tag">' + tag + '<div class="cross">x</div></div>';
+                        $("#all_tag").html(all_tag);
+                    }
+                });
+        });
+
+        $("#all_tag").on('click', '.suppr_tag', function () {
+            var suppr_tag = $(this).text();
+            suppr_tag = suppr_tag.substring(0, suppr_tag.length - 1);
+            $(this).remove();
+            $.ajax({
+                method: "POST",
+                url: "suppr_profile_tag",
+                data: {tag: suppr_tag}
+            })
+                .done(function (msg) {
+                    if (msg == 'done') {
+                        var tag_dispo = $("#tag_dispo").html();
+                        tag_dispo += '<div class="tag add_tag">' + suppr_tag + '<div class="plus">+</div></div>';
+                        $("#tag_dispo").html(tag_dispo);
+                    }
+                });
+        });
 
         $("#update_profile").click(function() {
             var nom = $("#nom").val();
@@ -121,17 +188,26 @@ block scripts
             var attirance = $("#attirance").val();
             var description = $("#description").val();
             $.ajax({
-                    method: "POST",
-                    url: "update_profile",
-                    data: {nom: nom, prenom: prenom, email: email, ville: ville, cp: cp, date: date, attirance: attirance, sexe: sexe, description: description, login: login}
-                })
+                method: "POST",
+                url: "update_profile",
+                data: {
+                    nom: nom,
+                    prenom: prenom,
+                    email: email,
+                    ville: ville,
+                    cp: cp,
+                    date: date,
+                    attirance: attirance,
+                    sexe: sexe,
+                    description: description,
+                    login: login
+                }
+            })
                 .done(function (msg) {
                     if (msg == 'done') {
-                        // modification effectué
                         $('#profile_modif_ok').show("slow").delay(4000).hide('slow');
                     }
                     else {
-                        // modification erreur
                         $('#profile_modif_erreur').show("slow").delay(4000).hide('slow');
                     }
                 });
@@ -176,13 +252,11 @@ block scripts
                 })
                 .done(function (msg) {
                     if (msg == 'done') {
-                        // modification effectué
                         if (name == 'url')
                             $("#"+div+"").hide();
                         $("#profile_modif_ok").show("slow").delay(4000).hide('slow');
                     }
                     else {
-                        // modification erreur
                         $("#profile_modif_erreur").show("slow").delay(4000).hide('slow');
                     }
                 });
