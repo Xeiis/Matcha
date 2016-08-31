@@ -152,8 +152,8 @@ exports.show_profile = function(username, req, res) {
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
         Mongo.find(db, function (docs) {
+            db.close();
             if(docs) {
-                console.log(docs);
                 res.render('profile_page', {
                     nom: docs[0].nom || '',
                     prenom: docs[0].prenom || '',
@@ -179,6 +179,7 @@ exports.show_profile = function(username, req, res) {
 
 exports.like_profile = function(username, req, res){
     var find = 0;
+    var match = 0;
     var like;
     if (req.session.login) {
         Mongo.Client.connect(Mongo.url, function(err, db) {
@@ -188,38 +189,46 @@ exports.like_profile = function(username, req, res){
                     Mongo.find(db, function (doc) {
                         if (doc) {
                             var i = 0;
+                            while (docs[0].like[i]) {
+                                if (docs[0].like[i].login == username.login) {
+                                    match = 1;
+                                    matchs = {match : {login: req.session.login, date: date_today(), photo: docs[0].profile}};
+                                    Mongo.update(db, function () {
+                                    }, {login: username.login}, {$push: matchs}, 'user');
+                                    matchs = {match : {login: username.login, date: date_today(), photo: doc[0].profile}};
+                                    Mongo.update(db, function () {
+                                    }, {login: req.session.login}, {$push: matchs}, 'user');
+                                }
+                                i++;
+                            }
                             if (doc[0].like) {
+                                i = 0;
                                 while (doc[0].like[i]) {
-                                    console.log(doc[0].like[i].login);
                                     if (doc[0].like[i].login == req.session.login) {
                                         find = 1;
                                         like = {like: {login: req.session.login}};
-                                        Mongo.Client.connect(Mongo.url, function (err, db) {
-                                            Mongo.assert.equal(null, err);
-                                            Mongo.update(db, function () {
-                                                db.close();
-                                                res.send('unlike');
-                                            }, {login: username.login}, {$pull: like}, 'user');
-                                        });
+                                        Mongo.update(db, function () {
+                                            db.close();
+                                            res.send('unlike');
+                                        }, {login: username.login}, {$pull: like}, 'user');
                                     }
                                     i++;
                                 }
+
                             }
                             if (find == 0) {
                                 like = {like: {login: req.session.login, date: date_today(), photo: doc[0].profile}};
-                                Mongo.Client.connect(Mongo.url, function (err, db) {
-                                    Mongo.assert.equal(null, err);
-                                    Mongo.update(db, function () {
-                                        db.close();
-                                        res.send('like');
-                                    }, {login: username.login}, {$push: like}, 'user');
-                                });
+                                Mongo.update(db, function () {
+                                    db.close();
+                                    res.send('like');
+                                }, {login: username.login}, {$push: like}, 'user');
                             }
                         }
                     }, {'login' : username.login}, 'user');
                 }
             }, {'login': req.session.login}, 'user');
         });
+
     }
 };
 
