@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6b08d719-505a-4535-a1f8-d5412b1e4422" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/private/generate.js" afterPath="$PROJECT_DIR$/private/generate.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/private/profile.js" afterPath="$PROJECT_DIR$/private/profile.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/private/socket_index.js" afterPath="$PROJECT_DIR$/private/socket_index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.jade" afterPath="$PROJECT_DIR$/views/index.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/profile.jade" afterPath="$PROJECT_DIR$/views/profile.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/profile_page.jade" afterPath="$PROJECT_DIR$/views/profile_page.jade" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/visites.jade" afterPath="$PROJECT_DIR$/views/visites.jade" />
     </list>
     <ignored path="matcha.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -484,7 +476,7 @@
       <workItem from="1470922913094" duration="652000" />
       <workItem from="1470960612026" duration="107000" />
       <workItem from="1471129158880" duration="118000" />
-      <workItem from="1471490338041" duration="7984000" />
+      <workItem from="1471490338041" duration="8145000" />
     </task>
     <task id="LOCAL-00001" summary="INITIAL commit">
       <created>1462553795340</created>
@@ -745,11 +737,18 @@
       <option name="project" value="LOCAL" />
       <updated>1470859055004</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="ajout des tags et diverse modif">
+      <created>1472489686960</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1472489686960</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="200399000" />
+    <option name="totallyTimeSpent" value="200560000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -796,7 +795,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="les sessions c'est presque ca, enfin je crois" />
     <MESSAGE value="les socket et session sont deux choses differentes apparement.." />
     <MESSAGE value="session ok page profile commencer." />
     <MESSAGE value="on peut update ses infos et c'est mis à jours :)" />
@@ -821,7 +819,8 @@
     <MESSAGE value="on push au cas ou lol." />
     <MESSAGE value="ajout des photos des nouveaux" />
     <MESSAGE value="on genere des personnes pour que ce soit plus simple maintenant." />
-    <option name="LAST_COMMIT_MESSAGE" value="on genere des personnes pour que ce soit plus simple maintenant." />
+    <MESSAGE value="ajout des tags et diverse modif" />
+    <option name="LAST_COMMIT_MESSAGE" value="ajout des tags et diverse modif" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
