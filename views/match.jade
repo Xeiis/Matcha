@@ -12,4 +12,7 @@ block content
                             else
                                 img(src="../images/profile.jpg" width="200" height="200" class="images" style="padding:10px;")
                             p(style="padding:5px;")= "Vous avez eu un match avec " + val.login + " le "+ val.date.substr(0,10) + " à "+ val.date.substr(11,8)
+            else
+                p.jumbotron
+                    != '<strong style="font-size:30px;font-weight: 300;color:#333;">Vous n\'avez pas encore de match.</strong>'
 block scripts

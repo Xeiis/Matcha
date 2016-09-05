@@ -114,7 +114,6 @@ router.get('/generate', function(req, res){
 router.get('/message/:id', function(req, res){
     console.log('/message/:id');
     var username = req.params.id;
-    console.log(username);
     chat.renderMessageChat(username, req, res);
 });
 

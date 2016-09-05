@@ -188,18 +188,32 @@ exports.like_profile = function(username, req, res){
                     Mongo.find(db, function (doc) {
                         if (doc) {
                             var i = 0;
-                            while (docs[0].like[i]) {
-                                if (docs[0].like[i].login == username.login) {
-                                    match = 1;
-                                    var matchs = {match : {login: req.session.login, date: date_today(), photo: docs[0].profile}};
-                                    Mongo.update(db, function () {
-                                    }, {login: username.login}, {$push: matchs}, 'user');
-                                    matchs = {match : {login: username.login, date: date_today(), photo: doc[0].profile}};
-                                    Mongo.update(db, function () {
-                                    }, {login: req.session.login}, {$push: matchs}, 'user');
+                            if (docs[0].like) {
+                                while (docs[0].like[i]) {
+                                    if (docs[0].like[i].login == username.login) {
+                                        match = 1;
+                                        var matchs = {
+                                            match: {
+                                                login: req.session.login,
+                                                date: date_today(),
+                                                photo: docs[0].profile
+                                            }
+                                        };
+                                        Mongo.update(db, function () {
+                                        }, {login: username.login}, {$push: matchs}, 'user');
+                                        matchs = {
+                                            match: {
+                                                login: username.login,
+                                                date: date_today(),
+                                                photo: doc[0].profile
+                                            }
+                                        };
+                                        Mongo.update(db, function () {
+                                        }, {login: req.session.login}, {$push: matchs}, 'user');
 
+                                    }
+                                    i++;
                                 }
-                                i++;
                             }
                             if (doc[0].like) {
                                 i = 0;

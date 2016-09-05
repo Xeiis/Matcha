@@ -22,15 +22,25 @@ exports.renderMessageChat = function(username, req, res)
         Mongo.find(db, function (docs) {
             if (docs) {
                 var i = 0;
-                if (typeof(docs[0].chat.message) != 'undefined') {
-                    while (docs[0].chat.message[i]) {
-                        while (docs[0].chat.message[i].login[j] != username) {
-                            j++
+                var find = 0;
+                if (typeof(docs[0].chat) != 'undefined') {
+                    if (typeof(docs[0].chat[0]) != 'undefined') {
+                        var chat =  [];
+                        while (docs[0].chat[i]) {
+                            var obj = {};
+                            if (docs[0].chat[i].message.conversation == username+"-"+req.session.login || docs[0].chat[i].message.conversation == req.session.login+"-"+username)
+                            {
+                                find = 1;
+                                obj.conv = {message : docs[0].chat[i].message.text, username : docs[0].chat[i].message.login, moi : req.session.login};
+                                chat.push(obj.conv);
+                            }
+                            i++;
                         }
-                        if (docs[0].chat.message[i].login[j] == username)
-                            res.render('messagechat', {chat: docs[0].chat.message[i], login: req.session.login});
-                        i++;
+                        if (find == 1)
+                            res.render('messagechat', {chat: chat, login: req.session.login});
                     }
+                    else
+                        res.render('messagechat', {chat: docs[0].chat, login: req.session.login});
                 }
                 else
                     res.render('messagechat', {chat: docs[0].chat, login: req.session.login});
@@ -42,16 +52,9 @@ exports.renderMessageChat = function(username, req, res)
     });
 };
 
-/*var chat = {chat : [ {message : [ {login : username.login, text: ''} ] } ] };
- Mongo.update(db, function () {
- }, {login: req.session.login}, {$push: chat}, 'user');
- var chat = {chat : [ {message : [{login : req.session.login, text: ''} ] } ] };
- Mongo.update(db, function () {
- }, {login: username.login}, {$push: chat}, 'user');*/
-
 exports.add_message = function(data, req, res)
 {
-    var chat = {chat : [ {message : [ {login : req.session.login, text: data.message} ] } ] };
+    var chat = {chat : {message : {login : req.session.login, text: data.message, conversation : data.username+"-"+req.session.login} } };
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
