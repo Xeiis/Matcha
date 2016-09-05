@@ -73,7 +73,6 @@ exports.photo_add = function(data, req, res) {
  };
 
 exports.add_profile_tag = function(data, req, res) {
-
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
@@ -192,12 +191,13 @@ exports.like_profile = function(username, req, res){
                             while (docs[0].like[i]) {
                                 if (docs[0].like[i].login == username.login) {
                                     match = 1;
-                                    matchs = {match : {login: req.session.login, date: date_today(), photo: docs[0].profile}};
+                                    var matchs = {match : {login: req.session.login, date: date_today(), photo: docs[0].profile}};
                                     Mongo.update(db, function () {
                                     }, {login: username.login}, {$push: matchs}, 'user');
                                     matchs = {match : {login: username.login, date: date_today(), photo: doc[0].profile}};
                                     Mongo.update(db, function () {
                                     }, {login: req.session.login}, {$push: matchs}, 'user');
+
                                 }
                                 i++;
                             }

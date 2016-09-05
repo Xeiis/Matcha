@@ -86,6 +86,11 @@ router.post('/add_new_tag', function(req, res){
     index_function.add_new_tag(req.body, req, res);
 });
 
+router.post('/add_message', function(req, res){
+    console.log('/add_message');
+    chat.add_message(req.body, req, res);
+});
+
 router.get('/visites', function(req, res){
     console.log('/visites');
     visites.renderVisites(req, res);
@@ -104,6 +109,13 @@ router.get('/chat', function(req, res){
 router.get('/generate', function(req, res){
     console.log('/generate');
     generate.generate(req, res);
+});
+
+router.get('/message/:id', function(req, res){
+    console.log('/message/:id');
+    var username = req.params.id;
+    console.log(username);
+    chat.renderMessageChat(username, req, res);
 });
 
 router.get('/:username', function(req, res){

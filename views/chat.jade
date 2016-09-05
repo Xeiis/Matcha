@@ -3,6 +3,22 @@ extends layout
 block content
     div(class="container" style="margin-top:20px")
         div(class="row")
-            p // pages des chat
-
+            if match
+                each val in match
+                    div(style="height:270px;width:210px;padding:5px;background-color:#ccc;float:left")
+                        a(href="/message/" + val.login + "")
+                            if val.photo
+                                img(src="../" + val.photo width="200" height="200" class="images" style="padding:10px;")
+                            else
+                                img(src="../images/profile.jpg" width="200" height="200" class="images" style="padding:10px;")
+                            if chat
+                                - var find = 0;
+                                each value in chat
+                                    if val.login == value.login
+                                        - find = 1;
+                                        p(style="padding:5px;")= "Ouvrir la conversation avec " + val.login + " dernier message le " + value.date.substr(0, 10) + " à " + value.date.substr(11, 8)
+                                if find == 0
+                                    p(style="padding:5px;")= "Vous pouvez commencer a chater avec " + val.login
+                            else
+                                p(style="padding:5px;")= "Vous pouvez commencer a chater avec " + val.login
 block scripts
