@@ -31,6 +31,7 @@ block scripts
         conv.scrollTop(conv[0].scrollHeight);
         $("#envoyez").click(function(){
             var message = $("#message").val();
+            $("#message").val('');
             var CheminComplet = document.location.href;
             var Login = CheminComplet.substring(CheminComplet.lastIndexOf("/") + 1);
             $.ajax({
