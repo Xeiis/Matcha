@@ -118,6 +118,7 @@ inscription = function(data_x, data_y, login, callback) {
         Mongo.assert.equal(null, err);
         Mongo.insertOne(db, function () {
             db.close();
+            console.log('compte crée');
             callback(data_y, login);
         }, data_x, 'user');
     });
@@ -151,6 +152,7 @@ photo_add = function(data, login) {
         Mongo.assert.equal(null, err);
         Mongo.update(db, function () {
             db.close();
+            console.log('ajout photo');
         }, {login: login}, {$push: data}, 'user');
     });
 };

@@ -2,7 +2,6 @@ var Mongo = require ('./mongodb.js');
 var passwordHash = require('password-hash');
 
 exports.inscription = function(data, callback) {
-    console.log(data);
     // Use connect method to connect to the Server
     data.password = passwordHash.generate(data.password);
     Mongo.Client.connect(Mongo.url, function(err, db) {
@@ -70,7 +69,6 @@ exports.get_profile_data = function(req, res) {
                         Mongo.assert.equal(null, err);
                         Mongo.find(db, function (docs) {
                             db.close();
-                            console.log(docs);
                             res.send(docs);
                         }, {login: {$ne: req.session.login}}, 'user');
                     });
@@ -121,12 +119,8 @@ exports.add_new_tag = function (tag, req, res) {
         Mongo.assert.equal(null, err);
         Mongo.find(db, function (doc) {
             if (doc != '')
-            {
-                console.log('{' + doc + '} non');
                 res.send('fail');
-            }
             else {
-                console.log(doc + ' oui');
                 Mongo.insertOne(db, function () {
                     db.close();
                     res.send('done');

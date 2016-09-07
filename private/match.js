@@ -6,7 +6,6 @@ exports.renderMatch= function(req,res,next)
         Mongo.assert.equal(null, err);
         Mongo.find(db, function (docs) {
             if(docs) {
-                console.log(docs[0].match);
                 res.render('match', {match : docs[0].match});
             }
             else {

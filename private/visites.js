@@ -7,7 +7,6 @@ exports.renderVisites = function(req,res,next)
         Mongo.assert.equal(null, err);
         Mongo.find(db, function (docs) {
             if(docs) {
-                console.info(docs[0].visiteur);
                 res.render('visites', {visiteur : docs[0].visiteur});
             }
             else {

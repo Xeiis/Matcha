@@ -7,7 +7,6 @@ exports.renderProfile = function(req,res)
         Mongo.assert.equal(null, err);
         Mongo.find(db, function (docs) {
             if(docs) {
-                console.log(docs);
                 Mongo.find(db, function (doc) {
                     if (doc) {
                         var tags = {};
@@ -96,7 +95,6 @@ exports.suppr_profile_tag = function(data, req, res) {
 
 exports.photo_suppr = function(data, req, res) {
      // Use connect method to connect to the Server
-    console.log(data);
      Mongo.Client.connect(Mongo.url, function(err, db) {
      Mongo.assert.equal(null, err);
          Mongo.update(db, function () {
@@ -107,7 +105,6 @@ exports.photo_suppr = function(data, req, res) {
 };
 
 exports.photo_profile = function(data, req, res) {
-    console.log(data);
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
