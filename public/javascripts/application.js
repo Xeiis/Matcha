@@ -3,9 +3,11 @@ var socket = io.connect('http://localhost:3000');
 var data_visite = {};
 var data_like = {};
 var data_match = {};
+var data_message = {};
 var visite = 0;
 var like = 0;
 var match = 0;
+var message = 0;
 
 socket.on('connect', function() {
     console.log('Connected!');
@@ -32,6 +34,12 @@ socket.on('new_like', function(data){
 socket.on('new_match', function(data){
     data_match = data;
     match = 1;
+    socket.emit('whoami');
+});
+
+socket.on('new_message', function(data){
+    data_message = data;
+    message = 1;
     socket.emit('whoami');
 });
 
@@ -62,6 +70,14 @@ socket.on('youare', function(login)
             alert('Vous avez un nouveau match avec ' + data_match.matcheur);
             // afficher la notif pas d'alert merci.
             match = 0;
+        }
+    }
+    if (message == 1)
+    {
+        if (data_message.message_to == login)
+        {
+            alert('Vous avez un nouveau message ' + data_message.message + ' de ' + data_message.message_from);
+            message = 0;
         }
     }
 });

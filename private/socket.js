@@ -20,10 +20,6 @@ module.exports = function(io) {
         socket.on('login', function(data) {
             socket.handshake.session.login = data;
         });
-        socket.on('message', function (message) {
-            message = ent.encode(message);
-            socket.broadcast.emit('message', {message: message, pseudo: socket.pseudo});
-        });
         socket.on('visite', function (visited) {
             console.log(socket.handshake.session.login);
             console.log(visited);
@@ -38,6 +34,12 @@ module.exports = function(io) {
             console.log(socket.handshake.session.login);
             console.log(matched);
             socket.broadcast.emit('new_match', {matcheur : socket.handshake.session.login, matched: matched});
+        });
+        socket.on('message', function (message) {
+            console.log(socket.handshake.session.login);
+            console.log(message.message);
+            console.log(message.login);
+            socket.broadcast.emit('new_message', {message_from : socket.handshake.session.login, message: message.message, message_to : message.login});
         });
         socket.on('petit_nouveau', function (pseudo) {
             pseudo = ent.encode(pseudo);
