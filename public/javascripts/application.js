@@ -45,30 +45,32 @@ socket.on('new_message', function(data){
 
 socket.on('youare', function(login)
 {
+    var html;
     if (visite == 1)
     {
         if (data_visite.visited == login)
         {
-            alert('Vous avez une nouvelle visite de ' + data_visite.visiteur);
-            // afficher la notif pas d'alert merci.
+            var notif_visite = $("#visite_notif");
+            notif_visite.css('display', '');
+            html = notif_visite.html();
+            html = parseInt(html) + 1;
+            if (!html)
+                html = 1;
+            notif_visite.html(html);
             visite = 0;
-        }
-    }
-    if (like == 1)
-    {
-        if (data_like.liked == login)
-        {
-            alert('Vous avez un nouveau like de ' + data_like.likeur);
-            // afficher la notif pas d'alert merci.
-            like = 0 ;
         }
     }
     if (match == 1)
     {
         if (data_match.matched == login)
         {
-            alert('Vous avez un nouveau match avec ' + data_match.matcheur);
-            // afficher la notif pas d'alert merci.
+            var notif_match = $("#match_notif");
+            notif_match.css('display', '');
+            html = notif_match.html();
+            html = parseInt(html) + 1;
+            if (!html)
+                html = 1;
+            notif_match.html(html);
             match = 0;
         }
     }
@@ -76,17 +78,23 @@ socket.on('youare', function(login)
     {
         if (data_message.message_to == login)
         {
+            var notif_chat = $("#chat_notif");
             var CheminComplet = document.location.href;
             var Login = CheminComplet.substring(CheminComplet.lastIndexOf("/") + 1);
             if (data_message.message_from == Login)
             {
+                notif_chat.css('display', 'none');
+                notif_chat.html('');
                 var conversation = $(".conversation").html();
                 conversation += "<div class='bloc'><div class='text left' style='float:left'>" + data_message.message + "</div></div>";
                 $(".conversation").html(conversation);
             }
             else
             {
-                alert('Vous avez un nouveau message ' + data_message.message + ' de ' + data_message.message_from);
+                notif_chat.css('display', '');
+                html = notif_chat.html();
+                html = parseInt(html) + 1;
+                notif_chat.html(html);
             }
             message = 0;
         }
@@ -133,5 +141,19 @@ $("#submit_deconnection").click(function(){
         });
 });
 
+var CheminComplet = document.location.href;
+var page = CheminComplet.substring(CheminComplet.lastIndexOf("/") + 1);
+if (page == 'visites')
+{
+    var notif_visite = $("#visite_notif");
+    notif_visite.css('display', 'none');
+    notif_visite.html('');
+}
+else if (page == 'match')
+{
+    var notif_match = $("#match_notif");
+    notif_match.css('display', 'none');
+    notif_match.html('');
+}
 
 

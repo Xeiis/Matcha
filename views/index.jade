@@ -162,7 +162,7 @@ block scripts
               null,
               {enableHighAccuracy: true});
     else
-      alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+      successCallback();
 
     function successCallback(position) {
       position_save = position;
@@ -173,7 +173,11 @@ block scripts
         method: "POST",
         url: "save_position",
         data: {latitude: position.coords.latitude, longitude: position.coords.longitude}
-      });
+      })
+        .done(function (position){
+            position_save.coords.latitude = position.latitude;
+            position_save.coords.longitude = position.longitude;
+        });
       $.ajax({
         method: "POST",
         url: "get_profile_data"

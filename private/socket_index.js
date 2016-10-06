@@ -1,5 +1,7 @@
 var Mongo = require ('./mongodb.js');
 var passwordHash = require('password-hash');
+var ip = require("ip");
+var geoip = require('geoip-lite');
 
 exports.inscription = function(data, callback) {
     // Use connect method to connect to the Server
@@ -48,6 +50,8 @@ exports.logout = function(req){
         }, {login: req.session.login}, {$set: {logged : false}}, 'user');
     });
 };
+
+var ip_address = '62.210.32.115'; // ip.address();
 
 exports.get_profile_data = function(req, res) {
     var attirance;
@@ -100,6 +104,12 @@ exports.get_profile_data = function(req, res) {
 };
 
 exports.save_position = function(data, req, res) {
+    if (!data)
+    {
+        var geo = geoip.lookup(ip_address);
+        data.latitude = geo.ll[0];
+        data.longitude = geo.ll[1];
+    }
     // Use connect method to connect to the Server
     if (req.session.login) {
         Mongo.Client.connect(Mongo.url, function (err, db) {

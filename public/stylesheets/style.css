@@ -118,6 +118,8 @@ select{
     background-color: #DCDCDC;
 }
 
+/* faire un span avec cette class puis le nombre a l'intérieur pour en faire une notification */
+
 .notification{
     color: #ffffff;
     background-color: red;

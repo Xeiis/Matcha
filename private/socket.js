@@ -25,11 +25,6 @@ module.exports = function(io) {
             console.log(visited);
            socket.broadcast.emit('new_visite', {visiteur : socket.handshake.session.login, visited: visited});
         });
-        socket.on('like', function (liked) {
-            console.log(socket.handshake.session.login);
-            console.log(liked);
-            socket.broadcast.emit('new_like', {likeur : socket.handshake.session.login, liked: liked});
-        });
         socket.on('match', function (matched) {
             console.log(socket.handshake.session.login);
             console.log(matched);

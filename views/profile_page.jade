@@ -65,18 +65,14 @@ block scripts
                 data: {login: login}
             })
                     .done(function (msg) {
-                        alert(msg);
                         if (msg == 'match') {
                             socket.emit('match', $("#login").val());
-                        }
-                        else if (msg == 'like') {
-                            socket.emit('like', $("#login").val());
                         }
                         else if (msg == 'unlike') {
                             alert('vous ne likez plus cette personne');
                         }
                         else {
-                            // il y a eu une erreur
+                            alert('oups something went wrong');
                         }
                     });
         });
