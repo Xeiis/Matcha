@@ -177,6 +177,7 @@ exports.like_profile = function(username, req, res){
     var find = 0;
     var match = 0;
     var like;
+    var matchs;
     if (req.session.login) {
         Mongo.Client.connect(Mongo.url, function(err, db) {
             Mongo.assert.equal(null, err);
@@ -188,16 +189,19 @@ exports.like_profile = function(username, req, res){
                             if (docs[0].like) {
                                 while (docs[0].like[i]) {
                                     if (docs[0].like[i].login == username.login) {
+                                        matchs = {match : {login : req.session.login}};
+                                        Mongo.update(db, function () {}, {login: username.login}, {$pull: matchs}, 'user');
+                                        matchs = {match : {login : username.login}};
+                                        Mongo.update(db, function () {}, {login: req.session.login}, {$pull: matchs}, 'user');
                                         match = 1;
-                                        var matchs = {
+                                        matchs = {
                                             match: {
                                                 login: req.session.login,
                                                 date: date_today(),
                                                 photo: docs[0].profile
                                             }
                                         };
-                                        Mongo.update(db, function () {
-                                        }, {login: username.login}, {$push: matchs}, 'user');
+                                        Mongo.update(db, function () {}, {login: username.login}, {$push: matchs}, 'user');
                                         matchs = {
                                             match: {
                                                 login: username.login,
@@ -205,16 +209,9 @@ exports.like_profile = function(username, req, res){
                                                 photo: doc[0].profile
                                             }
                                         };
-                                        Mongo.update(db, function () {
-                                        }, {login: req.session.login}, {$push: matchs}, 'user');
+                                        Mongo.update(db, function () {}, {login: req.session.login}, {$push: matchs}, 'user');
 
                                     }
-                                    i++;
-                                }
-                            }
-                            if (doc[0].like) {
-                                i = 0;
-                                while (doc[0].like[i]) {
                                     if (doc[0].like[i].login == req.session.login) {
                                         find = 1;
                                         like = {like: {login: req.session.login}};
@@ -225,13 +222,15 @@ exports.like_profile = function(username, req, res){
                                     }
                                     i++;
                                 }
-
                             }
                             if (find == 0) {
                                 like = {like: {login: req.session.login, date: date_today(), photo: doc[0].profile}};
                                 Mongo.update(db, function () {
                                     db.close();
-                                    res.send('like');
+                                    if (match == 1)
+                                        res.send('match');
+                                    else
+                                        res.send('like');
                                 }, {login: username.login}, {$push: like}, 'user');
                             }
                         }

@@ -1,5 +1,12 @@
 var socket = io.connect('http://localhost:3000');
 
+var data_visite = {};
+var data_like = {};
+var data_match = {};
+var visite = 0;
+var like = 0;
+var match = 0;
+
 socket.on('connect', function() {
     console.log('Connected!');
 });
@@ -8,6 +15,55 @@ socket.on('event', function(data){
 });
 socket.on('disconnect', function(){
    console.log('Disconnect');
+});
+
+socket.on('new_visite', function(data){
+    data_visite = data;
+    visite = 1;
+    socket.emit('whoami');
+});
+
+socket.on('new_like', function(data){
+    data_like = data;
+    like = 1;
+    socket.emit('whoami');
+});
+
+socket.on('new_match', function(data){
+    data_match = data;
+    match = 1;
+    socket.emit('whoami');
+});
+
+socket.on('youare', function(login)
+{
+    if (visite == 1)
+    {
+        if (data_visite.visited == login)
+        {
+            alert('Vous avez une nouvelle visite de ' + data_visite.visiteur);
+            // afficher la notif pas d'alert merci.
+            visite = 0;
+        }
+    }
+    if (like == 1)
+    {
+        if (data_like.liked == login)
+        {
+            alert('Vous avez un nouveau like de ' + data_like.likeur);
+            // afficher la notif pas d'alert merci.
+            like = 0 ;
+        }
+    }
+    if (match == 1)
+    {
+        if (data_match.matched == login)
+        {
+            alert('Vous avez un nouveau match avec ' + data_match.matcheur);
+            // afficher la notif pas d'alert merci.
+            match = 0;
+        }
+    }
 });
 
 socket.on('youare_logged', function(data){
