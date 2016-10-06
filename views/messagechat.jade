@@ -38,7 +38,7 @@ block scripts
                     if (msg == 'done')
                     {
                         var conversation = $(".conversation").html();
-                        conversation += "<div class='bloc'><div class = 'text right' style = 'float:right'>" + message + "</div></div>";
+                        conversation += "<div class='bloc'><div class='text right' style='float:right'>" + message + "</div></div>";
                         $(".conversation").html(conversation);
                         socket.emit('message', {message: message, login: Login});
                     }

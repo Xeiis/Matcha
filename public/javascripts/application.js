@@ -76,7 +76,18 @@ socket.on('youare', function(login)
     {
         if (data_message.message_to == login)
         {
-            alert('Vous avez un nouveau message ' + data_message.message + ' de ' + data_message.message_from);
+            var CheminComplet = document.location.href;
+            var Login = CheminComplet.substring(CheminComplet.lastIndexOf("/") + 1);
+            if (data_message.message_from == Login)
+            {
+                var conversation = $(".conversation").html();
+                conversation += "<div class='bloc'><div class='text left' style='float:left'>" + data_message.message + "</div></div>";
+                $(".conversation").html(conversation);
+            }
+            else
+            {
+                alert('Vous avez un nouveau message ' + data_message.message + ' de ' + data_message.message_from);
+            }
             message = 0;
         }
     }

@@ -212,6 +212,12 @@ exports.like_profile = function(username, req, res){
                                         Mongo.update(db, function () {}, {login: req.session.login}, {$push: matchs}, 'user');
 
                                     }
+                                    i++;
+                                }
+                            }
+                            if (doc[0].like) {
+                                i = 0;
+                                while (doc[0].like[i]) {
                                     if (doc[0].like[i].login == req.session.login) {
                                         find = 1;
                                         like = {like: {login: req.session.login}};
