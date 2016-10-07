@@ -118,8 +118,6 @@ select{
     background-color: #DCDCDC;
 }
 
-/* faire un span avec cette class puis le nombre a l'intérieur pour en faire une notification */
-
 .notification{
     color: #ffffff;
     background-color: red;
@@ -132,4 +130,8 @@ select{
     position: relative;
     font-size: 10px;
     font-family: 'San Francisco', -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif;
+}
+
+li {
+    height: 50px;
 }

@@ -41,6 +41,8 @@ block content
                     button(type="button" class="btn btn-default" id="like") Charmer
                     button(type="button" class="btn btn-default" id="report" style="margin-left:20px") Signaler
                     button(type="button" class="btn btn-default" id="bloquer" style="margin-left:20px") Bloquer
+                div(class="alert alert-success" role="alert" id="ok" style="display:none;margin-top:20px;")
+                div(class="alert alert-danger" role="alert" id="nok" style="display:none;margin-top:20px;")
             div(class="col-lg-6")
                 div(class="form-group")
                     if tag
@@ -69,10 +71,16 @@ block scripts
                             socket.emit('match', $("#login").val());
                         }
                         else if (msg == 'unlike') {
-                            alert('vous ne likez plus cette personne');
+                            $("#nok").html('Vous ne likez plus ' + login);
+                            $("#nok").show("slow").delay(4000).hide('slow');
+                        }
+                        else if (msg = 'like') {
+                            $("#ok").html('Vous likez maintenant ' + login);
+                            $("#ok").show("slow").delay(4000).hide('slow');
                         }
                         else {
-                            alert('oups something went wrong');
+                            $("#nok").html('oups something went wrong');
+                            $("#nok").show("slow").delay(4000).hide('slow');
                         }
                     });
         });
@@ -85,8 +93,12 @@ block scripts
             })
             .done(function (msg) {
                 if (msg == 'done') {
+                    $("#ok").html('Le profil ' + login + ' a bien été signalier');
+                    $("#ok").show("slow").delay(4000).hide('slow');
                 }
                 else {
+                    $("#nok").html('oups something went wrong');
+                    $("#nok").show("slow").delay(4000).hide('slow');
                 }
             });
         });
@@ -99,8 +111,12 @@ block scripts
             })
             .done(function (msg) {
                 if (msg == 'done') {
+                    $("#ok").html('Le profil ' + login + ' a bien été bloquer');
+                    $("#ok").show("slow").delay(4000).hide('slow');
                 }
                 else {
+                    $("#nok").html('oups something went wrong');
+                    $("#nok").show("slow").delay(4000).hide('slow');
                 }
             });
         });

@@ -94,6 +94,8 @@ socket.on('youare', function(login)
                 notif_chat.css('display', '');
                 html = notif_chat.html();
                 html = parseInt(html) + 1;
+                if (!html)
+                    html = 1;
                 notif_chat.html(html);
             }
             message = 0;

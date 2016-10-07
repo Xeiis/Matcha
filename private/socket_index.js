@@ -2,6 +2,7 @@ var Mongo = require ('./mongodb.js');
 var passwordHash = require('password-hash');
 var ip = require("ip");
 var geoip = require('geoip-lite');
+var nodemailer = require('nodemailer');
 
 exports.inscription = function(data, callback) {
     // Use connect method to connect to the Server
@@ -71,9 +72,9 @@ exports.get_profile_data = function(req, res) {
                     // Use connect method to connect to the Server
                     Mongo.Client.connect(Mongo.url, function (err, db) {
                         Mongo.assert.equal(null, err);
-                        Mongo.find(db, function (docs) {
+                        Mongo.find(db, function (doc) {
                             db.close();
-                            res.send(docs);
+                            res.send({doc : doc, me : docs});
                         }, {login: {$ne: req.session.login}}, 'user');
                     });
                 }
@@ -81,9 +82,9 @@ exports.get_profile_data = function(req, res) {
                     // Use connect method to connect to the Server
                     Mongo.Client.connect(Mongo.url, function (err, db) {
                         Mongo.assert.equal(null, err);
-                        Mongo.find(db, function (docs) {
+                        Mongo.find(db, function (doc) {
                             db.close();
-                            res.send(docs);
+                            res.send({doc : doc, me : docs});
                         }, {$and: [ {login: {$ne: req.session.login} }, {sexe: {$eq: attirance} }, {$or: [ {attirance: {$eq: docs[0].sexe} }, {attirance: {$eq: "HF"}} ]} ]}, 'user');
                     });
                 }
@@ -139,3 +140,42 @@ exports.add_new_tag = function (tag, req, res) {
         }, tag, 'tag');
     });
 };
+
+exports.forgot_password = function (data, req, res){
+    var password = aleatoire(8);
+    data.password = passwordHash.generate(password);
+    console.log(data.email);
+    Mongo.Client.connect(Mongo.url, function (err, db) {
+        Mongo.assert.equal(null, err);
+        Mongo.update(db, function () {
+            db.close();
+            var transporter = nodemailer.createTransport();
+            var mailOptions = {
+                from: 'matcha@gmail.com',
+                to: data.email,
+                subject: 'Oublie de mot de passe',
+                text: 'Votre nouveau mot de passe est : ' + password,
+                html: '<b>Votre nouveau mot de passe est : ' + password + '</b>'
+            };
+            transporter.sendMail(mailOptions, function(error, info){
+                if(error){
+                    return console.log(error);
+                }
+                console.log('Message sent: ' + info.response);
+            });
+            transporter.close();
+            res.send('done');
+        }, {email: data.email}, {$set: {password: password}}, 'user');
+    });
+};
+
+function aleatoire(size) {
+    var liste = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"
+        ,"0","1","2","3","4","5","6","7","8","9",
+        "!","@","#","$","%","^","&","*","(",")","_","-","=","+","[","]","{","}","\\","|",";",":",",","<","\.",">","/","?"];
+    var result = '';
+    for (i = 0; i < size; i++) {
+        result += liste[Math.floor(Math.random() * liste.length)];
+    }
+    return result;
+}

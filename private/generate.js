@@ -111,7 +111,7 @@ exports.generate = function(req, res) {
     tag(tague);
     console.log('12');
     res.send('Les comptes et tag ont bien été crées.');
-    res.redirect('http://localhost:3000/');
+    res.end();
 };
 
 tag = function(tag){

@@ -17,7 +17,13 @@ block content
           br
           button(type="submit" class="btn btn-default" id="submit_inscription" style="width:100%;") Inscription
           br
+          br
+          input(type="text" class="form-control" id="email_forgot" placeholder="Votre email du compte")
+          br
+          button(type="submit" class="btn btn-default" id="forgot_password" style="width:100%;") Mot de passe oublié
+          br
           div(class="alert alert-success" role="alert" id="inscription_ok" style="display:none;margin-top:20px;")
+          div(class="alert alert-danger" role="alert" id="message_erreur" style="display:none;margin-top:20px;")
     div(class="col-lg-4")
   div(class="row" id="container2" style="height:60%;min-height:400px")
     div(class="col-lg-12" style="height:100%;")
@@ -177,44 +183,9 @@ block scripts
         .done(function (position){
             position_save.coords.latitude = position.latitude;
             position_save.coords.longitude = position.longitude;
+            get_data(position_save);
         });
-      $.ajax({
-        method: "POST",
-        url: "get_profile_data"
-      })
-        .done(function (msg) {
-          var i = 0;
-
-          while (msg[i]) {
-            console.log(msg[i]);
-            if (msg[i].date)
-              age = dateDiff(msg[i].date, date_today());
-            else
-              age = 0;
-            var distance = ConvertDistance(distance_with2point(msg[i].longitude, msg[i].latitude, position.coords.longitude, position.coords.latitude));
-            if (distance < 1) {
-              distance *= 1000;
-              distance += 'm';
-            }
-            else
-              distance += 'Km';
-            var myLatlng = new google.maps.LatLng(msg[i].latitude, msg[i].longitude);
-            overlay = new CustomMarker(
-                    myLatlng,
-                    map,
-                    {
-                      marker_id: i
-                    },
-                    msg[i].profile,
-                    "<strong>" + msg[i].prenom + " " + msg[i].nom + "</strong> - " + age + " ans</br>" + distance + "</br>" + msg[i].description, // message dans l'infowindows
-                    msg[i].login,
-                    msg[i].sexe
-            );
-            all_overlay.push(overlay);
-            i++;
-          }
-        });
-    }
+      }
 
     function date_today() {
       var today = new Date();
@@ -321,6 +292,27 @@ block scripts
       get_data(position_save, age[0], age[1], pop[0], pop[1], distance);
     });
 
+
+    $("#forgot_password").click(function(){
+      var email = $("#email_forgot").val();
+      $.ajax({
+        method: "POST",
+        url: "forgot_password",
+        data: {email: email}
+      })
+        .done(function (msg){
+          if (msg == 'done')
+          {
+            $('#inscription_ok').html('Vous recevrez un e-mail dans les prochaines minutes');
+            $('#inscription_ok').show("slow").delay(4000).hide('slow');
+          }
+          else
+          {
+            $('#message_erreur').html('Something went wrong');
+            $('#message_erreur').show("slow").delay(4000).hide('slow');
+          }
+        });
+    });
     $("#submit_connection").click(function() {
       var login = $("#login_in").val();
       var password = $("#password_in").val();
@@ -343,78 +335,90 @@ block scripts
                 url: "save_position",
                 data: {latitude: position_save.coords.latitude, longitude: position_save.coords.longitude}
               })
-                .done(function (msg) {
-                  console.log('done');
-                });
+                      .done(function (msg) {
+                        console.log('done');
+                      });
+
+              $('#recherche_block').css('display', 'block');
+              $('#sign_in').hide("slow");
+              $('#sign_up').hide("slow");
+              $('#connection').hide("slow");
+              $('#login_value').html("Bonjour " + msg);
+              $('#submit_deconnection').fadeIn("slow");
+              $('#profile').show('fast');
+              $('#visites').show('fast');
+              $('#match').show('fast');
+              $('#chat').show('fast');
+              socket.emit('login', msg);
             }
-            $('#recherche_block').css('display', 'block');
-            $('#sign_in').hide("slow");
-            $('#sign_up').hide("slow");
-            $('#connection').hide("slow");
-            $('#login_value').html("Bonjour " + msg);
-            $('#submit_deconnection').fadeIn("slow");
-            $('#profile').show('fast');
-            $('#visites').show('fast');
-            $('#match').show('fast');
-            $('#chat').show('fast');
-            socket.emit('login', msg);
           });
     });
 
     function get_data(position, age_min, age_max, pop_min, pop_max, distance_max) {
-      console.log("get data");
       $.ajax({
         method: "POST",
         url: "get_profile_data"
       })
-              .done(function (msg) {
-                console.log("data recup");
-                var i = 0;
+        .done(function (msg) {
 
-                while (msg[i]) {
-                  //console.log(msg[i]);
-                  if (msg[i].date)
-                    age = dateDiff(msg[i].date, date_today());
-                  else
-                    age = 0;
-                  var distance = ConvertDistance(distance_with2point(msg[i].longitude, msg[i].latitude, position.coords.longitude, position.coords.latitude));
-                  var myLatlng = new google.maps.LatLng(msg[i].latitude, msg[i].longitude);
+          var i = 0;
 
-                  if (age_min && age_max && pop_min && pop_max) {
-                    if (age >= age_min && age <= age_max && ((msg[i].pop >= pop_min && msg[i].pop <= pop_max) || !msg[i].pop) && (distance < distance_max || !distance_max)) {
-                      console.log(msg[i]);
-                      if (distance < 1) {
-                        distance *= 1000;
-                        distance += 'm';
-                      }
-                      else
-                        distance += 'Km';
-                      overlay = new CustomMarker(
-                              myLatlng,
-                              map,
-                              {
-                                marker_id: i
-                              },
-                              msg[i].profile,
-                              "<strong>" + msg[i].prenom + "</strong> - " + age + " ans</br>" + distance + "</br>" + msg[i].description // message dans l'infowindows
-                      );
-                    }
-                  }
-                  else {
-                    overlay = new CustomMarker(
-                            myLatlng,
-                            map,
-                            {
-                              marker_id: i
-                            },
-                            msg[i].profile,
-                            "<strong>" + msg[i].prenom + "</strong> - " + age + " ans</br>" + distance + "</br>" + msg[i].description // message dans l'infowindows
-                    );
-                  }
-                  all_overlay.push(overlay);
-                  i++;
+          while (msg.doc[i]) {
+            console.log(msg.doc[i]);
+            if (msg.doc[i].date)
+              age = dateDiff(msg.doc[i].date, date_today());
+            else
+              age = 0;
+            var distance = ConvertDistance(distance_with2point(msg.doc[i].longitude, msg.doc[i].latitude, position.coords.longitude, position.coords.latitude));
+            var myLatlng = new google.maps.LatLng(msg.doc[i].latitude, msg.doc[i].longitude);
+
+            if (age_min && age_max && pop_min && pop_max) {
+              if (age >= age_min && age <= age_max && ((msg.doc[i].pop >= pop_min && msg.doc[i].pop <= pop_max) || !msg.doc[i].pop) && (distance < distance_max || !distance_max) && msg.me[0].bloquer.indexOf(msg.doc[i].login) === -1) {
+
+                if (distance < 1) {
+                  distance *= 1000;
+                  distance += 'm';
                 }
-              });
+                else
+                  distance += 'Km';
+                  overlay = new CustomMarker(
+                          myLatlng,
+                          map,
+                          {
+                            marker_id: i
+                          },
+                          msg.doc[i].profile,
+                          "<strong>" + msg.doc[i].prenom + "</strong> - " + age + " ans</br>" + distance + "</br>" + msg.doc[i].description, // message dans l'infowindows
+                          msg.doc[i].login,
+                          msg.doc[i].sexe
+                  );
+              }
+            }
+            else {
+              if (distance < 1) {
+                distance *= 1000;
+                distance += 'm';
+              }
+              else
+                distance += 'Km';
+              if (msg.me[0].bloquer.indexOf(msg.doc[i].login) === -1) {
+                overlay = new CustomMarker(
+                        myLatlng,
+                        map,
+                        {
+                          marker_id: i
+                        },
+                        msg.doc[i].profile,
+                        "<strong>" + msg.doc[i].prenom + "</strong> - " + age + " ans</br>" + distance + "</br>" + msg.doc[i].description, // message dans l'infowindows
+                        msg.doc[i].login,
+                        msg.doc[i].sexe
+                );
+              }
+            }
+            all_overlay.push(overlay);
+            i++;
+          }
+        });
     }
 
     socket.on('inscription', function(data) {

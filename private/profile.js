@@ -82,6 +82,28 @@ exports.add_profile_tag = function(data, req, res) {
     });
 };
 
+exports.report_profile = function(data, req, res) {
+    // Use connect method to connect to the Server
+    Mongo.Client.connect(Mongo.url, function(err, db) {
+        Mongo.assert.equal(null, err);
+        Mongo.update(db, function () {
+            db.close();
+            res.send('done');
+        }, {login: data.login}, {$push: {report: req.session.login}}, 'user');
+    });
+};
+
+exports.bloquer_profile = function(data, req, res) {
+    // Use connect method to connect to the Server
+    Mongo.Client.connect(Mongo.url, function(err, db) {
+        Mongo.assert.equal(null, err);
+        Mongo.update(db, function () {
+            db.close();
+            res.send('done');
+        }, {login: req.session.login}, {$push: {bloquer: data.login}}, 'user');
+    });
+};
+
 exports.suppr_profile_tag = function(data, req, res) {
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {

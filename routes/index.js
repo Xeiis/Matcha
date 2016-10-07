@@ -8,16 +8,8 @@ var match = require('../private/match.js');
 var chat = require('../private/chat.js');
 var generate = require('../private/generate.js');
 
-/* GET home page. */
-router.get('/', function(req, res) {
-    console.log("/");
-    index.renderIndex(req, res);
-});
 
-router.get('/profile', function(req, res) {
-    console.log("/profile");
-    profile.renderProfile(req, res);
-});
+/* POST */
 
 router.post('/login', function(req, res){
     console.log("/login");
@@ -71,6 +63,16 @@ router.post('/like_profile', function(req, res){
     profile.like_profile(req.body, req, res);
 });
 
+router.post('/report_profile', function(req, res){
+    console.log('/report_profile');
+    profile.report_profile(req.body, req, res);
+});
+
+router.post('/bloquer_profile', function(req, res){
+    console.log('/bloquer_profile');
+    profile.bloquer_profile(req.body, req, res);
+});
+
 router.post('/add_profile_tag', function(req, res){
     console.log('/add_profile_tag');
     profile.add_profile_tag(req.body, req, res);
@@ -89,6 +91,22 @@ router.post('/add_new_tag', function(req, res){
 router.post('/add_message', function(req, res){
     console.log('/add_message');
     chat.add_message(req.body, req, res);
+});
+
+router.post ('/forgot_password', function(req, res){
+    console.log('/forgot_password');
+    index_function.forgot_password(req.body, req, res);
+});
+
+/* GET */
+router.get('/', function(req, res) {
+    console.log("/");
+    index.renderIndex(req, res);
+});
+
+router.get('/profile', function(req, res) {
+    console.log("/profile");
+    profile.renderProfile(req, res);
 });
 
 router.get('/visites', function(req, res){
