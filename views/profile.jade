@@ -5,25 +5,25 @@ block content
         div(class="row")
             div(class="col-lg-6")
                 div(class="form-group")
-                    label(for="nom") Votre nom:
+                    label(for="nom") Nom:
                     input(type="text" class="form-control" placeholder="Nom" id="nom" value="#{nom}")
                 div(class="form-group")
-                    label(for="prenom") Votre prenom:
+                    label(for="prenom") Prenom:
                     input(type="text" class="form-control" id="prenom" placeholder="Prenom" value="#{prenom}")
                 div(class="form-group")
-                    label(for="login") Votre login:
+                    label(for="login") Login:
                     input(type="text" class="form-control" id="login" placeholder="login" value="#{login}" required)
                 div(class="form-group")
-                    label(for="email") Votre email:
+                    label(for="email") E-mail:
                     input(type="email" class="form-control" id="email" placeholder="Email" value="#{email}")
                 div(class="form-group")
-                    label(for="ville") Votre ville:
+                    label(for="ville") Ville:
                     input(type="text" class="form-control" id="ville" placeholder="Ville" value="#{ville}")
                 div(class="form-group")
-                    label(for="cp") Votre code postal:
+                    label(for="cp") Code postal:
                     input(type="number" class="form-control" id="cp" placeholder="Code postal" value="#{cp}")
                 div(class="form-group")
-                    label Vos tag:
+                    label Tag:
                     div(style="width:100%;min-height:90px;height:auto;border-radius:5px;margin-bottom:20px;background-color:white;color:black" id="all_tag")
                         if tag
                             each val in tag
@@ -44,10 +44,10 @@ block content
                                         div(class="plus") +
             div(class="col-lg-6")
                 div(class="form-group")
-                    label(for="date") Votre date de naissance:
+                    label(for="date") Date de naissance:
                     input(type="date" class="form-control" id="date" value="#{date}")
                 div(class="form-group")
-                    label(for="sexe") Votre sexe:
+                    label(for="sexe") Sexe:
                     select(class="form-control" id="sexe")
                         option(value='') -- Choisissez votre sexe --
                         if sexe == "H"
@@ -63,7 +63,7 @@ block content
                         else
                             option(value="A") Autre
                 div(class="form-group")
-                    label(for="attirance") Votre attirance:
+                    label(for="attirance") Attirance:
                     select(class="form-control" id="attirance")
                         option(value='') -- Choisissez votre attirance --
                         if attirance == "H"
@@ -78,6 +78,12 @@ block content
                             option(value="HF" selected) Les deux
                         else
                             option(value="HF") Les deux
+                div(class="form-group")
+                    label(for="description") Longitude:
+                    input(type="number" class="form-control" id="longitude" placeholder="Longitude" value="#{longitude}")
+                div(class="form-group")
+                    label(for="description") Latitude:
+                    input(type="number" class="form-control" id="latitude" placeholder="Latitude" value="#{latitude}")
                 div(class="form-group")
                     label(for="description") Une description:
                     textarea(placeholder="Description" id="description" class="form-control") #{description}
@@ -187,6 +193,8 @@ block scripts
             var sexe = $("#sexe").val();
             var attirance = $("#attirance").val();
             var description = $("#description").val();
+            var latitude = $("#latitude").val();
+            var longitude = $("#longitude").val();
             $.ajax({
                 method: "POST",
                 url: "update_profile",
@@ -200,7 +208,9 @@ block scripts
                     attirance: attirance,
                     sexe: sexe,
                     description: description,
-                    login: login
+                    login: login,
+                    latitude: latitude,
+                    longitude: longitude
                 }
             })
                 .done(function (msg) {

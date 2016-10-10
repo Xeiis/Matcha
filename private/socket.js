@@ -21,20 +21,26 @@ module.exports = function(io) {
             socket.handshake.session.login = data;
         });
         socket.on('visite', function (visited) {
-            console.log(socket.handshake.session.login);
             console.log(visited);
-           socket.broadcast.emit('new_visite', {visiteur : socket.handshake.session.login, visited: visited});
+           socket.broadcast.emit('new_visite', {visited: visited});
         });
         socket.on('match', function (matched) {
-            console.log(socket.handshake.session.login);
             console.log(matched);
-            socket.broadcast.emit('new_match', {matcheur : socket.handshake.session.login, matched: matched});
+            socket.broadcast.emit('new_match', {matched: matched});
+        });
+        socket.on('like', function (liked) {
+            console.log(liked);
+            socket.broadcast.emit('new_like', {liked: liked});
+        });
+        socket.on('unlike', function (unliked) {
+            console.log(socket.handshake.session.login);
+            console.log(unliked);
+            socket.broadcast.emit('new_unlike', {unlikeur : socket.handshake.session.login, unliked: unliked});
         });
         socket.on('message', function (message) {
-            console.log(socket.handshake.session.login);
             console.log(message.message);
             console.log(message.login);
-            socket.broadcast.emit('new_message', {message_from : socket.handshake.session.login, message: message.message, message_to : message.login});
+            socket.broadcast.emit('new_message', {message_from : socket.handshake.session.login, message: message.message, message_to: message.login});
         });
         socket.on('petit_nouveau', function (pseudo) {
             pseudo = ent.encode(pseudo);

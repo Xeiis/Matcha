@@ -4,8 +4,10 @@ var data_visite = {};
 var data_like = {};
 var data_match = {};
 var data_message = {};
+var data_unlike = {};
 var visite = 0;
 var like = 0;
+var unlike = 0;
 var match = 0;
 var message = 0;
 
@@ -43,6 +45,18 @@ socket.on('new_message', function(data){
     socket.emit('whoami');
 });
 
+socket.on('new_like', function(data){
+    data_like = data;
+    like = 1;
+    socket.emit('whoami');
+});
+
+socket.on('new_unlike', function(data){
+    data_unlike = data;
+    unlike = 1;
+    socket.emit('whoami');
+});
+
 socket.on('youare', function(login)
 {
     var html;
@@ -72,6 +86,30 @@ socket.on('youare', function(login)
                 html = 1;
             notif_match.html(html);
             match = 0;
+        }
+    }
+    if (like == 1)
+    {
+        if (data_like.liked == login)
+        {
+            var notif_like = $("#like_notif");
+            notif_like.css('display', '');
+            html = notif_like.html();
+            html = parseInt(html) + 1;
+            if (!html)
+                html = 1;
+            notif_like.html(html);
+            like = 0;
+        }
+    }
+    if (unlike == 1)
+    {
+        if (data_unlike.unliked == login)
+        {
+            var notif_unlike = $("#unlike_notif");
+            notif_unlike.html("L'utilisateur "+ data_unlike.unlikeur + " ne vous like plus.");
+            $("#unlike_notif").show( "slow" ).delay(10000).hide('slow');
+            unlike = 0;
         }
     }
     if (message == 1)
@@ -112,6 +150,7 @@ socket.on('youare_logged', function(data){
     $('#visites').show('fast');
     $('#match').show('fast');
     $('#chat').show('fast');
+    $('#like').show('fast');
 });
 
 socket.on('youare_not_logged', function(){
@@ -126,6 +165,7 @@ $("#submit_deconnection").click(function(){
     $('#visites').hide('fast');
     $('#match').hide('fast');
     $('#chat').hide('fast');
+    $('#like').hide('fast');
     $.ajax({
             method: "POST",
             url: "logout"

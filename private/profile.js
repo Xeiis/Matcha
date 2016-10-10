@@ -28,6 +28,8 @@ exports.renderProfile = function(req,res)
                             description: docs[0].description || '',
                             login: docs[0].login || '',
                             images: docs[0].url,
+                            longitude: docs[0].longitude,
+                            latitude: docs[0].latitude,
                             tag : docs[0].tag,
                             tags: tags,
                             answer: req.query.answer,
@@ -138,9 +140,12 @@ exports.photo_profile = function(data, req, res) {
 };
 
 exports.show_profile = function(username, req, res) {
+    var profile_like = "no";
+    var profile_match = "no";
     // Use connect method to connect to the Server
     // permet d'indiquer que la personne a visiter le profil
     if (req.session.login) {
+        add_popularity(username, 10);
         // supprime la derniere visite
         var pull = {visiteur: {login: req.session.login}};
         Mongo.Client.connect(Mongo.url, function (err, db) {
@@ -155,6 +160,27 @@ exports.show_profile = function(username, req, res) {
             Mongo.find(db, function (docs) {
                 db.close();
                 if (docs[0]) {
+                    console.log(docs[0]);
+                    if(docs[0].match) {
+                        for (var j = 0, len2 = docs[0].match.length; j < len2; j++) {
+                            if (docs[0].match[j].login === username) {
+                                profile_match = "yes";
+                                break;
+                            }
+                        }
+                    }
+                    if (profile_match == 'no') {
+                        if (docs[0].like) {
+                            for (var i = 0, len = docs[0].like.length; i < len; i++) {
+                                if (docs[0].like[i].login === username) {
+                                    profile_like = "yes";
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    console.log(profile_like);
+                    console.log(profile_match);
                     var visiteur = {visiteur: {login: req.session.login, date: date_today(), photo: docs[0].profile}};
                     Mongo.Client.connect(Mongo.url, function (err, db) {
                         Mongo.assert.equal(null, err);
@@ -184,8 +210,12 @@ exports.show_profile = function(username, req, res) {
                     description: docs[0].description || '',
                     login: docs[0].login || '',
                     images: docs[0].url,
+                    pop : docs[0].pop,
+                    last_logged : docs[0].last_logged,
                     tag : docs[0].tag,
-                    logged: docs[0].logged || ''
+                    logged: docs[0].logged || '',
+                    profile_like : profile_like,
+                    profile_match : profile_match
                 });
             }
             else {
@@ -205,68 +235,81 @@ exports.like_profile = function(username, req, res){
             Mongo.assert.equal(null, err);
             Mongo.find(db, function (docs) {
                 if(docs) {
-                    Mongo.find(db, function (doc) {
-                        if (doc) {
-                            var i = 0;
-                            if (docs[0].like) {
-                                while (docs[0].like[i]) {
-                                    if (docs[0].like[i].login == username.login) {
-                                        matchs = {match : {login : req.session.login}};
-                                        Mongo.update(db, function () {}, {login: username.login}, {$pull: matchs}, 'user');
-                                        matchs = {match : {login : username.login}};
-                                        Mongo.update(db, function () {}, {login: req.session.login}, {$pull: matchs}, 'user');
-                                        match = 1;
-                                        matchs = {
-                                            match: {
-                                                login: req.session.login,
-                                                date: date_today(),
-                                                photo: docs[0].profile
-                                            }
-                                        };
-                                        Mongo.update(db, function () {}, {login: username.login}, {$push: matchs}, 'user');
-                                        matchs = {
-                                            match: {
-                                                login: username.login,
-                                                date: date_today(),
-                                                photo: doc[0].profile
-                                            }
-                                        };
-                                        Mongo.update(db, function () {}, {login: req.session.login}, {$push: matchs}, 'user');
-
+                    if(docs[0].url) {
+                        Mongo.find(db, function (doc) {
+                            if (doc) {
+                                var i = 0;
+                                if (docs[0].like) {
+                                    while (docs[0].like[i]) {
+                                        if (docs[0].like[i].login == username.login) {
+                                            matchs = {match: {login: req.session.login}};
+                                            Mongo.update(db, function () {
+                                            }, {login: username.login}, {$pull: matchs}, 'user');
+                                            matchs = {match: {login: username.login}};
+                                            Mongo.update(db, function () {
+                                            }, {login: req.session.login}, {$pull: matchs}, 'user');
+                                            match = 1;
+                                            matchs = {
+                                                match: {
+                                                    login: req.session.login,
+                                                    date: date_today(),
+                                                    photo: docs[0].profile
+                                                }
+                                            };
+                                            Mongo.update(db, function () {
+                                            }, {login: username.login}, {$push: matchs}, 'user');
+                                            matchs = {
+                                                match: {
+                                                    login: username.login,
+                                                    date: date_today(),
+                                                    photo: doc[0].profile
+                                                }
+                                            };
+                                            Mongo.update(db, function () {
+                                            }, {login: req.session.login}, {$push: matchs}, 'user');
+                                            add_popularity(username.login, 100);
+                                        }
+                                        i++;
                                     }
-                                    i++;
+                                }
+                                if (doc[0].like) {
+                                    i = 0;
+                                    while (doc[0].like[i]) {
+                                        if (doc[0].like[i].login == req.session.login) {
+                                            add_popularity(username.login, -50);
+                                            find = 1;
+                                            like = {like: {login: req.session.login}};
+                                            Mongo.update(db, function () {
+                                                db.close();
+                                                res.send('unlike');
+                                            }, {login: username.login}, {$pull: like}, 'user');
+                                        }
+                                        i++;
+                                    }
+                                }
+                                if (find == 0) {
+                                    add_popularity(username.login, 50);
+                                    like = {
+                                        like: {
+                                            login: req.session.login,
+                                            date: date_today(),
+                                            photo: docs[0].profile
+                                        }
+                                    };
+                                    Mongo.update(db, function () {
+                                        db.close();
+                                        if (match == 1)
+                                            res.send('match');
+                                        else
+                                            res.send('like');
+                                    }, {login: username.login}, {$push: like}, 'user');
                                 }
                             }
-                            if (doc[0].like) {
-                                i = 0;
-                                while (doc[0].like[i]) {
-                                    if (doc[0].like[i].login == req.session.login) {
-                                        find = 1;
-                                        like = {like: {login: req.session.login}};
-                                        Mongo.update(db, function () {
-                                            db.close();
-                                            res.send('unlike');
-                                        }, {login: username.login}, {$pull: like}, 'user');
-                                    }
-                                    i++;
-                                }
-                            }
-                            if (find == 0) {
-                                like = {like: {login: req.session.login, date: date_today(), photo: doc[0].profile}};
-                                Mongo.update(db, function () {
-                                    db.close();
-                                    if (match == 1)
-                                        res.send('match');
-                                    else
-                                        res.send('like');
-                                }, {login: username.login}, {$push: like}, 'user');
-                            }
-                        }
-                    }, {'login' : username.login}, 'user');
+                        }, {'login': username.login}, 'user');
+                    }
                 }
             }, {'login': req.session.login}, 'user');
         });
-
     }
 };
 
@@ -296,6 +339,19 @@ function date_today() {
     }
     today = yyyy + '/' + mm + '/' + dd + ',' + hours + ':' + minutes + ':' + second;
     return today;
+}
+
+function add_popularity(username, score) {
+    Mongo.Client.connect(Mongo.url, function(err, db) {
+        Mongo.assert.equal(null, err);
+        Mongo.find(db, function (docs) {
+            if(docs) {
+                Mongo.update(db, function () {
+                    db.close();
+                }, {login : username}, {$set : {pop : docs[0].pop + score}}, 'user');
+            }
+        }, {login : username}, 'user');
+    });
 }
 
 

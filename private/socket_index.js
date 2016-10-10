@@ -48,7 +48,7 @@ exports.logout = function(req){
         Mongo.update(db, function () {
             db.close();
             req.session.destroy();
-        }, {login: req.session.login}, {$set: {logged : false}}, 'user');
+        }, {login: req.session.login}, {$set: {logged : false, last_logged: date_today()}}, 'user');
     });
 };
 
@@ -165,7 +165,7 @@ exports.forgot_password = function (data, req, res){
             });
             transporter.close();
             res.send('done');
-        }, {email: data.email}, {$set: {password: password}}, 'user');
+        }, {email: data.email}, {$set: {password: data.password}}, 'user');
     });
 };
 
@@ -178,4 +178,32 @@ function aleatoire(size) {
         result += liste[Math.floor(Math.random() * liste.length)];
     }
     return result;
+}
+
+function date_today() {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    var hours = today.getHours();
+    var minutes = today.getMinutes();
+    var second = today.getSeconds();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+    if (hours < 10){
+        hours = '0' + hours;
+    }
+    if (minutes < 10){
+        minutes = '0' + minutes;
+    }
+    if (second < 10){
+        second = '0' + second;
+    }
+    today = yyyy + '/' + mm + '/' + dd + ',' + hours + ':' + minutes + ':' + second;
+    return today;
 }

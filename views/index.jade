@@ -401,7 +401,23 @@ block scripts
               }
               else
                 distance += 'Km';
-              if (msg.me[0].bloquer.indexOf(msg.doc[i].login) === -1) {
+              if (msg.me[0].bloquer) {
+                if (msg.me[0].bloquer.indexOf(msg.doc[i].login) === -1) {
+                  overlay = new CustomMarker(
+                          myLatlng,
+                          map,
+                          {
+                            marker_id: i
+                          },
+                          msg.doc[i].profile,
+                          "<strong>" + msg.doc[i].prenom + "</strong> - " + age + " ans</br>" + distance + "</br>" + msg.doc[i].description, // message dans l'infowindows
+                          msg.doc[i].login,
+                          msg.doc[i].sexe
+                  );
+                }
+              }
+              else
+              {
                 overlay = new CustomMarker(
                         myLatlng,
                         map,

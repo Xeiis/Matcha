@@ -10,37 +10,43 @@ block content
                     if logged
                         p!= '<img src="images/bouton_vert.png" width="18" height="18"> En ligne'
                     else
-                        p!= '<img src="images/bouton_rouge.png" width="18" height="18"> Hors ligne'
+                        p.
+                            <img src='images/bouton_rouge.png' width='18' height='18'>
+                            Hors ligne depuis le #{last_logged}
                     if sexe == "H"
                         if attirance
                             if attirance == "F" && sexe == "H"
-                                p Homme, #{nom} #{prenom} #{ville} #{cp}, Heterosexuelle
+                                p Homme, #{nom} #{prenom} #{ville} #{cp}, Heterosexuelle, #{pop}
                             if attirance == sexe
-                                p Homme, #{nom} #{prenom} #{ville} #{cp}, Homosexuel
+                                p Homme, #{nom} #{prenom} #{ville} #{cp}, Homosexuel, #{pop}
                             if attirance == "HF"
-                                p Homme, #{nom} #{prenom} #{ville} #{cp}, Bisexuel
+                                p Homme, #{nom} #{prenom} #{ville} #{cp}, Bisexuel, #{pop}
                     if sexe == "F"
                         if attirance
                             if attirance == "H" && sexe == "F"
-                                p Femme, #{nom} #{prenom} #{ville} #{cp}, Heterosexuelle
+                                p Femme, #{nom} #{prenom} #{ville} #{cp}, Heterosexuelle, #{pop}
                             if attirance == sexe
-                                p Femme, #{nom} #{prenom} #{ville} #{cp}, Homosexuel
+                                p Femme, #{nom} #{prenom} #{ville} #{cp}, Homosexuel, #{pop}
                             if attirance == "HF"
-                                p Femme, #{nom} #{prenom} #{ville} #{cp}, Bisexuel
+                                p Femme, #{nom} #{prenom} #{ville} #{cp}, Bisexuel, #{pop}
                     if sexe == "A"
                         if attirance
                             if attirance == "F"
-                                p Autre, #{nom} #{prenom} #{ville} #{cp}, aime les femmes
+                                p Autre, #{nom} #{prenom} #{ville} #{cp}, aime les femmes, #{pop}
                             if attirance == "H"
-                                p Autre, #{nom} #{prenom} #{ville} #{cp}, aime les hommes
+                                p Autre, #{nom} #{prenom} #{ville} #{cp}, aime les hommes, #{pop}
                             if attirance == "HF"
-                                p Autre, #{nom} #{prenom} #{ville} #{cp}, Bisexuel
+                                p Autre, #{nom} #{prenom} #{ville} #{cp}, Bisexuel, #{pop}
                 div(class="form-group")
                     p #{description}
                 div(class="form-group")
-                    button(type="button" class="btn btn-default" id="like") Charmer
+                    button(type="button" class="btn btn-default" id="liker") Charmer
                     button(type="button" class="btn btn-default" id="report" style="margin-left:20px") Signaler
                     button(type="button" class="btn btn-default" id="bloquer" style="margin-left:20px") Bloquer
+                if profile_like == "yes"
+                    div(class="alert alert-success" role="alert" style="margin-top:20px;") Ce profil vous like
+                if profile_match == "yes"
+                    div(class="alert alert-success" role="alert" style="margin-top:20px;") Vous avez un match avec ce profil
                 div(class="alert alert-success" role="alert" id="ok" style="display:none;margin-top:20px;")
                 div(class="alert alert-danger" role="alert" id="nok" style="display:none;margin-top:20px;")
             div(class="col-lg-6")
@@ -59,7 +65,7 @@ block content
 block scripts
     script(type="text/javascript").
         socket.emit('visite', $("#login").val());
-        $("#like").on('click', function(){
+        $("#liker").on('click', function(){
             var login = $("#login").val();
             $.ajax({
                 method: "POST",
@@ -68,15 +74,26 @@ block scripts
             })
                     .done(function (msg) {
                         if (msg == 'match') {
+                            var notif_match = $("#match_notif");
+                            notif_match.css('display', '');
+                            html = notif_match.html();
+                            html = parseInt(html) + 1;
+                            if (!html)
+                                html = 1;
+                            notif_match.html(html);
+                            $("#ok").html('Vous avez un nouveau match avec ' + login);
+                            $("#ok").show("slow").delay(4000).hide('slow');
                             socket.emit('match', $("#login").val());
                         }
                         else if (msg == 'unlike') {
                             $("#nok").html('Vous ne likez plus ' + login);
                             $("#nok").show("slow").delay(4000).hide('slow');
+                            socket.emit('unlike', $("#login").val());
                         }
-                        else if (msg = 'like') {
+                        else if (msg == 'like') {
                             $("#ok").html('Vous likez maintenant ' + login);
                             $("#ok").show("slow").delay(4000).hide('slow');
+                            socket.emit('like', $("#login").val());
                         }
                         else {
                             $("#nok").html('oups something went wrong');

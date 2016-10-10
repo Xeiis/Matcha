@@ -54,6 +54,7 @@ exports.renderMessageChat = function(username, req, res)
 
 exports.add_message = function(data, req, res)
 {
+    add_popularity(data.username, 5);
     var chat = {chat : {message : {login : req.session.login, text: data.message, conversation : data.username+"-"+req.session.login} } };
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
@@ -66,3 +67,16 @@ exports.add_message = function(data, req, res)
         res.send('done');
     });
 };
+
+function add_popularity(username, score) {
+    Mongo.Client.connect(Mongo.url, function(err, db) {
+        Mongo.assert.equal(null, err);
+        Mongo.find(db, function (docs) {
+            if(docs) {
+                Mongo.update(db, function () {
+                    db.close();
+                }, {login : username}, {$set : {pop : docs[0].pop + score}}, 'user');
+            }
+        }, {login : username}, 'user');
+    });
+}
