@@ -144,7 +144,6 @@ exports.add_new_tag = function (tag, req, res) {
 exports.forgot_password = function (data, req, res){
     var password = aleatoire(8);
     data.password = passwordHash.generate(password);
-    console.log(data.email);
     Mongo.Client.connect(Mongo.url, function (err, db) {
         Mongo.assert.equal(null, err);
         Mongo.update(db, function () {
@@ -161,7 +160,6 @@ exports.forgot_password = function (data, req, res){
                 if(error){
                     return console.log(error);
                 }
-                console.log('Message sent: ' + info.response);
             });
             transporter.close();
             res.send('done');

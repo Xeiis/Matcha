@@ -160,7 +160,6 @@ exports.show_profile = function(username, req, res) {
             Mongo.find(db, function (docs) {
                 db.close();
                 if (docs[0]) {
-                    console.log(docs[0]);
                     if(docs[0].match) {
                         for (var j = 0, len2 = docs[0].match.length; j < len2; j++) {
                             if (docs[0].match[j].login === username) {
@@ -179,8 +178,6 @@ exports.show_profile = function(username, req, res) {
                             }
                         }
                     }
-                    console.log(profile_like);
-                    console.log(profile_match);
                     var visiteur = {visiteur: {login: req.session.login, date: date_today(), photo: docs[0].profile}};
                     Mongo.Client.connect(Mongo.url, function (err, db) {
                         Mongo.assert.equal(null, err);

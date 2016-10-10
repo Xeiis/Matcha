@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  script(type='text/javascript', src='http://maps.google.com/maps/api/js?sensor=true')
   div(class="container" id="container1" style="display:none;margin-top:20px")
     div(class="col-lg-4")
     div(class="col-lg-4")
@@ -53,10 +54,38 @@ block content
               - n = n + 5
             option(value="100+") 100+ km
           br
+          if tags
+            label Tag a rechercher :
+            div(style="width:100%;min-height:90px;height:auto;border-radius:5px;margin-bottom:20px;background-color:white;color:black" id="tag_dispo")
+              each val in tags
+                - var i = 0;
+                if i == 0
+                  div(class="tag add_tag") #{val}
+                    div(class="plus") +
+          label Tag rechercher :
+          div(style="width:100%;min-height:90px;height:auto;border-radius:5px;margin-bottom:20px;background-color:white;color:black" id="all_tag")
           button(type="submit" class="btn btn-default" id="submit_recherche" style="width:100%;") Relancer la recherche
 
 block scripts
   script(type="text/javascript").
+    $("#tag_dispo").on('click', '.add_tag', function () {
+      var tag = $(this).text();
+      tag = tag.substring(0, tag.length - 1);
+      $(this).remove();
+      var all_tag = $("#all_tag").html();
+      all_tag += '<div class="tag suppr_tag">' + tag + '<div class="cross">x</div></div>';
+      $("#all_tag").html(all_tag);
+    });
+
+    $("#all_tag").on('click', '.suppr_tag', function () {
+      var suppr_tag = $(this).text();
+      suppr_tag = suppr_tag.substring(0, suppr_tag.length - 1);
+      $(this).remove();
+      var tag_dispo = $("#tag_dispo").html();
+      tag_dispo += '<div class="tag add_tag">' + suppr_tag + '<div class="plus">+</div></div>';
+      $("#tag_dispo").html(tag_dispo);
+    });
+
     var all_overlay = [];
     var position_save;
 
@@ -272,7 +301,6 @@ block scripts
     });
 
     function removeOverlay() {
-      console.log("remove overlay");
       var i = 0;
       while(all_overlay[i])
       {
@@ -285,11 +313,18 @@ block scripts
       var age = $("#ex2").attr('data-value').split(",");
       var pop = $("#ex3").attr('data-value').split(",");
       var distance = $("#distance").val();
-      console.log("age min : "+age[0]+" age max : "+age[1]);
-      console.log("pop min : "+pop[0]+" pop max : "+pop[1]);
-      console.log("distance : "+distance);
+      var tags = $("#all_tag").html().split("<div class=\"tag suppr_tag\">");
+      tags = tags.join();
+      tags = tags.split("<div class=\"cross\">x</div></div>");
+      tags.pop();
+      var i = 0;
+      while(tags[i])
+      {
+        tags[i] = tags[i].replace(',','');
+        i++;
+      }
       removeOverlay();
-      get_data(position_save, age[0], age[1], pop[0], pop[1], distance);
+      get_data(position_save, age[0], age[1], pop[0], pop[1], distance, tags);
     });
 
 
@@ -335,9 +370,8 @@ block scripts
                 url: "save_position",
                 data: {latitude: position_save.coords.latitude, longitude: position_save.coords.longitude}
               })
-                      .done(function (msg) {
-                        console.log('done');
-                      });
+                .done(function (msg) {
+                });
 
               $('#recherche_block').css('display', 'block');
               $('#sign_in').hide("slow");
@@ -354,17 +388,15 @@ block scripts
           });
     });
 
-    function get_data(position, age_min, age_max, pop_min, pop_max, distance_max) {
+    function get_data(position, age_min, age_max, pop_min, pop_max, distance_max, tags) {
       $.ajax({
         method: "POST",
         url: "get_profile_data"
       })
         .done(function (msg) {
-
           var i = 0;
 
           while (msg.doc[i]) {
-            console.log(msg.doc[i]);
             if (msg.doc[i].date)
               age = dateDiff(msg.doc[i].date, date_today());
             else
@@ -373,14 +405,32 @@ block scripts
             var myLatlng = new google.maps.LatLng(msg.doc[i].latitude, msg.doc[i].longitude);
 
             if (age_min && age_max && pop_min && pop_max) {
-              if (age >= age_min && age <= age_max && ((msg.doc[i].pop >= pop_min && msg.doc[i].pop <= pop_max) || !msg.doc[i].pop) && (distance < distance_max || !distance_max) && msg.me[0].bloquer.indexOf(msg.doc[i].login) === -1) {
-
+              if ((age >= age_min && age <= age_max) && ((msg.doc[i].pop >= pop_min && msg.doc[i].pop <= pop_max) || !msg.doc[i].pop) && (distance < distance_max || !distance_max) && msg.me[0].bloquer.indexOf(msg.doc[i].login) === -1) {
+                var find = 1;
+                var j = 0;
+                while (tags[j]) {
+                  find = 0;
+                  var k = 0;
+                  if (msg.doc[i].tag) {
+                    while (msg.doc[i].tag[k]) {
+                      if (msg.doc[i].tag[k] == tags[j]) {
+                        find = 1;
+                        break;
+                      }
+                      k++;
+                    }
+                  }
+                  j++;
+                  if (find == 0)
+                    break;
+                }
                 if (distance < 1) {
                   distance *= 1000;
                   distance += 'm';
                 }
                 else
                   distance += 'Km';
+                if (find != 0) {
                   overlay = new CustomMarker(
                           myLatlng,
                           map,
@@ -392,6 +442,7 @@ block scripts
                           msg.doc[i].login,
                           msg.doc[i].sexe
                   );
+                }
               }
             }
             else {
