@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  script(type='text/javascript', src='http://maps.google.com/maps/api/js?sensor=true')
+  script(type='text/javascript', src='http://maps.google.com/maps/api/js?key=AIzaSyD7dMzTFKbhPysCWCCX8EAaNZfj-yWsEPc')
   div(class="container" id="container1" style="display:none;margin-top:20px")
     div(class="col-lg-4")
     div(class="col-lg-4")
@@ -25,6 +25,11 @@ block content
           br
           div(class="alert alert-success" role="alert" id="inscription_ok" style="display:none;margin-top:20px;")
           div(class="alert alert-danger" role="alert" id="message_erreur" style="display:none;margin-top:20px;")
+          div(class="alert alert-danger" role="alert" id="login_erreur" style="display:none;margin-top:20px;")
+          div(class="alert alert-danger" role="alert" id="nom_erreur" style="display:none;margin-top:20px;")
+          div(class="alert alert-danger" role="alert" id="prenom_erreur" style="display:none;margin-top:20px;")
+          div(class="alert alert-danger" role="alert" id="email_erreur" style="display:none;margin-top:20px;")
+          div(class="alert alert-danger" role="alert" id="password_erreur" style="display:none;margin-top:20px;")
     div(class="col-lg-4")
   div(class="row" id="container2" style="height:60%;min-height:400px")
     div(class="col-lg-12" style="height:100%;")
@@ -127,7 +132,6 @@ block scripts
         else
           div.style.border = '2px solid #8a09ec';
         div.innerHTML = "<img src='" + this.img + "' width='96' height='96' alt='photo de profil'>";
-
         if (typeof(self.args.marker_id) !== 'undefined') {
           div.dataset.marker_id = self.args.marker_id;
         }
@@ -201,7 +205,6 @@ block scripts
 
     function successCallback(position) {
       position_save = position;
-      // permet de se place là ou on se trouve
       var myLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       map.panTo(myLatlng);
       $.ajax({
@@ -297,7 +300,42 @@ block scripts
       var email = $("#email").val();
       var nom = $("#nom").val();
       var prenom = $("#prenom").val();
-      socket.emit('inscription', {login: login, password: password, email: email, nom: nom, prenom: prenom, pop : 0});
+      var password_regex = new RegExp(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-z^A-Z^0-9]).{8,}$/);
+      var email_regex = new RegExp(/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i);
+      if (password_regex.test(password) && login != '' && email_regex.test(email) && nom != '' && prenom != '')
+      {
+        $("#password").css('border','');
+        $("#prenom").css('border', '');
+        $("#login").css('border', '');
+        $("#email").css('border', '');
+        $("#nom").css('border', '');
+        socket.emit('inscription', {login: login, password: password, email: email, nom: nom, prenom: prenom, pop: 0});
+      }
+      if (!password_regex.test(password)) {
+        $("#password").css('border','1px solid red');
+        $('#password_erreur').html('8 caractère comprenant une lettre majuscule un chiffre et un caractère spécial');
+        $('#password_erreur').show("slow").delay(4000).hide('slow');
+      }
+      if (login == '') {
+        $("#login").css('border', '1px solid red');
+        $('#login_erreur').html('Veuillez entrer un login');
+        $('#login_erreur').show("slow").delay(4000).hide('slow');
+      }
+      if (!email_regex.test(email)) {
+        $("#email").css('border', '1px solid red');
+        $('#email_erreur').html('Veuillez entrer un email valide');
+        $('#email_erreur').show("slow").delay(4000).hide('slow');
+      }
+      if (nom == '') {
+        $("#nom").css('border', '1px solid red');
+        $('#nom_erreur').html('Veuillez entrer un nom');
+        $('#nom_erreur').show("slow").delay(4000).hide('slow');
+      }
+      if (prenom == '') {
+        $("#prenom").css('border', '1px solid red');
+        $('#prenom_erreur').html('Veuillez entrer un prenom');
+        $('#prenom_erreur').show("slow").delay(4000).hide('slow');
+      }
     });
 
     function removeOverlay() {
@@ -330,23 +368,31 @@ block scripts
 
     $("#forgot_password").click(function(){
       var email = $("#email_forgot").val();
-      $.ajax({
-        method: "POST",
-        url: "forgot_password",
-        data: {email: email}
-      })
-        .done(function (msg){
-          if (msg == 'done')
-          {
-            $('#inscription_ok').html('Vous recevrez un e-mail dans les prochaines minutes');
-            $('#inscription_ok').show("slow").delay(4000).hide('slow');
-          }
-          else
-          {
-            $('#message_erreur').html('Something went wrong');
-            $('#message_erreur').show("slow").delay(4000).hide('slow');
-          }
-        });
+      var email_regex = new RegExp(/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i);
+      if (email_regex.test(email)) {
+        $("#email_forgot").css('border', '');
+        $.ajax({
+          method: "POST",
+          url: "forgot_password",
+          data: {email: email}
+        })
+                .done(function (msg) {
+                  if (msg == 'done') {
+                    $('#inscription_ok').html('Vous recevrez un e-mail dans les prochaines minutes');
+                    $('#inscription_ok').show("slow").delay(4000).hide('slow');
+                  }
+                  else {
+                    $('#message_erreur').html('Something went wrong');
+                    $('#message_erreur').show("slow").delay(4000).hide('slow');
+                  }
+                });
+      }
+      else
+      {
+        $("#email_forgot").css('border', '1px solid red');
+        $('#email_erreur').html('Veuillez entrer un email valide');
+        $('#email_erreur').show("slow").delay(4000).hide('slow');
+      }
     });
     $("#submit_connection").click(function() {
       var login = $("#login_in").val();
@@ -452,8 +498,23 @@ block scripts
               }
               else
                 distance += 'Km';
-              if (msg.me[0].bloquer) {
-                if (msg.me[0].bloquer.indexOf(msg.doc[i].login) === -1) {
+              if (msg.me) {
+                if (msg.me[0].bloquer) {
+                  if (msg.me[0].bloquer.indexOf(msg.doc[i].login) === -1) {
+                    overlay = new CustomMarker(
+                            myLatlng,
+                            map,
+                            {
+                              marker_id: i
+                            },
+                            msg.doc[i].profile,
+                            "<strong>" + msg.doc[i].prenom + "</strong> - " + age + " ans</br>" + distance + "</br>" + msg.doc[i].description, // message dans l'infowindows
+                            msg.doc[i].login,
+                            msg.doc[i].sexe
+                    );
+                  }
+                }
+                else {
                   overlay = new CustomMarker(
                           myLatlng,
                           map,

@@ -33,21 +33,29 @@ exports.login = function(data, req, res) {
                     });
                     req.session.login = data.login;
                     res.send(data.login);
-                } else
+                    res.end();
+                }
+                else {
                     res.send('Mauvais login / Mot de passe');
+                    res.end();
+                }
             }
-            else
+            else {
                 res.send('Mauvais login / Mot de passe');
+                res.end();
+            }
         }, {'login': data.login}, 'user');
     });
 };
 
-exports.logout = function(req){
+exports.logout = function(req, res){
     Mongo.Client.connect(Mongo.url, function (err, db) {
         Mongo.assert.equal(null, err);
         Mongo.update(db, function () {
             db.close();
             req.session.destroy();
+            res.send('done');
+            res.end();
         }, {login: req.session.login}, {$set: {logged : false, last_logged: date_today()}}, 'user');
     });
 };
@@ -75,6 +83,7 @@ exports.get_profile_data = function(req, res) {
                         Mongo.find(db, function (doc) {
                             db.close();
                             res.send({doc : doc, me : docs});
+                            res.end();
                         }, {login: {$ne: req.session.login}}, 'user');
                     });
                 }
@@ -85,6 +94,7 @@ exports.get_profile_data = function(req, res) {
                         Mongo.find(db, function (doc) {
                             db.close();
                             res.send({doc : doc, me : docs});
+                            res.end();
                         }, {$and: [ {login: {$ne: req.session.login} }, {sexe: {$eq: attirance} }, {$or: [ {attirance: {$eq: docs[0].sexe} }, {attirance: {$eq: "HF"}} ]} ]}, 'user');
                     });
                 }
@@ -98,7 +108,8 @@ exports.get_profile_data = function(req, res) {
             Mongo.assert.equal(null, err);
             Mongo.find(db, function (docs) {
                 db.close();
-                res.send(docs);
+                res.send({doc : docs});
+                res.end();
             }, {}, 'user');
         });
     }
@@ -118,23 +129,29 @@ exports.save_position = function(data, req, res) {
             Mongo.update(db, function () {
                 db.close();
                 res.send('done');
+                res.end();
             }, {login: req.session.login}, {$set: data}, 'user');
         });
     }
     else
+    {
         res.end();
+    }
 };
 
 exports.add_new_tag = function (tag, req, res) {
     Mongo.Client.connect(Mongo.url, function (err, db) {
         Mongo.assert.equal(null, err);
         Mongo.find(db, function (doc) {
-            if (doc != '')
+            if (doc != '') {
                 res.send('fail');
+                res.end();
+            }
             else {
                 Mongo.insertOne(db, function () {
                     db.close();
                     res.send('done');
+                    res.end();
                 }, tag, 'tag');
             }
         }, tag, 'tag');
@@ -163,6 +180,7 @@ exports.forgot_password = function (data, req, res){
             });
             transporter.close();
             res.send('done');
+            res.end();
         }, {email: data.email}, {$set: {password: data.password}}, 'user');
     });
 };

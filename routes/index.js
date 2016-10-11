@@ -30,18 +30,12 @@ router.post('/get_profile_data', function(req, res) {
 
 router.post('/logout', function(req, res) {
     console.log('/logout');
-    index_function.logout(req);
-    res.send('Done');
+    index_function.logout(req, res);
 });
 
 router.post('/photo_add', function(req, res) {
     console.log("/photo_add");
-    var data = new Object();
-
-    if (typeof(req.file) == 'undefined')
-        res.redirect('http://localhost:3000/profile?photo=false');
-    data.url = req.file.path.substring(req.file.path.indexOf('/') + 1);
-    profile.photo_add(data, req, res);
+    profile.photo_add(req, res);
 });
 
 router.post('/save_position', function(req, res) {
@@ -148,8 +142,6 @@ router.get('/:username', function(req, res) {
     if (username != 'favicon.ico' && username != 'undefined') {
         profile.show_profile(username, req, res);
     }
-    else
-        res.end();
 });
 
 module.exports = router;

@@ -65,6 +65,7 @@ exports.add_message = function(data, req, res)
         }, {login: data.username}, {$push: chat}, 'user');
         db.close();
         res.send('done');
+        res.end();
     });
 };
 

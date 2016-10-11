@@ -57,20 +57,33 @@ exports.update_profile = function(data, req, res)
         Mongo.update(db, function () {
             db.close();
             res.send('done');
+            res.end();
         }, {login :req.session.login},  {$set: data}, 'user');
     });
 };
 
-exports.photo_add = function(data, req, res) {
-
-     // Use connect method to connect to the Server
-     Mongo.Client.connect(Mongo.url, function(err, db) {
-         Mongo.assert.equal(null, err);
-         Mongo.update(db, function () {
-             db.close();
-             res.redirect('http://localhost:3000/profile?answer=yes')
-         }, {login: req.session.login}, {$push: data}, 'user');
-     });
+exports.photo_add = function(req, res) {
+    var data = {};
+    if (typeof(req.file) == 'undefined') {
+        res.redirect('http://localhost:3000/profile?photo=false');
+        res.end();
+    }
+    data.url = req.file.path.substring(req.file.path.indexOf('/') + 1);
+    // Use connect method to connect to the Server
+    if ((req.file.originalname.substr(-3) == 'png' || req.file.originalname.substr(-3) == 'jpg' || req.file.originalname.substr(-4) == 'jpeg')) {
+        Mongo.Client.connect(Mongo.url, function (err, db) {
+            Mongo.assert.equal(null, err);
+            Mongo.update(db, function () {
+                db.close();
+                res.redirect('http://localhost:3000/profile?answer=yes');
+                res.end();
+            }, {login: req.session.login}, {$push: data}, 'user');
+        });
+    }
+    else {
+        res.redirect('http://localhost:3000/profile?photo=falses');
+        res.end();
+    }
  };
 
 exports.add_profile_tag = function(data, req, res) {
@@ -80,6 +93,7 @@ exports.add_profile_tag = function(data, req, res) {
         Mongo.update(db, function () {
             db.close();
             res.send('done');
+            res.end();
         }, {login: req.session.login}, {$push: data}, 'user');
     });
 };
@@ -91,6 +105,7 @@ exports.report_profile = function(data, req, res) {
         Mongo.update(db, function () {
             db.close();
             res.send('done');
+            res.end();
         }, {login: data.login}, {$push: {report: req.session.login}}, 'user');
     });
 };
@@ -102,6 +117,7 @@ exports.bloquer_profile = function(data, req, res) {
         Mongo.update(db, function () {
             db.close();
             res.send('done');
+            res.end();
         }, {login: req.session.login}, {$push: {bloquer: data.login}}, 'user');
     });
 };
@@ -113,6 +129,7 @@ exports.suppr_profile_tag = function(data, req, res) {
         Mongo.update(db, function () {
             db.close();
             res.send('done');
+            res.end();
         }, {login : req.session.login}, {$pull: data}, 'user');
     });
 };
@@ -124,6 +141,7 @@ exports.photo_suppr = function(data, req, res) {
          Mongo.update(db, function () {
              db.close();
              res.send('done');
+             res.end();
          }, {login : req.session.login}, {$pull: data}, 'user');
     });
 };
@@ -135,6 +153,7 @@ exports.photo_profile = function(data, req, res) {
         Mongo.update(db, function () {
             db.close();
             res.send('done');
+            res.end();
         }, {login : req.session.login}, {$set: data}, 'user');
     });
 };
@@ -279,6 +298,7 @@ exports.like_profile = function(username, req, res){
                                             Mongo.update(db, function () {
                                                 db.close();
                                                 res.send('unlike');
+                                                res.end();
                                             }, {login: username.login}, {$pull: like}, 'user');
                                         }
                                         i++;
@@ -295,10 +315,14 @@ exports.like_profile = function(username, req, res){
                                     };
                                     Mongo.update(db, function () {
                                         db.close();
-                                        if (match == 1)
+                                        if (match == 1) {
                                             res.send('match');
-                                        else
+                                            res.end();
+                                        }
+                                        else {
                                             res.send('like');
+                                            res.end();
+                                        }
                                     }, {login: username.login}, {$push: like}, 'user');
                                 }
                             }

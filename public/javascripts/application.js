@@ -160,7 +160,7 @@ socket.on('youare_not_logged', function(){
 
 $("#submit_deconnection").click(function(){
     socket.emit('logout');
-    $('#recherche_block').css('display', 'none');
+    //$('#recherche_block').css('display', 'none');
     $('#profile').hide('fast');
     $('#visites').hide('fast');
     $('#match').hide('fast');
@@ -171,6 +171,7 @@ $("#submit_deconnection").click(function(){
             url: "logout"
         })
         .done(function (msg) {
+            get_data(position_save);
             $('#sign_in').show( "slow" );
             $('#sign_up').show( "slow" );
             $('#submit_deconnection').fadeOut( "slow" );
