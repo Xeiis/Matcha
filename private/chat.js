@@ -54,18 +54,41 @@ exports.renderMessageChat = function(username, req, res)
 
 exports.add_message = function(data, req, res)
 {
+    var find = 0;
     add_popularity(data.username, 5);
     var chat = {chat : {message : {login : req.session.login, text: data.message, conversation : data.username+"-"+req.session.login} } };
     // Use connect method to connect to the Server
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);
-        Mongo.update(db, function () {
-        }, {login: req.session.login}, {$push: chat}, 'user');
-        Mongo.update(db, function () {
-        }, {login: data.username}, {$push: chat}, 'user');
-        db.close();
-        res.send('done');
-        res.end();
+        Mongo.find(db, function (docs) {
+            if (docs) {
+                Mongo.find(db, function (doc) {
+                    if (doc) {
+                        if (doc[0].bloquer) {
+                            if (doc[0].bloquer.indexOf(docs[0].login) !== -1) {
+                                find = 1;
+                            }
+                        }
+                        if (find == 0)
+                        {
+                            Mongo.update(db, function () {
+                            }, {login: req.session.login}, {$push: chat}, 'user');
+                            Mongo.update(db, function () {
+                            }, {login: data.username}, {$push: chat}, 'user');
+                            db.close();
+                            res.send('done');
+                            res.end();
+                        }
+                        else
+                        {
+                            db.close();
+                            res.end();
+                        }
+                    }
+                }, {login: data.username}, 'user');
+            }
+        }, {login: req.session.login}, 'user');
+
     });
 };
 

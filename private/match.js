@@ -1,6 +1,6 @@
 var Mongo = require ('./mongodb.js');
 
-exports.renderMatch= function(req,res)
+exports.renderMatch = function(req,res)
 {
     Mongo.Client.connect(Mongo.url, function(err, db) {
         Mongo.assert.equal(null, err);

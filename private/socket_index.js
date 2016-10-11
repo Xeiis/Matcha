@@ -115,7 +115,7 @@ exports.get_profile_data = function(req, res) {
 
 exports.save_position = function(data, req, res) {
     console.log(data);
-    if (!data.hasOwnProperty('latitude'))
+    if (!Object.prototype.hasOwnProperty.call(data, 'latitude'))
     {
         var geo = geoip.lookup(ip_address);
         data.latitude = geo.ll[0];

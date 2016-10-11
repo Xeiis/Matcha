@@ -481,10 +481,6 @@ block scripts
                 .done(function (position) {
                   position_save.coords.latitude = position.latitude;
                   position_save.coords.longitude = position.longitude;
-                  console.log("test 11: " + position_save.coords.longitude);
-                  console.log("test 22: " + position.longitude);
-                  console.log("test 1: " + position_save.coords.latitude);
-                  console.log("test 2: " + position.latitude);
                   get_data_next(age_min, age_max, pop_min, pop_max, distance_max, tags);
                 });
       }
@@ -506,10 +502,6 @@ block scripts
               age = dateDiff(msg.doc[i].date, date_today());
             else
               age = 0;
-            console.log(msg.doc[i].longitude);
-            console.log(msg.doc[i].latitude);
-            console.log(position_save.coords.longitude);
-            console.log(position_save.coords.latitude);
             var distance = ConvertDistance(distance_with2point(msg.doc[i].longitude, msg.doc[i].latitude, position_save.coords.longitude, position_save.coords.latitude));
             var myLatlng = new google.maps.LatLng(msg.doc[i].latitude, msg.doc[i].longitude);
 
