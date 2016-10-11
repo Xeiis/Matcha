@@ -133,5 +133,13 @@ select{
 }
 
 li {
-    height: 50px;
+    max-height: 50px;
+}
+
+.navbar-nav{
+    margin: 0px !important;
+}
+
+.collapse {
+    display:block !important;
 }

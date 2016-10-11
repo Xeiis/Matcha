@@ -92,7 +92,8 @@ block scripts
     });
 
     var all_overlay = [];
-    var position_save;
+    var position_save = {};
+    position_save.coords = {};
 
     $("#ex2").slider({});
     $("#ex3").slider({});
@@ -201,8 +202,7 @@ block scripts
               null,
               {enableHighAccuracy: true});
     else
-      successCallback();
-
+        alert("impossible de geolocaliser");
     function successCallback(position) {
       position_save = position;
       var myLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -212,12 +212,12 @@ block scripts
         url: "save_position",
         data: {latitude: position.coords.latitude, longitude: position.coords.longitude}
       })
-        .done(function (position){
-            position_save.coords.latitude = position.latitude;
-            position_save.coords.longitude = position.longitude;
-            get_data(position_save);
-        });
-      }
+              .done(function (position) {
+                position_save.coords.latitude = position.latitude;
+                position_save.coords.longitude = position.longitude;
+                get_data(position_save);
+              });
+    }
 
     function date_today() {
       var today = new Date();
@@ -316,25 +316,40 @@ block scripts
         $('#password_erreur').html('8 caractère comprenant une lettre majuscule un chiffre et un caractère spécial');
         $('#password_erreur').show("slow").delay(4000).hide('slow');
       }
+      else{
+        $("#password").css('border','');
+      }
       if (login == '') {
         $("#login").css('border', '1px solid red');
         $('#login_erreur').html('Veuillez entrer un login');
         $('#login_erreur').show("slow").delay(4000).hide('slow');
+      }
+      else {
+        $("#login").css('border', '');
       }
       if (!email_regex.test(email)) {
         $("#email").css('border', '1px solid red');
         $('#email_erreur').html('Veuillez entrer un email valide');
         $('#email_erreur').show("slow").delay(4000).hide('slow');
       }
+      else{
+        $("#email").css('border', '');
+      }
       if (nom == '') {
         $("#nom").css('border', '1px solid red');
         $('#nom_erreur').html('Veuillez entrer un nom');
         $('#nom_erreur').show("slow").delay(4000).hide('slow');
       }
+      else{
+        $("#nom").css('border', '');
+      }
       if (prenom == '') {
         $("#prenom").css('border', '1px solid red');
         $('#prenom_erreur').html('Veuillez entrer un prenom');
         $('#prenom_erreur').show("slow").delay(4000).hide('slow');
+      }
+      else{
+        $("#prenom").css('border', '');
       }
     });
 
@@ -362,7 +377,22 @@ block scripts
         i++;
       }
       removeOverlay();
-      get_data(position_save, age[0], age[1], pop[0], pop[1], distance, tags);
+      if (!position_save) {
+        $.ajax({
+          method: "POST",
+          url: "save_position",
+          data: {}
+        })
+                .done(function (position) {
+                  position_save.coords.latitude = position.latitude;
+                  position_save.coords.longitude = position.longitude;
+                  get_data(position_save, age[0], age[1], pop[0], pop[1], distance, tags);
+                });
+      }
+      else
+      {
+        get_data(position_save);
+      }
     });
 
 
@@ -410,15 +440,22 @@ block scripts
             else {
               if (typeof(overlay) != 'undefined')
                 removeOverlay();
-              get_data(position_save);
-              $.ajax({
-                method: "POST",
-                url: "save_position",
-                data: {latitude: position_save.coords.latitude, longitude: position_save.coords.longitude}
-              })
-                .done(function (msg) {
-                });
-
+              if (!position_save) {
+                $.ajax({
+                  method: "POST",
+                  url: "save_position",
+                  data: {}
+                })
+                        .done(function (position) {
+                          position_save.coords.latitude = position.latitude;
+                          position_save.coords.longitude = position.longitude;
+                          get_data(position_save);
+                        });
+              }
+              else
+              {
+                get_data(position_save);
+              }
               $('#recherche_block').css('display', 'block');
               $('#sign_in').hide("slow");
               $('#sign_up').hide("slow");
@@ -434,7 +471,29 @@ block scripts
           });
     });
 
-    function get_data(position, age_min, age_max, pop_min, pop_max, distance_max, tags) {
+    function get_data(age_min, age_max, pop_min, pop_max, distance_max, tags) {
+      if (!position_save.hasOwnProperty('latitude')) {
+        $.ajax({
+          method: "POST",
+          url: "save_position",
+          data: {}
+        })
+                .done(function (position) {
+                  position_save.coords.latitude = position.latitude;
+                  position_save.coords.longitude = position.longitude;
+                  console.log("test 11: " + position_save.coords.longitude);
+                  console.log("test 22: " + position.longitude);
+                  console.log("test 1: " + position_save.coords.latitude);
+                  console.log("test 2: " + position.latitude);
+                  get_data_next(age_min, age_max, pop_min, pop_max, distance_max, tags);
+                });
+      }
+      else
+      {
+        get_data_next(age_min, age_max, pop_min, pop_max, distance_max, tags);
+      }
+    }
+    function get_data_next(age_min, age_max, pop_min, pop_max, distance_max, tags){
       $.ajax({
         method: "POST",
         url: "get_profile_data"
@@ -447,11 +506,22 @@ block scripts
               age = dateDiff(msg.doc[i].date, date_today());
             else
               age = 0;
-            var distance = ConvertDistance(distance_with2point(msg.doc[i].longitude, msg.doc[i].latitude, position.coords.longitude, position.coords.latitude));
+            console.log(msg.doc[i].longitude);
+            console.log(msg.doc[i].latitude);
+            console.log(position_save.coords.longitude);
+            console.log(position_save.coords.latitude);
+            var distance = ConvertDistance(distance_with2point(msg.doc[i].longitude, msg.doc[i].latitude, position_save.coords.longitude, position_save.coords.latitude));
             var myLatlng = new google.maps.LatLng(msg.doc[i].latitude, msg.doc[i].longitude);
 
             if (age_min && age_max && pop_min && pop_max) {
-              if ((age >= age_min && age <= age_max) && ((msg.doc[i].pop >= pop_min && msg.doc[i].pop <= pop_max) || !msg.doc[i].pop) && (distance < distance_max || !distance_max) && msg.me[0].bloquer.indexOf(msg.doc[i].login) === -1) {
+              if ((age >= age_min && age <= age_max) && ((msg.doc[i].pop >= pop_min && msg.doc[i].pop <= pop_max) || (!msg.doc[i].pop && msg.doc[i].pop != 0)) && (distance < distance_max || !distance_max)) {
+                if (msg.me) {
+                  if (msg.me[0].bloquer) {
+                    if (msg.me[0].bloquer.indexOf(msg.doc[i].login) !== -1) {
+                      var find2 = 1;
+                    }
+                  }
+                }
                 var find = 1;
                 var j = 0;
                 while (tags[j]) {
@@ -476,7 +546,7 @@ block scripts
                 }
                 else
                   distance += 'Km';
-                if (find != 0) {
+                if (find != 0 || find2 == 1) {
                   overlay = new CustomMarker(
                           myLatlng,
                           map,
@@ -528,8 +598,7 @@ block scripts
                   );
                 }
               }
-              else
-              {
+              else {
                 overlay = new CustomMarker(
                         myLatlng,
                         map,
@@ -548,7 +617,6 @@ block scripts
           }
         });
     }
-
     socket.on('inscription', function(data) {
       var html = "Inscription effectué";
       $("#inscription_ok").html(html);

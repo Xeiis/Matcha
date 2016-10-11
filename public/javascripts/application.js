@@ -168,10 +168,10 @@ $("#submit_deconnection").click(function(){
     $('#like').hide('fast');
     $.ajax({
             method: "POST",
-            url: "logout"
+            url: "/logout"
         })
         .done(function (msg) {
-            get_data(position_save);
+
             $('#sign_in').show( "slow" );
             $('#sign_up').show( "slow" );
             $('#submit_deconnection').fadeOut( "slow" );
@@ -180,6 +180,10 @@ $("#submit_deconnection").click(function(){
             var NomDuFichier = CheminComplet.substring(CheminComplet.lastIndexOf( "/" )+1 );
             if (NomDuFichier != '') {
                 document.location.href = 'http://localhost:3000/';
+            }
+            else
+            {
+                get_data(position_save);
             }
         });
 });

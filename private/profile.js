@@ -77,7 +77,7 @@ exports.photo_add = function(req, res) {
                 db.close();
                 res.redirect('http://localhost:3000/profile?answer=yes');
                 res.end();
-            }, {login: req.session.login}, {$push: data}, 'user');
+            }, {login: req.session.login}, {$push: {url : data.url}}, 'user');
         });
     }
     else {
@@ -112,14 +112,20 @@ exports.report_profile = function(data, req, res) {
 
 exports.bloquer_profile = function(data, req, res) {
     // Use connect method to connect to the Server
-    Mongo.Client.connect(Mongo.url, function(err, db) {
-        Mongo.assert.equal(null, err);
-        Mongo.update(db, function () {
-            db.close();
-            res.send('done');
-            res.end();
-        }, {login: req.session.login}, {$push: {bloquer: data.login}}, 'user');
-    });
+    if (req.session.login) {
+        Mongo.Client.connect(Mongo.url, function (err, db) {
+            Mongo.assert.equal(null, err);
+            Mongo.update(db, function () {
+                db.close();
+                res.send('done');
+                res.end();
+            }, {login: req.session.login}, {$push: {bloquer: data.login}}, 'user');
+        });
+    }
+    else {
+        res.send('no login');
+        res.end();
+    }
 };
 
 exports.suppr_profile_tag = function(data, req, res) {
@@ -331,6 +337,10 @@ exports.like_profile = function(username, req, res){
                 }
             }, {'login': req.session.login}, 'user');
         });
+    }
+    else {
+        res.send('no login');
+        res.end();
     }
 };
 

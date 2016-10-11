@@ -95,6 +95,10 @@ block scripts
                             $("#ok").show("slow").delay(4000).hide('slow');
                             socket.emit('like', $("#login").val());
                         }
+                        else if (msg == 'no login') {
+                            $("#nok").html('Vous devez vous connecter pour like un profile');
+                            $("#nok").show("slow").delay(4000).hide('slow');
+                        }
                         else {
                             $("#nok").html('oups something went wrong');
                             $("#nok").show("slow").delay(4000).hide('slow');
@@ -130,6 +134,10 @@ block scripts
                 if (msg == 'done') {
                     $("#ok").html('Le profil ' + login + ' a bien été bloquer');
                     $("#ok").show("slow").delay(4000).hide('slow');
+                }
+                else if (msg == 'no login') {
+                    $("#nok").html('Vous devez vous connecter pour bloquer un profile');
+                    $("#nok").show("slow").delay(4000).hide('slow');
                 }
                 else {
                     $("#nok").html('oups something went wrong');

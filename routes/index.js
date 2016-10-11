@@ -19,7 +19,6 @@ router.post('/login', function(req, res){
 
 router.post('/update_profile', function(req, res) {
     console.log("/update_profile");
-    console.log(req.body);
     profile.update_profile(req.body, req, res);
 });
 
@@ -142,6 +141,8 @@ router.get('/:username', function(req, res) {
     if (username != 'favicon.ico' && username != 'undefined') {
         profile.show_profile(username, req, res);
     }
+    else
+        res.redirect('http://localhost:3000/');
 });
 
 module.exports = router;

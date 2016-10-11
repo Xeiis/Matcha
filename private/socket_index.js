@@ -72,10 +72,8 @@ exports.get_profile_data = function(req, res) {
                 db.close();
                 if (docs[0].attirance)
                     attirance = docs[0].attirance;
-                else if (docs[0].sexe == "H")
-                    attirance = "F";
-                else if (docs[0].sexe == "F")
-                    attirance = "H";
+                else
+                    attirance = "HF";
                 if (attirance == "HF") {
                     // Use connect method to connect to the Server
                     Mongo.Client.connect(Mongo.url, function (err, db) {
@@ -116,7 +114,8 @@ exports.get_profile_data = function(req, res) {
 };
 
 exports.save_position = function(data, req, res) {
-    if (!data)
+    console.log(data);
+    if (!data.hasOwnProperty('latitude'))
     {
         var geo = geoip.lookup(ip_address);
         data.latitude = geo.ll[0];
@@ -128,13 +127,14 @@ exports.save_position = function(data, req, res) {
             Mongo.assert.equal(null, err);
             Mongo.update(db, function () {
                 db.close();
-                res.send('done');
+                res.send(data);
                 res.end();
             }, {login: req.session.login}, {$set: data}, 'user');
         });
     }
     else
     {
+        res.send(data);
         res.end();
     }
 };
