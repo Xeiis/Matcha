@@ -164,9 +164,38 @@ exports.photo_profile = function(data, req, res) {
     });
 };
 
+exports.is_it_blocked = function(data, req, res) {
+    // Use connect method to connect to the Server
+    Mongo.Client.connect(Mongo.url, function (err, db) {
+        Mongo.assert.equal(null, err);
+        Mongo.find(db, function (docs) {
+            Mongo.find(db, function (doc) {
+                db.close();
+                if (doc[0].bloquer) {
+                    if (doc[0].bloquer.indexOf(docs[0].login) !== -1) {
+                        res.send('yes');
+                        res.end();
+                    }
+                    else
+                    {
+                        res.send('no');
+                        res.end();
+                    }
+                }
+                else
+                {
+                    res.send('no');
+                    res.end();
+                }
+            }, {'login': data.login}, 'user');
+        }, {'login': req.session.login}, 'user');
+    });
+};
+
 exports.show_profile = function(username, req, res) {
     var profile_like = "no";
     var profile_match = "no";
+    var find = 0;
     // Use connect method to connect to the Server
     // permet d'indiquer que la personne a visiter le profil
     if (req.session.login) {
@@ -183,34 +212,49 @@ exports.show_profile = function(username, req, res) {
         Mongo.Client.connect(Mongo.url, function (err, db) {
             Mongo.assert.equal(null, err);
             Mongo.find(db, function (docs) {
-                db.close();
-                if (docs[0]) {
-                    if(docs[0].match) {
-                        for (var j = 0, len2 = docs[0].match.length; j < len2; j++) {
-                            if (docs[0].match[j].login === username) {
-                                profile_match = "yes";
-                                break;
+                Mongo.find(db, function (doc) {
+                    db.close();
+                    if (docs[0]) {
+                        if (doc[0].bloquer) {
+                            if (doc[0].bloquer.indexOf(docs[0].login) !== -1) {
+                                find = 1;
                             }
                         }
-                    }
-                    if (profile_match == 'no') {
-                        if (docs[0].like) {
-                            for (var i = 0, len = docs[0].like.length; i < len; i++) {
-                                if (docs[0].like[i].login === username) {
-                                    profile_like = "yes";
-                                    break;
+                        if (find == 0) {
+                            if (docs[0].match) {
+                                for (var j = 0, len2 = docs[0].match.length; j < len2; j++) {
+                                    if (docs[0].match[j].login === username) {
+                                        profile_match = "yes";
+                                        break;
+                                    }
                                 }
                             }
+                            if (profile_match == 'no') {
+                                if (docs[0].like) {
+                                    for (var i = 0, len = docs[0].like.length; i < len; i++) {
+                                        if (docs[0].like[i].login === username) {
+                                            profile_like = "yes";
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            var visiteur = {
+                                visiteur: {
+                                    login: req.session.login,
+                                    date: date_today(),
+                                    photo: docs[0].profile
+                                }
+                            };
+                            Mongo.Client.connect(Mongo.url, function (err, db) {
+                                Mongo.assert.equal(null, err);
+                                Mongo.update(db, function () {
+                                    db.close();
+                                }, {login: username}, {$push: visiteur}, 'user');
+                            });
                         }
                     }
-                    var visiteur = {visiteur: {login: req.session.login, date: date_today(), photo: docs[0].profile}};
-                    Mongo.Client.connect(Mongo.url, function (err, db) {
-                        Mongo.assert.equal(null, err);
-                        Mongo.update(db, function () {
-                            db.close();
-                        }, {login: username}, {$push: visiteur}, 'user');
-                    });
-                }
+                }, {'login': username}, 'user');
             }, {'login': req.session.login}, 'user');
         });
     }

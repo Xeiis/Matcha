@@ -64,7 +64,15 @@ block content
                         img(src="../"+val width="200" height="200" class="photo")
 block scripts
     script(type="text/javascript").
-        socket.emit('visite', $("#login").val());
+        $.ajax({
+            method: "POST",
+            url: "is_it_blocked",
+            data: {login: $("#login").val()}
+        })
+            .done(function (msg) {
+                if(msg == 'no')
+                    socket.emit('visite', $("#login").val());
+            });
         $("#liker").on('click', function(){
             var login = $("#login").val();
             $.ajax({

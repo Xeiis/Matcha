@@ -117,6 +117,7 @@ exports.save_position = function(data, req, res) {
     console.log(data);
     if (!Object.prototype.hasOwnProperty.call(data, 'latitude'))
     {
+        console.log("je recherche pas rapport a l'ip");
         var geo = geoip.lookup(ip_address);
         data.latitude = geo.ll[0];
         data.longitude = geo.ll[1];

@@ -92,7 +92,13 @@ router.post ('/forgot_password', function(req, res) {
     index_function.forgot_password(req.body, req, res);
 });
 
+router.post('/is_it_blocked', function(req, res){
+    console.log('/is_it_blocked');
+    profile.is_it_blocked(req.body, req, res);
+});
+
 /* GET */
+
 router.get('/', function(req, res) {
     console.log("/");
     index.renderIndex(req, res);

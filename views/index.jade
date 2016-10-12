@@ -472,7 +472,7 @@ block scripts
     });
 
     function get_data(age_min, age_max, pop_min, pop_max, distance_max, tags) {
-      if (!position_save.hasOwnProperty('latitude')) {
+      if (!position_save) {
         $.ajax({
           method: "POST",
           url: "save_position",
@@ -498,6 +498,7 @@ block scripts
           var i = 0;
 
           while (msg.doc[i]) {
+            var overlay = overlay || {};
             if (msg.doc[i].date)
               age = dateDiff(msg.doc[i].date, date_today());
             else
